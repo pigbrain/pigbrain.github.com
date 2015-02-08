@@ -28,5 +28,5 @@ redis-server도 같이 넣어놓은 이유는 redis-sentinel이 redis를 빌드�
 각각의 변수들의 의미는다음과 같다. 
 REDIS_SENTINEL_NAME=redis-sentinel <br> 
 REDIS_INSTALL=$(QUIET_INSTALL)$(INSTALL) <br> 
-QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>&2; <br> 
+QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)$@$(ENDCOLOR) 1>\&2; <br> 
 INSTALL=install <br> 
