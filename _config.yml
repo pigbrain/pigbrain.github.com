@@ -9,13 +9,13 @@ markdown: kramdown
 
 # The title and tagline is showed on homepage
 #
-title :  Simpleyyt 
-tagline: Yitao's Blog
+title :  Pigbrain
+tagline: Blog
 
 # Information about author
 #
 author :
-  name : Yitao Yao
+  name : HyunDong Lee
   
 # Information for contacts showed at on the footer
 #
