@@ -47,3 +47,8 @@ sentinelRedisInstance *sentinelGetMasterByName(char *name); <br>
 char *sentinelGetSubjectiveLeader(sentinelRedisInstance *master); <br> 
 char *sentinelGetObjectiveLeader(sentinelRedisInstance *master); <br> 
 등등...
+
+많은 함수들 중 아래 세 함수를 중심으로 보면 Sentiel 에서 failover상황에서 어떻게 처리하는지 알 수 있다.
+void sentinelReceiveIsMasterDownReply(redisAsyncContext *c, void *reply, void *privdata) <br> 
+void sentinelAskMasterStateToOtherSentinels(sentinelRedisInstance *master, int flags) <br> 
+char *sentinelVoteLeader(sentinelRedisInstance *master, uint64_t req_epoch, char *req_runid, uint64_t *leader_epoch) <br> 
