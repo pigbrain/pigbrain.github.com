@@ -26,7 +26,7 @@ redis-server도 같이 넣어놓은 이유는 redis-sentinel이 redis를 빌드�
 사용하기 때문이다. 즉, redis를 실행할때 입력 매개변수를 통하여 sentinel로 실행할 수도 <br> 
 있고 그냥 redis-sentinel을 실행해도 되고 뭐 이런게 아닐까? <br>
 실제 redis.c 파일을 보면 <br> 
-run_with_period(100) \{ <br> 
+run_with_period(100) \{  // run_with_period(100)은 100ms 주기로 실행하도록 하는 MACRO이다. <br> 
  if (server.sentinel_mode) <br> 
    sentinelTimer()\; <br> 
 \} <br> 
