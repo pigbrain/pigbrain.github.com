@@ -26,7 +26,7 @@ redis-server도 같이 넣어놓은 이유는 redis-sentinel이 redis를 빌드�
 있고 그냥 redis-sentinel을 실행해도 되고 뭐 이런게 아닐까? <br>
 실제 redis.c 파일을 보면 <br> 
 run_with_period(100) { <br> 
- if (server.sentinel_mode) sentinelTimer(); <br> 
+>> if (server.sentinel_mode) sentinelTimer(); <br>  
 } <br> 
 처럼 sentinel_mode가 true일 경우에만 매 tick 마다 sentinel 로직을 처리하게 된다.
 
