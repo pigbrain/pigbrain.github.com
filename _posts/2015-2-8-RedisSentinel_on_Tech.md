@@ -35,4 +35,5 @@ REDIS_SERVER_OBJ=REDIS_SERVER_OBJ=adlist.o ae.o anet.o dict.o redis.o sds.o zmal
 
 이 수 많은 소스들 중에 이전 버전 Redis에는 존재 하지 않던 sentinel.o가 생긴 것을 볼 수 있다. <br>
 sentinel.c 를 열어보니,, 뭐 주석 빼고 이러면 3500라인 정도 될것 같다.. <br>
-함수 prototype을 봐도 이 파일에 모든 기능이 있는 것 같다.
+함수 prototype만 봐도 이 파일에 모든 기능이 있는 것 같다. <br><br>
+
