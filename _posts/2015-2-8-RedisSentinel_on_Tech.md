@@ -28,7 +28,7 @@ redis-server도 같이 넣어놓은 이유는 redis-sentinel이 redis를 빌드�
 실제 redis.c 파일을 보면 <br> 
 run_with_period(100) \{ <br> 
  if (server.sentinel_mode) <br> 
-   sentinelTimer(); <br>  
+   sentinelTimer()\; <br> 
 \} <br> 
 처럼 sentinel_mode가 true일 경우에만 매 tick 마다 sentinel 로직을 처리하게 된다. <br> 
 
@@ -55,7 +55,5 @@ char *sentinelGetSubjectiveLeader(sentinelRedisInstance *master); <br>
 char *sentinelGetObjectiveLeader(sentinelRedisInstance *master); <br> 
 등등...
 
-많은 함수들 중 아래 세 함수를 중심으로 보면 Sentiel 에서 failover상황에서 어떻게 처리하는지 알 수 있다.
-void sentinelReceiveIsMasterDownReply(redisAsyncContext *c, void *reply, void *privdata) <br> 
-void sentinelAskMasterStateToOtherSentinels(sentinelRedisInstance *master, int flags) <br> 
-char *sentinelVoteLeader(sentinelRedisInstance *master, uint64_t req_epoch, char *req_runid, uint64_t *leader_epoch) <br> 
+위에서 언급한 sentinelTimer() 함수에서 호출되는 함수들을 따라가다보면 redis instance의 상태에 따라 <br>
+어떠한 로직을 실행 할지 결정하는 void sentinelFailoverStateMachine(sentinelRedisInstance *ri) 함수를 만날 수 있다.
