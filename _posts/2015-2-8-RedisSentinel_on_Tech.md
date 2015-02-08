@@ -57,3 +57,4 @@ char *sentinelGetObjectiveLeader(sentinelRedisInstance *master); <br>
 
 위에서 언급한 sentinelTimer() 함수에서 호출되는 함수들을 따라가다보면 redis instance의 상태에 따라 <br>
 어떠한 로직을 실행 할지 결정하는 void sentinelFailoverStateMachine(sentinelRedisInstance *ri) 함수를 만날 수 있다.
+그 중 Master에 failover가 발생 했을때 새로운 Master를 선출하기 위해 투표를 진행하는데 이 부분을 중점으로 보려고 한다. 
