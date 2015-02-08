@@ -9,8 +9,8 @@ markdown: kramdown
 
 # The title and tagline is showed on homepage
 #
-title :  이거 왜케 어려워
-tagline: HyunDong's Blog
+title :  ㅋ
+tagline: Yitao's Blog
 
 # Information about author
 #
@@ -20,15 +20,15 @@ author :
 # Information for contacts showed at on the footer
 #
 contact :
-  e-mail : hyundong.lee@nhnent.com
-  Github : https://github.com/pigbrain/
- # WeiBo : http://www.weibo.com/u/1836017133
- # Google+ : https://plus.google.com/103860633659538888207?rel=author
+  e-mail : mailto:simpleyyt@gmail.com
+  Github : https://github.com/Simpleyyt
+  WeiBo : http://www.weibo.com/u/1836017133
+  Google+ : https://plus.google.com/103860633659538888207?rel=author
   
 # Links showed on the footer
 #
-#links :
-#  Yitao's Blog : http://simpleyyt.github.io/
+links :
+  Yitao's Blog : http://simpleyyt.github.io/
 
 # The search engine. Only support google custom search engine.
 #
