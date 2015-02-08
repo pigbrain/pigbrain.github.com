@@ -1,35 +1,37 @@
-# Simpleyyt
+Freshman21
+==========
 
-My blog based on Jekyll-Bootstrap.
+Freshman21 is a Jekyll blog theme, base on theme [Freshman](http://github.com/yulijia/freshman). 
 
-## About Jekyll-Bootstrap
+A tribute to WordPress Theme Twenty-Twelve and Twenty-eleven.
 
-For all usage and documentation please see: <http://jekyllbootstrap.com>
+Enjoy.
 
-## About theme
 
-This theme is the copy of [elementaryOS](http://elementaryos.org) portal page. Some features are imperfect, but I will make it more perfect.
+![Screen](http://i.imgur.com/oSp7kacl.png)
 
-## Usage
+### How to install this theme?
 
-You can edit the `_config.yml` file to change the setting of site. If you want to change avatar or favicon, just replace the files in `assets\themes\Snail\img`.
+```
+# please make sure you have already installed git tools and ruby tools(gem)
+$ gem install sass
+$ gem install jekyll
+$ git clone https://github.com/yulijia/freshman21.git
+$ mv freshman21/ yourblogname.github.io/
+```
 
-## About excerpt
+### A Summary of Features
 
-There are 2 ways of excerpt: "teaser" and "truncate_words" (Configurated in _config.yml).
+- Provide single column and two columns layout
+- Powerful configure file
+- Comments by Disqus
+- Support LaTeX (by MathJax)
+- Syntax highlighting
 
- * "teaser": look for the More tag (<!--more-->) and create a teaser from the content that precedes the More tag.
-You must place "<!--more-->" at paragraph in post. The whole content will be displayed in homepage if no More tag found in post.
 
- * "truncate_words": generate an excerpt automatically by selecting the first 20 words of the post. It doesn't work well in some of no-English post.
+### Demo
 
-## Change Log
+Single column, please see [my own blog](http://yulijia.net/en/)
 
- * Add pagination.
- * Add new way of excerpt.
- * Download google fonts to the local.
- * Add google custom search engine.
+Two columns, please see the [theme website](http://yulijia.net/freshman21/)
 
-## License
-
-[MIT](http://opensource.org/licenses/MIT)
