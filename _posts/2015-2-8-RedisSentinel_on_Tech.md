@@ -1,6 +1,6 @@
 ---
 layout: post
-category: linux
+category: Tech
 title: Redis Sentinel#1
 tagline: by Pigbrain
 tags: [Tech]
