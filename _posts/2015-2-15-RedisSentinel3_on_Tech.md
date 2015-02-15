@@ -73,7 +73,7 @@ else if (flags & SRI_SENTINEL) table = master->sentinels;
 {% endhighlight %}
 한 가지 특이한(?) 것은 redis인스턴스를 생성하는 시점(아직 connect 되지 않은 상태)에 ping 타임아웃 값을 설정한다는 것이다 <br>
 이렇게 함으로써 ping을 보내지 않은 상태지만 connect과정에서 타임아웃이 발생했다는 것을 알 수 있다.
-{% endhighlight %} 
+{% highlight c %}
 sentinelRedisInstance *ri;
 ri = zmalloc(sizeof(*ri));
 ri->last_ping_time = mstime();
