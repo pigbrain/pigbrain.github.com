@@ -5,8 +5,8 @@ title: Redis Sentinel#1
 tagline: by Pigbrain
 tags: [Tech]
 ---
-Redis Sentinel은 redis 관리를 돕도록 디자인된 시스템이다. <br>
-이제 부터 Sentinel 소스를 열어봐야겠다..
+Redis Sentinel#1!  <br>
+Redis Sentinel은 redis 관리를 돕도록 디자인된 시스템이다. 
 
 <!--more-->
 
@@ -63,4 +63,8 @@ char *sentinelGetObjectiveLeader(sentinelRedisInstance *master);
 
 위에서 언급한 sentinelTimer() 함수에서 호출되는 함수들을 따라가다보면 redis instance의 상태에 따라 어떠한 로직을 실행 할지 결정하는
 void sentinelFailoverStateMachine(sentinelRedisInstance *ri) 함수를 만날 수 있다. 그 중 Master에 failover가 발생 했을때 새로운 
-Master를 선출하기 위해 투표를 진행하는데 이 부분을 중점으로 보려고 한다. 
+Master를 선출하기 위해 투표를 진행하는데... <br> 
+
+이제부터 sentinel의 처음 부터 끝까지 하나씩 파헤쳐 보자.
+
+#To be continue....#
