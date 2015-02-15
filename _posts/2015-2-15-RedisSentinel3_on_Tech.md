@@ -34,7 +34,7 @@ sentinel은 redis인스턴스가 다운되었을때 두 가지 상태로 관리�
 
 {% highlight c %}
 // config.c
-// sentinel의 설정은 sentinel \<option1\> \<option2\> ... 와 같은 형태로 되어 있다. <br>
+// sentinel의 설정은 sentinel \<option1\> \<option2\> ... 와 같은 형태로 되어 있다.
 // sentinel로 시작하는 설정들에 한하여 sentinelHandleConfiguration(..)를 호출 한다.
 } else if (!strcasecmp(argv[0],"sentinel")) {
 	if (argc != 1) {
@@ -71,12 +71,14 @@ if (flags & SRI_MASTER) table = sentinel.masters;
 else if (flags & SRI_SLAVE) table = master->slaves;
 else if (flags & SRI_SENTINEL) table = master->sentinels;
 {% endhighlight %}
-한 가지 특이한(?) 것은 redis인스턴스를 생성하는 시점(아직 connect 되지 않은 상태)에 ping 타임아웃 값을 설정한다는 것이다 <br>
+한 가지 특이한(?) 것은 redis인스턴스를 생성하는 시점(아직 connect 되지 않은 상태)에 ping 타임아웃 값을 설정한다는 것이다.
 이렇게 함으로써 ping을 보내지 않은 상태지만 connect과정에서 타임아웃이 발생했다는 것을 알 수 있다.
 {% highlight c %}
 sentinelRedisInstance *ri;
 ri = zmalloc(sizeof(*ri));
 ri->last_ping_time = mstime();
 {% endhighlight %}
+
+
 
 #To be continue....#
