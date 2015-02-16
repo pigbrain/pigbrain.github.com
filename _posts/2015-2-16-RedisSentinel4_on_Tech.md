@@ -32,8 +32,11 @@ void sentinelTimer(void) {
 이번절에서 살펴볼 함수는 sentinelHandleDictOfRedisInstances 이다. <br>
 sentinelHandleDictOfRedisInstances 에서는 sentinel의 거의 모든 기능이 있다고 봐도 무방하다. <br>
 예를 들어 주기적으로 인스턴스들(sentinel, redis-master, redis-slave)에게 ping을 보내거나 새로운 인스턴스를 조사하기 위해 hello를 보내거나 
-혹은 연결이 끊어진 인스턴스들에 대해서는 reconnect를 시도하고 master의 상태(SDOWN/ODWN)에 따라 fail-over를 처리하기도 하고 등등 수 많은 일을 한다.
+혹은 연결이 끊어진 인스턴스들에 대해서는 reconnect를 시도하고 master의 상태(SDOWN/ODWN)에 따라 fail-over를 처리하기도 하고 등등 수 많은 일을 한다.  
 
+
+sentinelHandleDictOfRedisInstances 함수의 구현부 이다. 딱 봐도 루프를 돌면서 인스턴스들을 처리한다.
+추가로 인스턴스가 redis-master일 경우에만 추가적인 처리를 한다.
 {% highlight c %}
 // sentinel.c
 void sentinelHandleDictOfRedisInstances(dict *instances) {
@@ -59,10 +62,11 @@ void sentinelHandleDictOfRedisInstances(dict *instances) {
 	dictReleaseIterator(di);
 }
 {% endhighlight %}
-sentinelHandleDictOfRedisInstances 함수의 구현부 이다. 딱 봐도 루프를 돌면서 인스턴스들을 처리한다.
-추가로 인스턴스가 redis-master일 경우에만 추가적인 처리를 한다. 인스턴스들에 대해 어떠한 처리를 하는지는 바로 아래에서 설명한다. <br>
 
 
+sentinelHandleRedisInstance(..)에서 disconnect되어 있는 인스턴스들에 대해서 connect를 시도하고 
+connect되어있는 인스턴스들에 대해서는 ping을 보낸다. 또한 모든 인스턴스들에 "\_\_sentinel\_\_:hello"를 전송하기도 한다.
+"\_\_sentinel\_\_:hello"에 대한 것은 나중에 설명하도록 하겠다. <br>
 {% highlight c %}
 // sentinel.c
 void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
@@ -91,11 +95,7 @@ void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
 }
 
 {% endhighlight %}
-
-sentinelHandleRedisInstance(..)에서 disconnect되어 있는 인스턴스들에 대해서 connect를 시도하고 
-connect되어있는 인스턴스들에 대해서는 ping을 보낸다. 또한 모든 인스턴스들에 "\_\_sentinel\_\_:hello"를 전송하기도 한다.
-"\_\_sentinel\_\_:hello"에 대한 것은 나중에 설명하도록 하겠다. <br>
-sentinelCheckObjectivelyDown(..)에서는 ping을 보내고 난 후 지정된 시간안에 응답이 없을 경우 sentinel은 SDOWN상태로 업데이트 한다. 
+sentinelCheckSubjectivelyDown(..)에서는 ping을 보내고 난 후 지정된 시간안에 응답이 없을 경우 sentinel은 SDOWN상태로 업데이트 한다. 
 단 redis-master에 대해서만 SDOWN 상태로 업데이트하고 이 후 sentinel들 끼리 투표를 통하여 ODOWN 상태 업데이트를 결정하며 
 sentinel이나 redis-slave에 대해서는 SDOWN 상태가 되면 바로 disconnect를 진행한다.
 
