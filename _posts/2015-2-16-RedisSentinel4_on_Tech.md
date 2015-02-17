@@ -69,7 +69,7 @@ sentinelHandleRedisInstance(..)의 구현부 이다.
 // sentinel.c
 void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
 	sentinelReconnectInstance(ri);
-	sentinelSendPeriodicCommands(ri);	// ping or "\_\_sentinel\_\_:hello"
+	sentinelSendPeriodicCommands(ri);
 
 	if (sentinel.tilt) {
 		if (mstime()-sentinel.tilt_start_time < SENTINEL_TILT_PERIOD) return;
@@ -93,7 +93,7 @@ void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
 {% endhighlight %}
 sentinelReconnectInstance()에서는 disconnect되어 있는 인스턴스들에 대해서 connect를 시도한다. <br>
 connect는 비동기로 처리하며 connect/disconnect에 대한 콜백 함수를 설정한다. <br>
-만약 connect 하는 대상이 redis-master/slave일 경ㅇ "\_\_sentinel\_\_:hello" 메세지를 보낸다. <br>
+만약 connect 하는 대상이 redis-master/slave일 경우 "\_\_sentinel\_\_:hello" 메세지를 보낸다. <br>
 "\_\_sentinel\_\_:hello"메세지를 통하여 sentinel이 다른 sentinel들을 자동으로 발견할수 있다.
 아래는 SENTINEL_HELLO_CHANNEL("\_\_sentinel\_\_:hello")을 전송하고 응답 데이터 수신시 sentinelReceiveHelloMessages 
 함수를 콜백으로 설정하는 코드이다.
