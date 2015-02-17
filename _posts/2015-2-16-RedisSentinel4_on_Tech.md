@@ -64,14 +64,12 @@ void sentinelHandleDictOfRedisInstances(dict *instances) {
 {% endhighlight %}
 
 
-sentinelHandleRedisInstance(..)에서 disconnect되어 있는 인스턴스들에 대해서 connect를 시도하고 
-connect되어있는 인스턴스들에 대해서는 ping을 보낸다. 또한 모든 인스턴스들에 "\_\_sentinel\_\_:hello"를 전송하기도 한다.
-"\_\_sentinel\_\_:hello"에 대한 것은 나중에 설명하도록 하겠다. <br>
+sentinelHandleRedisInstance(..)의 구현부 이다.
 {% highlight c %}
 // sentinel.c
 void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
 	sentinelReconnectInstance(ri);
-	sentinelSendPeriodicCommands(ri);
+	sentinelSendPeriodicCommands(ri);	// ping or "\_\_sentinel\_\_:hello"
 
 	if (sentinel.tilt) {
 		if (mstime()-sentinel.tilt_start_time < SENTINEL_TILT_PERIOD) return;
@@ -84,7 +82,6 @@ void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
 	if (ri->flags & (SRI_MASTER|SRI_SLAVE)) {
 	}
 
-   
 	if (ri->flags & SRI_MASTER) {
 		sentinelCheckObjectivelyDown(ri);
 		if (sentinelStartFailoverIfNeeded(ri))
@@ -93,11 +90,29 @@ void sentinelHandleRedisInstance(sentinelRedisInstance *ri) {
 		sentinelAskMasterStateToOtherSentinels(ri,SENTINEL_NO_FLAGS);
 	}
 }
-
 {% endhighlight %}
-sentinelCheckSubjectivelyDown(..)에서는 ping을 보내고 난 후 지정된 시간안에 응답이 없을 경우 sentinel은 SDOWN상태로 업데이트 한다. 
-단 redis-master에 대해서만 SDOWN 상태로 업데이트하고 이 후 sentinel들 끼리 투표를 통하여 ODOWN 상태 업데이트를 결정하며 
-sentinel이나 redis-slave에 대해서는 SDOWN 상태가 되면 바로 disconnect를 진행한다.
+sentinelReconnectInstance()에서는 disconnect되어 있는 인스턴스들에 대해서 connect를 시도한다. <br>
+connect는 비동기로 처리하며 connect/disconnect에 대한 콜백 함수를 설정한다. <br>
+만약 connect 하는 대상이 redis-master/slave일 경ㅇ "\_\_sentinel\_\_:hello" 메세지를 보낸다. <br>
+"\_\_sentinel\_\_:hello"메세지를 통하여 sentinel이 다른 sentinel들을 자동으로 발견할수 있다.
+아래는 SENTINEL_HELLO_CHANNEL("\_\_sentinel\_\_:hello")을 전송하고 응답 데이터 수신시 sentinelReceiveHelloMessages 
+함수를 콜백으로 설정하는 코드이다.
+{% highlight c %}
+// sentinel.c
+void sentinelReconnectInstance(sentinelRedisInstance *ri) {
+	...
+	if ((ri->flags & (SRI_MASTER|SRI_SLAVE)) && ri->pc == NULL) {
+		...
+		redisAsyncCommand(ri->pc,
+				sentinelReceiveHelloMessages, NULL, "SUBSCRIBE %s",
+				SENTINEL_HELLO_CHANNEL); 
+		
+		...
+	}
+	...
+}
+{% endhighlight %}
+
 
 {% highlight c %}
 // sentinel.c
@@ -118,6 +133,10 @@ void sentinelSendPeriodicCommands(sentinelRedisInstance *ri) {
 	...
 }
 {% endhighlight %}
+
+sentinelCheckSubjectivelyDown(..)에서는 ping을 보내고 난 후 지정된 시간안에 응답이 없을 경우 sentinel은 SDOWN상태로 업데이트 한다. 
+단 redis-master에 대해서만 SDOWN 상태로 업데이트하고 이 후 sentinel들 끼리 투표를 통하여 ODOWN 상태 업데이트를 결정하며 
+sentinel이나 redis-slave에 대해서는 SDOWN 상태가 되면 바로 disconnect를 진행한다.
 
 
 \<수정중\>
