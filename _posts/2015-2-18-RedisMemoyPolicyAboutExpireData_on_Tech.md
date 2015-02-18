@@ -148,5 +148,102 @@ void activeExpireCycle(int type) {
 다른 요청에 대한 처리가 지연될 것이다. 그래서 redis에서는 0xf(16)번째 이터레이션에 샘플링하여 expire시킬 수 있는 최대 시간을 초과 하였는지 검사한다.
 지정한 최대 시간을 초과 하였을 경우 더 이상 샘플링하지 않고 그대로 루프를 빠져나와 다른 요청들을 처리한다.  
 
-마지막 방법이다.
+마지막 방법은 메모리 정책에 의한 메모리 정리이다. 패킷을 수신하여 처리 하기 직전에 지정된 메모리 정책에 의하여 메모리를 정리하는 코드가 있다.
+패킷을 수신하는 부분부터 확인 해보도록 하겠다.
+{% highlight c %}
+// networking.c
+void readQueryFromClient(aeEventLoop *el, int fd, void *privdata, int mask) {
+	redisClient *c = (redisClient*) privdata;
+	...
+	processInputBuffer(c);
+}
+
+void processInputBuffer(redisClient *c) {
+	while(sdslen(c->querybuf)) {
+		...
+		if (processCommand(c) == REDIS_OK)
+ 			resetClient(c);
+		...
+	}
+}
+
+// redis.c
+int processCommand(redisClient *c) {
+	...
+	if (server.maxmemory) {
+		int retval = freeMemoryIfNeeded();
+		if ((c->cmd->flags & REDIS_CMD_DENYOOM) && retval == REDIS_ERR) {
+			flagTransaction(c);
+			addReply(c, shared.oomerr);
+			return REDIS_OK;
+		}
+	}
+	...
+	// 지정된 콜백 함수 실행
+	if (c->flags & REDIS_MULTI &&
+			c->cmd->proc != execCommand && c->cmd->proc != discardCommand &&
+			c->cmd->proc != multiCommand && c->cmd->proc != watchCommand) {
+		queueMultiCommand(c);
+		addReply(c,shared.queued);
+	} else {
+		call(c,REDIS_CALL_FULL);
+		if (listLength(server.ready_keys))
+			handleClientsBlockedOnLists();
+	}
+	...
+}
+{% endhighlight %}
+readQueryFromClient(..) 함수는 redis에서 클라이언트로 부터 이벤트가 발생했을때 이벤트 루프에서 호출하는 콜백함수이다. 
+즉 클라이언트로 부터 수신된 데이터가 발생하면  readQueryFromClient(..) 함수가 호출된다. processInputBuffer(..)에서 정상적은 패킷인지 검사한 후 
+processCommand(..)함수를 호출한다. processCommand(..)를 보면 지정된 패킷의 콜백 함수를 실행 하기전에 redis의 최대 메모리를 지정한 경우 
+freeMemoryIfNeeded()함수를 호출 하는 것을 볼 수 있다. 이곳이 expire를 처리하는 마지막 장소이다. freeMemoryIfNeeded()내부를 보면 수많은 if문을 볼 수 있다.
+메모리 정책에 따라 어떤 메모리를 해제 할지 정하기 때문이다.
+{% highlight c %}
+// redis.c
+int freeMemoryIfNeeded(void) {
+	...
+	if (mem_used <= server.maxmemory) return REDIS_OK;
+	...
+	mem_tofree = mem_used - server.maxmemory;
+	mem_freed = 0;
+	
+	while (mem_freed < mem_tofree) {
+		for (j = 0; j < server.dbnum; j++) {
+			if (server.maxmemory_policy == REDIS_MAXMEMORY_ALLKEYS_LRU ||
+				server.maxmemory_policy == REDIS_MAXMEMORY_ALLKEYS_RANDOM)
+			{
+				dict = server.db[j].dict;
+			} else {
+				dict = server.db[j].expires;
+			}
+			
+			if (server.maxmemory_policy == REDIS_MAXMEMORY_ALLKEYS_RANDOM ||
+				server.maxmemory_policy == REDIS_MAXMEMORY_VOLATILE_RANDOM)
+			{
+				de = dictGetRandomKey(dict);
+				bestkey = dictGetKey(de);
+			}
+			else if (server.maxmemory_policy == REDIS_MAXMEMORY_ALLKEYS_LRU ||
+				server.maxmemory_policy == REDIS_MAXMEMORY_VOLATILE_LRU)
+			{
+				...
+			}
+			else if (server.maxmemory_policy == REDIS_MAXMEMORY_VOLATILE_TTL) {
+				...
+			}
+			...
+			if (bestkey) {
+				...
+				dbDelete(db,keyobj);
+				...
+			}
+		}
+	}
+	...	
+}
+{% endhighlight %}
+수 많은 메모리 정책이 존재한다. 정책에 따라 메모리를 해제 할 수 있는 최적의 키를 찾아 메모리를 해제 한다.
+메모리를 해제할 테이블이 expires일 수도 있고 일반 데이터 테이블 일 수 도있고 이건 사용자가 config를 지정하기 나름이다.
+
+#The End
 
