@@ -142,10 +142,12 @@ void sentinelProcessHelloMessage(char *hello, int hello_len) {
 master name으로 현재 자신의 redis-master를 조회한 후 자신이 감시하지 않는 master일 경우 처리하지 않는다. 
 (다른 sentinel들을 발견하더라도 자신과 모니터링하는 대상이 동일한 sentinel에 대해서만 연결을 하려는 것으로 보인다.)
 그리고 sentinel 리스트에서 ip, port정보로 현재 등록되어 있는 sentinel 인지 검사한 후에 등록되지 않은 sentinel이라면 새로운 sentinel 인스턴스를 생성한다.
-만약 새로운 sentinel을 추가하기전에 runid로 중복된 sentinel이 있는지 검사하고 만약 존재한다면 해당 인스턴스를 삭제 한 후 새로운 인스턴스를 생성한다.
+만약 새로운 sentinel을 추가하기전에 runid로 중복된 sentinel이 있는지 검사하고 만약 존재한다면 해당 인스턴스를 삭제 한 후 새로운 인스턴스를 생성한다.  
 
 
-
+다시 sentinelHandleRedisInstance(..)로 돌아가서 sentinelSendPeriodicCommands(..)를 보자.  
+여기서는 매초마다 인스턴스들에게 ping을 보내거나 앞서 얘기한 "\_\_sentinel\_\_:hello"메세지를 보낸다.
+("\_\_sentinel\_\_:hello"메세지는 연결되었을때 외에도 주기적으로(약 5분간격)으로 보낸다.)
 {% highlight c %}
 // sentinel.c
 void sentinelSendPeriodicCommands(sentinelRedisInstance *ri) {
@@ -166,8 +168,8 @@ void sentinelSendPeriodicCommands(sentinelRedisInstance *ri) {
 }
 {% endhighlight %}
 
-sentinelCheckSubjectivelyDown(..)에서는 ping을 보내고 난 후 지정된 시간안에 응답이 없을 경우 sentinel은 SDOWN상태로 업데이트 한다. 
-단 redis-master에 대해서만 SDOWN 상태로 업데이트하고 이 후 sentinel들 끼리 투표를 통하여 ODOWN 상태 업데이트를 결정하며 
+sentinelHandleRedisInstance(..) 중 sentinelCheckSubjectivelyDown(..)에서는 ping을 보내고 난 후 지정된 시간안에 응답이 없을 경우 
+sentinel은 SDOWN상태로 업데이트 한다. 단 redis-master에 대해서만 SDOWN 상태로 업데이트하고 이 후 sentinel들 끼리 투표를 통하여 ODOWN 상태 업데이트를 결정하며 
 sentinel이나 redis-slave에 대해서는 SDOWN 상태가 되면 바로 disconnect를 진행한다.
 
 
