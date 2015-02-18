@@ -91,12 +91,62 @@ dbDelete를 보면 db->expires에서 데이터를 삭제하고  db->dict에서�
 
 사용자가 get을 할때 expire를 처리하는 것은 매우 쉬워 보인다. Memcached에서도 expire는 이와 동일하게 처리하는 것으로 알고있다.
 하지만 사용자가 get을 하지 않으면 redis는 expire된 키를 계속 가지고 있을까? 굉장한 메모리 낭비 일 것이다. 그래서 redis에서는 이 방식 외에도
-다른 두가지 방식을 이용하여 expire데이터를 관리하고 있다.
+다른 두가지 방식을 이용하여 expire데이터를 관리하고 있다.  
 
+두번째 방법 부터는 조금 복잡한 것 같다.  
+sentinel#2를 포스팅 하면서 redis나 sentinel이나 일정 주기로 처리되야 하는 로직을 정의 한 곳이 serverCron(..)이라고 했다. 
+serverCron(..)의 구현부를 잘 살펴 보면 아래처럼 databaseCron(); 이라는 것이 있다.
+{% highlight c %}
+// redis.c
+int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
+	...
+	databasesCron();
+	...
+}
 
+void databasesCron(void) {
+	...
+	if (server.active_expire_enabled && server.masterhost == NULL)
+		activeExpireCycle(ACTIVE_EXPIRE_CYCLE_SLOW);
+	...
+}
+{% endhighlight %}
+databaseCron(..)을 보면 active_expire_enabled 설정이 true이고 slave모드가 아니라면 activeExpireCycle(..)실행하게 되어 있다.
+activeExpireCycle(..)에서는  랜덤 샘플링을 이용하여 키들을 expire시킨다. redis는 싱글 쓰레드 구조로 되어 있기 때문에 하나의 작업을 오래 처리하거나하면 
+다른 요청들에 대한 응답이 늦어질 수 밖에 없다. 그래서 모든 expire테이블을 조사 하는 것이 아닌 샘플링을 하는 것으로 보인다.  
+{% highlight c %}
+// redis.c
+void activeExpireCycle(int type) {
+	...
+	while (num--) {
+		dictEntry *de;
+		long long ttl;
+		
+		if ((de = dictGetRandomKey(db->expires)) == NULL) break;
+		ttl = dictGetSignedIntegerVal(de)-now;
+		if (activeExpireCycleTryExpire(db,de,now)) expired++;
+		if (ttl < 0) ttl = 0;
+		ttl_sum += ttl;
+		ttl_samples++;
+	}
+	...
+	
+	if ((iteration & 0xf) == 0) {
+		long long elapsed = ustime()-start;
 
+		latencyAddSampleIfNeeded("expire-cycle",elapsed/1000);
+		if (elapsed > timelimit) timelimit_exit = 1;
+	}
+	if (timelimit_exit) return;
+	
+	...
+}
+{% endhighlight %}
+샘플링을 하여 expire 키를 삭제 하는 코드이다. activeExpireCycleTryExpire(..)에서 dbDelete(..)를 수행한다.  
+그러나 여기에 중요한 코드가 하나 더 있다. 현재 쌓여있는 키가 10개일때와 10000개일때 샘플링 횟수를 다르게 해야 할 것이다.
+만약 키가 엄~~청 많다면 샘플링 횟수도 더 많아야 할 것이다. 그러나 샘플링하여 키를 삭제하는데 시간이 너무 오래 걸리면 어떻게 될까?
+다른 요청에 대한 처리가 지연될 것이다. 그래서 redis에서는 0xf(16)번째 이터레이션에 샘플링하여 expire시킬 수 있는 최대 시간을 초과 하였는지 검사한다.
+지정한 최대 시간을 초과 하였을 경우 더 이상 샘플링하지 않고 그대로 루프를 빠져나와 다른 요청들을 처리한다.  
 
-
-
-
+마지막 방법이다.
 
