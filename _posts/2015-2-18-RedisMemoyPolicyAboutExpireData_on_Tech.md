@@ -14,7 +14,7 @@ redis에는 수많은 기능이 존재한다.
 그 중 set한 데이터에 대하여 expire를 설정할 수 있다.  
 다음은 redis에서 expire를 설정하는 command 예제이다. TTL은 남은 expire시간을 나타낸다.
 <img src="/assets/themes/Snail/img/RedisMemoryPolicyAboutExpire/redis-expire.png" alt="">
-출처 : http://redis.io/commands/expire  
+이미지 출처 : http://redis.io/commands/expire  
 
 redis에서는 expire를 처리하기 위해 어떠한 방식의 로직을 구현하고 있을까?  
 하나의 쓰레드를 타이머로 이용해서? 아니면 signal을 이용해서?  
