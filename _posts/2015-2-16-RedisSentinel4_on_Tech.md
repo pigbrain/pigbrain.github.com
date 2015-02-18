@@ -31,11 +31,11 @@ void sentinelTimer(void) {
 {% endhighlight %}
 이번절에서 살펴볼 함수는 sentinelHandleDictOfRedisInstances 이다. <br>
 sentinelHandleDictOfRedisInstances 에서는 sentinel의 거의 모든 기능이 있다고 봐도 무방하다. <br>
-예를 들어 주기적으로 인스턴스들(sentinel, redis-master, redis-slave)에게 ping을 보내거나 새로운 인스턴스를 조사하기 위해 hello를 보내거나 
+예를 들어 주기적으로 인스턴스들(sentinel, redis-master, redis-slave)에게 ping을 보내거나 새로운 sentinel을 발견하기 위해 hello를 보내거나 
 혹은 연결이 끊어진 인스턴스들에 대해서는 reconnect를 시도하고 master의 상태(SDOWN/ODWN)에 따라 fail-over를 처리하기도 하고 등등 수 많은 일을 한다.  
+	
 
-
-sentinelHandleDictOfRedisInstances 함수의 구현부 이다. 딱 봐도 루프를 돌면서 인스턴스들을 처리한다.
+sentinelHandleDictOfRedisInstances 함수의 구현부 이다. 매 틱마다 인스턴스들에 대하여 동일한 처리한다.
 추가로 인스턴스가 redis-master일 경우에만 추가적인 처리를 한다.
 {% highlight c %}
 // sentinel.c
@@ -112,6 +112,38 @@ void sentinelReconnectInstance(sentinelRedisInstance *ri) {
 	...
 }
 {% endhighlight %}
+sentinelReceiveHelloMessages(..) 콜백 함수에는  "\_\_sentinel\_\_:hello"메세지 응답을 실질적으로 처리하는
+sentinelProcessHelloMessage(..) 함수가 있다.
+{% highlight c %}
+void sentinelProcessHelloMessage(char *hello, int hello_len) {
+	...
+	master = sentinelGetMasterByName(token[4]);
+	if (!master) goto cleanup;
+	
+	port = atoi(token[1]);
+	master_port = atoi(token[6]);
+	si = getSentinelRedisInstanceByAddrAndRunID(master->sentinels,token[0],port,token[2]);
+	current_epoch = strtoull(token[3],NULL,10);
+	master_config_epoch = strtoull(token[7],NULL,10);
+	
+	if (!si) {
+		...
+		removed = removeMatchingSentinelsFromMaster(master,token[0],port,token[2]);
+		if (removed) {
+			sentinelEvent(REDIS_NOTICE,"-dup-sentinel",master,  "%@ #duplicate of %s:%d or %s", token[0],port,token[2]);
+		}
+
+		si = createSentinelRedisInstance(NULL,SRI_SENTINEL, token[0],port,master->quorum,master);
+	}
+	...
+}
+{% endhighlight %}
+"\_\_sentinel\_\_:hello"메세지 응답으로 master name, sentinel의 ip, port 등등이있는데 우선
+master name으로 현재 자신의 redis-master를 조회한 후 자신이 감시하지 않는 master일 경우 처리하지 않는다. 
+(다른 sentinel들을 발견하더라도 자신과 모니터링하는 대상이 동일한 sentinel에 대해서만 연결을 하려는 것으로 보인다.)
+그리고 sentinel 리스트에서 ip, port정보로 현재 등록되어 있는 sentinel 인지 검사한 후에 등록되지 않은 sentinel이라면 새로운 sentinel 인스턴스를 생성한다.
+만약 새로운 sentinel을 추가하기전에 runid로 중복된 sentinel이 있는지 검사하고 만약 존재한다면 해당 인스턴스를 삭제 한 후 새로운 인스턴스를 생성한다.
+
 
 
 {% highlight c %}
