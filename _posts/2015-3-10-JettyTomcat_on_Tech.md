@@ -23,6 +23,7 @@ Jetty란 무엇인가..
 
 **1. Jetty ?**  
  
+ * Jetty는 일반적으로 Tomcat 과 같이 서블릿 컨테이너로 독립적인 프로세스로 실행되면서 jsp나 서블릿 클래스에 정의된 기능을 수행하는 역할을 담당한다.
  * 자바 기반의 오픈소스 웹 서버
  * (비동기)HTTP 서버, (비동기)HTTP 클라이언트, 웹소켓, OSGi, JNDI, JMX 등을 지원 
  * Jetty는 다음과 같은 방법으로 실행 가능하다.  
@@ -47,7 +48,10 @@ Server는 Jetty의 메인 클래스로서  HTTP커넥션을 관리하는 Connect
 **\[참고자료\]**
 
  * http://www.eclipse.org/jetty/documentation/
+ * 클라우드 컴퓨팅 구현 기술
 
-
+https://webtide.com/why-choose-jetty/
+http://sohanb.blogspot.kr/
+http://www.programdevelop.com/3089737/
 
 #The End
