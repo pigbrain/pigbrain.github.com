@@ -22,11 +22,18 @@ Jetty란 무엇인가..
 ---
 
 **1. Jetty ?**  
-Jetty는 HTTP 서버, HTTP 클라이언트, 서블릿, 웹소켓, SPDY, JMX, JNDI, JAAS 등을 지원하는 오픈소스 프로젝트이다. 소스코드는 http://git.eclipse.org/c/jetty/org.eclipse.jetty.project.git/ 에서 다운로드 받을 수 있다. Jetty를 다양한 방법으로 사용 할 수 있는데 몇 가지 예를 들면 독립적으로 서버를 실행 할 수 있고 아파치 모듈로 넣어서 서버를 구현할 수도 있으며 자바 어플리케이션에 내장하여 Http서버를 만들 수도 있다.
+ 
+ * 자바 기반의 오픈소스 웹 서버
+ * (비동기)HTTP 서버, (비동기)HTTP 클라이언트, 웹소켓, OSGi, JNDI, JMX 등을 지원 
+ * Jetty는 다음과 같은 방법으로 실행 가능하다.  
+    * Tomcat 처럼 독립적으로 실행 
+    * 자바 어플리케이션에 Jetty를 내장하여 실행
+ * 소스코드는 http://git.eclipse.org/c/jetty/org.eclipse.jetty.project.git/ 에서 다운로드 받을 수 있다. 
 
-<img src="/assets/themes/Snail/img/JettyTomcat/chocoJetty.PNG" alt="">
-
-**2. Jetty 구조**
+**2. Jetty 구조**  
+Jetty의 구조는 아래 그림과 같다.  
+Server는 Jetty의 메인 클래스로서  HTTP커넥션을 관리하는 Connector와 쓰레드풀에서 쓰레드를 얻어와 request를 처리하고 response를 제공하는 Handler와 함께 전체적인 구성을 이루고 있다. 
+<img src="/assets/themes/Snail/img/JettyTomcat/view20000Jetty.PNG" alt="">
 
 **3. Jetty와 Tomcat의 차이점**    
 
@@ -35,6 +42,12 @@ Jetty는 HTTP 서버, HTTP 클라이언트, 서블릿, 웹소켓, SPDY, JMX, JND
 **5. Jetty를 이용한 Embedded 웹 서버 만들기**  
 
 **6. Embedded된 Jetty와 Spring**  
+
+
+**\[참고자료\]**
+
+ * http://www.eclipse.org/jetty/documentation/
+
 
 
 #The End
