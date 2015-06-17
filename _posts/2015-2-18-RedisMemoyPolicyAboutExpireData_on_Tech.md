@@ -1,9 +1,9 @@
 ---
 layout: post
-category: Linux
+category: OpenSource
 title: Redis는 Expire를 어떻게 처리할까?
 tagline: by Pigbrain
-tags: [Tech]
+tags: [OpenSource][Redis]
 ---
 Redis는 키를 저장할때 expire를 설정할 수 있다.<br>
 expire시간이 만료되면 어떠한 방법으로 데이터를 삭제할까?<br>
@@ -244,6 +244,4 @@ int freeMemoryIfNeeded(void) {
 {% endhighlight %}
 수 많은 메모리 정책이 존재한다. 정책에 따라 메모리를 해제 할 수 있는 최적의 키를 찾아 메모리를 해제 한다.
 메모리를 해제할 테이블이 expires일 수도 있고 일반 데이터 테이블 일 수 도있고 이건 사용자가 config를 지정하기 나름이다.
-
-#The End
 
