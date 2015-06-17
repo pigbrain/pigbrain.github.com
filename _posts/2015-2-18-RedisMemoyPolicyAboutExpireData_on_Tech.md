@@ -3,7 +3,7 @@ layout: post
 category: OpenSource
 title: Redis는 Expire를 어떻게 처리할까?
 tagline: by Pigbrain
-tags: [OpenSource][Redis]
+tags: [Tech]
 ---
 Redis는 키를 저장할때 expire를 설정할 수 있다.<br>
 expire시간이 만료되면 어떠한 방법으로 데이터를 삭제할까?<br>
