@@ -23,10 +23,9 @@ MachineLearning을 위한 일반적인 알고리즘들
 		* Ridge
 		* Decision Tree
 		* Lasso
-  
-  
-  
-    
+ +
+ +
+ +
 * **비지도 학습(Unsupervised Learning)** 
 	* 정의 
 		* 데이터가 어떻게 구성되었는지를 알아내기 위한 방법
