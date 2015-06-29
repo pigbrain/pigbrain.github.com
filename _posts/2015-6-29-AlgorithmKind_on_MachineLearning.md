@@ -1,11 +1,11 @@
 ---
 layout: post
-category: OpenSource
+category: MachineLearning
 title: MachineLearning을 위한 알고리즘 종류
 tagline: by Pigbrain
 tags: [MachineLearning]
 ---
-MachineLearning을 위한 일반적인 알고리즘
+MachineLearning을 위한 일반적인 알고리즘들
 
 <!--more-->
 
@@ -23,6 +23,7 @@ MachineLearning을 위한 일반적인 알고리즘
 		* Ridge
 		* Decision Tree
 		* Lasso
+ 
  
 * **비지도 학습(Unsupervised Learning)** 
 	* 정의 
