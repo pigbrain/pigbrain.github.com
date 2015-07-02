@@ -9,9 +9,10 @@ tags: [MachineLearning]
 
 <!--more-->
   
-* K-NN ?
-	* 다른 데이터들(훈련데이터)과 가장 유사한 K개의 데이터를 이용하여 값을 예측하는  알고리즘
-	* 입력 데이터와 훈련 데이터들과의 유사성은 [유클리드거리](https://en.wikipedia.org/wiki/Euclidean_distance)를 이용
+#K-Neareast Neighbor (K-NN)#
+**-다른 데이터들(훈련데이터)과 가장 유사한 K개의 데이터를 이용하여 값을 예측하는  알고리즘**   
+**-입력 데이터와 훈련 데이터들과의 유사성은 [유클리드거리](https://en.wikipedia.org/wiki/Euclidean_distance)를 이용**
+
 * 장점
 	* 높은 정확도
 	* 오류 데이터(outlier)에 둔감
@@ -20,6 +21,8 @@ tags: [MachineLearning]
 	* 계산 비용이 높다
 	* 많은 메모리 필요 
 
+
+#예제#
 <br>
 <br>
 <table>
@@ -32,9 +35,10 @@ tags: [MachineLearning]
 <tr><td>F</td><td>98</td><td>2</td><td>액션</td></tr>
 <tr><td>G</td><td>18</td><td>90</td><td>?</td></tr>
 </table>
-
+<br>
 
 **물음표에 해당하는 영화 유형을 찾아보자**  
+
 1. 다른 모든 영화와의 유사도를 계산 한다  
 2. 유사도가 가장 가까운(가장 작은) K개의 영화를 찾는다 (K=3으로 가정)  
 3. K개중 다수의 영화 유형을 G의 영화 유형으로 예측한다  
@@ -48,9 +52,7 @@ tags: [MachineLearning]
 <tr><td>E</td><td>117.4</td></tr>
 <tr><td>F</td><td>118.9</td></tr>
 </table>
-
+<br>
 
 영화 G와 유사도가 가장 가까운 영화는 A, B, C 이다.  
-A, B, C가 로맨스 이기 때문에 G도 로맨스 이다.
-
- 
+A, B, C가 로맨스 이기 때문에 G도 로맨스 이다.  
