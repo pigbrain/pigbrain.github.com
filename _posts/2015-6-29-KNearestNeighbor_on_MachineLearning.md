@@ -9,7 +9,6 @@ tags: [MachineLearning]
 
 <!--more-->
   
-#K-Neareast Neighbor (K-NN)#
 **-다른 데이터들(훈련데이터)과 가장 유사한 K개의 데이터를 이용하여 값을 예측하는  알고리즘**   
 **-입력 데이터와 훈련 데이터들과의 유사성은 [유클리드거리](https://en.wikipedia.org/wiki/Euclidean_distance)를 이용**
 
@@ -23,8 +22,6 @@ tags: [MachineLearning]
 
 
 #예제#
-<br>
-<br>
 <table>
 <tr><td>영화 제목</td><td>발차기 장면 횟수</td><td>키스 장면 횟수</td><td>영화 유형</td></tr>
 <tr><td>A</td><td>3</td><td>104</td><td>로맨스</td></tr>
