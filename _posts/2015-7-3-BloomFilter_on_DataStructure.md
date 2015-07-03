@@ -3,7 +3,7 @@ layout: post
 category: MachineLearning
 title: 블룸필터(Bloom Filter)
 tagline: by Pigbrain
-tags: [Data Structure]
+tags: [DataStructure]
 ---
 블룸필터(Bloom Filter)란? 
 
