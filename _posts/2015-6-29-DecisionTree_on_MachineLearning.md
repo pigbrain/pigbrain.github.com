@@ -43,4 +43,10 @@ tags: [MachineLearning]
 	* 엔트로피는 정보에 대한 기대 값으로 정의된다
 	* 엔트로피를 계산하기 위해서는 분류 항목의 가능한 모든 값에 대해 정보의 기대값이 필요하다
 	* https://en.wikipedia.org/wiki/Entropy_(information_theory)
-	* 엔트로피가 높다는 것은 데이터가 혼잡(?)하다는 것을 의미
+	* 엔트로피가 높다는 것은 데이터가 혼잡(?)하다는 것을 의미  
+  
+ 
+#예제
+<img src="/assets/themes/Snail/img/MachineLearning/DecisionTree/DecisionTree_example.png" alt="">
+이미지 출처 : http://javacan.tistory.com/entry/MachineLearningInAction-03-DecisitionTree-ID3
+ 
