@@ -1,6 +1,6 @@
 ---
 layout: post
-category: MachineLearning
+category: DataStructure
 title: 블룸필터(Bloom Filter)
 tagline: by Pigbrain
 tags: [DataStructure]
