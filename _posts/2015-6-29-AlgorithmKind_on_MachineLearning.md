@@ -5,7 +5,6 @@ title: MachineLearning을 위한 알고리즘 종류
 tagline: by Pigbrain
 tags: [MachineLearning]
 ---
-MachineLearning을 위한 일반적인 알고리즘들
 
 <!--more-->
 

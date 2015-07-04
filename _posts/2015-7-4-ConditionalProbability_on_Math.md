@@ -5,9 +5,7 @@ title: 조건부확률(Conditional Probability)
 tagline: by Pigbrain
 tags: [Math]
 ---
-  
-조건부확률의 정의, 공식을 알아보자
-  
+
 <!--more-->
 
 **-사건 A가 일어났다는 가정하에 사건 B가 일어나는 확률**   

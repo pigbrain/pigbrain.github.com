@@ -5,7 +5,6 @@ title: 의사결정트리(Decision Tree)
 tagline: by Pigbrain
 tags: [MachineLearning]
 ---
-의사결정트리(Decision Tree)를 만들고 데이터를 분류하는 방법에 대해 알아보자
 
 <!--more-->
 

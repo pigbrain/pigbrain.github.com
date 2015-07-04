@@ -5,7 +5,6 @@ title: K-Neareast Neighbor 알고리즘 (K-NN)
 tagline: by Pigbrain
 tags: [MachineLearning]
 ---
-지도학습(Supervised Learning) 중 K-NN에 대하여 알아보자 
 
 <!--more-->
   
