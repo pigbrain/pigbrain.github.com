@@ -16,7 +16,7 @@ tags: [Math]
 
 * P(A)는 사건 A가 일어날 확률 
 * P(A ∩ B)는 사건 A와 사건 B가동시에 일어날 확률 
-* P(A \| B)는 사건 A가 일어났을 때 사건 B가 일어날 확률  
+* P(A │ B)는 사건 A가 일어났을 때 사건 B가 일어날 확률  
 
 # 증명
 <img src="/assets/themes/Snail/img/Math\ConditionalProbability/proof.png" alt="">
@@ -38,7 +38,7 @@ tags: [Math]
 
 6. A ∩ B = {(A1, A2) | A1 < A2, A1 + A2 = 9} = {(3,6)(4,5)} 원소는 2개 -> P(A ∩ B) = **2/36** 
  
-7. P(B \| A) = **2/15** 
+7. P(B │ A) = **2/15** 
   
  
 #참고
