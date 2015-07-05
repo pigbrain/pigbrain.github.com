@@ -21,7 +21,7 @@ tags: [Math]
 * P(B │ A)는 사건 B가 일어났을 때 사건 A가 일어날 확률  
 
 # 증명  
-<img src="/assets/themes/Snail/img/Math\ConditionalProbability/table.png" alt="">
+<img src="/assets/themes/Snail/img/Math/Bayes/table.png" alt="">
 
 * 표본공간 B1,B2,B3,B4가 상호베타적이며 완비적인 사상들로 분할 되어 있다
 * 사상 A와 사상B는 교집합을 형성한다
@@ -31,7 +31,7 @@ tags: [Math]
 	* P(A) = P(B1)P(A │ B1) + P(B2)P(A │ B2) + P(B3)P(A │ B3) + P(B4)P(A │ B4) 
 * B¡의 사전적 확률 P(B¡)와 P(A │ B¡)가 주어진 경우 B¡의 사후적 확률 P(B¡ │ A)를 구한다
 	
-<img src="/assets/themes/Snail/img/Math\ConditionalProbability/proof.png" alt="">
+<img src="/assets/themes/Snail/img/Math/Bayes/proof.png" alt="">
 
  
 #참고
