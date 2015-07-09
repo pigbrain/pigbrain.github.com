@@ -28,7 +28,7 @@ tags: [MachineLearning]
 #예제#  
   
 <table>
-<tr><td>영화</td><td>단어</td><td>분류</td></td>
+<tr><td>영화</td><td>단어</td><td>분류</td></tr>
 <tr><td>1</td><td>fun,couple,love,love</td><td>Comedy</td></tr>
 <tr><td>2</td><td>fast,furious,shoot</td><td>Action</td></tr>
 <tr><td>3</td><td>Couple,fly,fast,fun,fun</td><td>Comedy</td></tr>
