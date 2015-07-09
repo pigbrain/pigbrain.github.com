@@ -67,9 +67,14 @@ tags: [MachineLearning]
 * A = P(Comedy | Words) = ((1/9) * (0/9) * (3/9)) * 2/5 = 0
 * B = P(Action | Words) = ((2/11) * (2/11)*(1/11)) * 3/5 = 0.0018 (동일한 방법으로 계산)
 * **A < B 이기 때문에 해당 문서는 Action으로 분류**
-
-
+  
+#Laplace Smoothing을 이용한 예외 처리 ##
+* 나이브베이시안의 단점 중 하나는 훈련데이터에 없는 새로운 단어가 나왔을 때 확률이 0이 되는 문제가 있다
+* 위 현상을 방지하기 위해 Laplace(add-1) Smoothing이란 방법을 사용
+* 빈도수에 +1을 해줌으로써 확률이 0이 되는 것을 방지
+  
 
 #참고#
 * https://en.wikipedia.org/wiki/Naive_Bayes_classifier
 * http://bcho.tistory.com/1010
+* http://www.leesanghyun.co.kr/Naive_Bayesian_Classifier
