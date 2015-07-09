@@ -34,8 +34,9 @@ tags: [MachineLearning]
 <tr><td>4</td><td>Furious,shoot,shoot,fun</td><td>Action</td></tr>
 <tr><td>5</td><td>Fly,fast,shoot,love</td><td>Action</td></tr>
 </table>
+  
 <br>
-
+  
 **어떤 문서에 “fun,furious,fast” 라는 3개의 단어만 있을 때, 이 문서는 Comedy인가? Action인가 ?**  
   
   
