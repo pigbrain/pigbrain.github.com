@@ -66,7 +66,7 @@ tags: [MachineLearning]
 
 * A = P(Comedy | Words) = ((1/9) * (0/9) * (3/9)) * 2/5 = 0
 * B = P(Action | Words) = ((2/11) * (2/11)*(1/11)) * 3/5 = 0.0018 (동일한 방법으로 계산)
-* A < B 이기 때문에 해당 문서는 Action으로 분류된다
+* **A < B 이기 때문에 해당 문서는 Action으로 분류**
 
 
 
