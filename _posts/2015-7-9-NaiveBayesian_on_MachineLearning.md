@@ -25,7 +25,8 @@ tags: [MachineLearning]
 * P1(x, y) > P2(x, y) 이면 속성(x, y)는 분류항목1에 속한다
 * P1(x, y) < P2(x, y) 이면 속성(x, y)는 분류항목2에 속한다
 
-#예제#
+#예제#  
+  
 <table>
 <tr><td>영화</td><td>단어</td><td>분류</td></td>
 <tr><td>1</td><td>fun,couple,love,love</td><td>Comedy</td></tr>
