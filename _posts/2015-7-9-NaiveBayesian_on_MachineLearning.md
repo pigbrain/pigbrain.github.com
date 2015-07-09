@@ -71,4 +71,5 @@ tags: [MachineLearning]
 
 
 #참고#
+* https://en.wikipedia.org/wiki/Naive_Bayes_classifier
 * http://bcho.tistory.com/1010
