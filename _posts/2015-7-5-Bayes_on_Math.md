@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Math
-title: 베이즈 정리(Bayes's Theorem)
+title: 베이스 정리(Bayes's Theorem)
 tagline: by Pigbrain
 tags: [Math]
 ---
