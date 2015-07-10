@@ -20,7 +20,7 @@ tags: [Math]
 # 예제
 * x는 -10 ~ +10 범위의 값을 갖는다
 * a는 1, 3, 5, 7, 9의 값을 갖는다
-<img src="/assets/themes/Snail/img/Math/SigmoidFunction/graph.png" alt="">
+<img src="/assets/themes/Snail/img/Math/SigmoidFunction/graph.PNG" alt="">
 * 시그모이드 함수는 기울기 매개변수(a)의 값이 증가할수록 계단 함수 (step function) 모양에 가까워진다
  
 #참고
