@@ -27,9 +27,18 @@ tags: [MachineLearning]
   
 
 #분류방법#
- ㄴㄴ
-#예제#  
-  ㄴㄴ
+ * 각각의 속성에 가중치를 곱한 다음 서로 더한 값을 구한다
+ * 더한 값을 시그모이드 함수에 넣고 0에서 1 사이의 수를 구한다
+ * 이 수가 0.5 이상이면 1로 분류하고, 0.5이하이면 0으로 분류한다
+
+<img src="/assets/themes/Snail/img/LogisticRegression/logistic_regression.png" alt="">  
+
+#회귀 계수(가중치)를 찾기 위한 최적화 방법#  
+* 시그모이드 함수의 입력은 z이며 z는 다음과 같이 주어진다
+<img src="/assets/themes/Snail/img/LogisticRegression/input_z.png" alt=""> 	
+	* 벡터 x는 입력 데이터
+	* 가장 좋은 계수 w(가중치)를 찾기 위하여 기울기상승(gradient ascent)이라는 최적화 방법을 이용
+* 
 
 #용어#
 * 오버피팅(Overfitting)과 언더피팅(Underfitting)
@@ -40,3 +49,4 @@ tags: [MachineLearning]
 #참고#
 * http://terms.naver.com/entry.nhn?docId=2323285&cid=42419&categoryId=42419
 * http://blog.secmem.org/647
+* https://people.cs.pitt.edu/~milos/courses/cs2710/lectures/Class22.pdf
