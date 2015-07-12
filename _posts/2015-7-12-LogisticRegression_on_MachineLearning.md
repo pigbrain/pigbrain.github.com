@@ -40,11 +40,13 @@ tags: [MachineLearning]
 	* 가장 좋은 계수 w(가중치)를 찾기 위하여 기울기상승(gradient ascent)이라는 최적화 방법을 이용
 * 기울기 상승은 함수에서 최대 지점을 찾고자 할 때, 이 지점으로 이동하는 가장 좋은 방법이 기울기의 방향에 있다는 생각을 기반으로 한다
 	* 기울기는 ▽기호를 사용
-	* 함수f(x, y)의 기울기는 아래와 같다.
+	* 함수f(x, y)의 기울기는 아래와 같다
 <img src="/assets/themes/Snail/img/LogisticRegression/gradient.png" alt="">
 	* f(x, y)는 정의가 필요하며 계산이 이뤄지는 지점 근처에서 미분이 가능해야 한다
 <img src="/assets/themes/Snail/img/LogisticRegression/gradient_descent.png" alt="">
-
+	* 기울기 상승 알고리즘은 아래와 같이 벡터로 표현 가능
+		* 매개변수 a에 의해 크기가 결정
+<img src="/assets/themes/Snail/img/LogisticRegression/gradeint_vector.png" alt="">
 
 #용어#
 * 오버피팅(Overfitting)과 언더피팅(Underfitting)
