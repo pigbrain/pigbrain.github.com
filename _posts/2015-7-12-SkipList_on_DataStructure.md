@@ -31,17 +31,19 @@ tags: [DataStructure]
 	* x > y 이면 다음 노드로 이동
 	* x < y 이면 아래 리스트로 이동
 	
-* Ex) 78을 검색
+* Ex) 78을 검색  
 <img src="/assets/themes/Snail/img/DataStructure/SkipList/search.png" alt="">
+  
+  
 
-search_for_insertion.png
 #삽입#
 * Ex) 15를 삽입
 	* 15를 검색한다
 	* 15보다 작은 수에서 검색이 종료된다
 	* 검색 종료 된 위치를 Predecessor Key라고 지칭하며 이 다음 위치에 15를 삽입한다
 		* 삽입할때 확률로 노드의 크기를 정하여 삽입한다 
-<img src="/assets/themes/Snail/img/DataStructure/SkipList/search.png" alt="">
+<img src="/assets/themes/Snail/img/DataStructure/SkipList/insert.png" alt="">
+  
 
 #삭제#
 * Ex) 34를 삭제 
@@ -50,5 +52,7 @@ search_for_insertion.png
 
 
 # 참고
+* https://en.wikipedia.org/wiki/Skip_list
 * http://www.slideshare.net/jongwookkim/skip-list
 * http://sweeper.egloos.com/m/867460
+* http://www.slideshare.net/AndresMendezVazquez/analysis-of-algorithms-13-skip-lists?related=1
