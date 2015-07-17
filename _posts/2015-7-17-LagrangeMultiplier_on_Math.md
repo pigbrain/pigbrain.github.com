@@ -27,11 +27,30 @@ tags: [Math]
 	* 위 식에서 최대값, 최소값을 구하려면 다소 복잡하다 
 
 * 경계선에서의 최대값과 최소값을 쉽게 구할 수 있는 방법은 ?
+<br>
 <img src="/assets/themes/Snail/img/Math/LagrangeMultiplier/prof2.png" alt="">    
 
 
 
 #예제#
+
+* 경계선이 다음과 같이 주어져 있다. f(x, y) = x의 g(x, y) = 0 위에서의 최대값과 최소값은 ?
+<img src="/assets/themes/Snail/img/Math/LagrangeMultiplier/ex1.png" alt=""> 
+<br>
+<br>
+<img src="/assets/themes/Snail/img/Math/LagrangeMultiplier/ex2.png" alt=""> 
+* 이 연립 방정식을 풀게 되면 x=1, y=0, λ=1이 나온다
+* f(x, y)는 (1, 0)dptj 최대 혹은 최소값을 갖고 그 값은 f(1, 0) = 1 이다.
+<br>
+* **그런데!** 임의의 실수 y에 대해 아래와 같은 성질을 만족
+<img src="/assets/themes/Snail/img/Math/LagrangeMultiplier/ex3.png" alt="">
+* f(x, y) = x는 (0, 0)에서 최소값 0을 갖는다
+<br>
+<br>
+* (0, 0)이 라그랑주 승수법을 잉ㅇ하여 나오지 않는 이유는 ?
+	* g(x, y)를 좌표평면에 그래프를 그리면 (0, 0)에서 뾰족점을 갖기 때문에 (0, 0)에서 접선을 가지 않기 때문이다
+<img src="/assets/themes/Snail/img/Math/LagrangeMultiplier/ex4.png" alt="">  
+
 
 #참고
 * http://economia.tistory.com/2  
