@@ -47,7 +47,7 @@ tags: [Math]
 * f(x, y) = x는 (0, 0)에서 최소값 0을 갖는다
 <br>
 <br>
-* (0, 0)이 라그랑주 승수법을 잉ㅇ하여 나오지 않는 이유는 ?
+* (0, 0)이 라그랑주 승수법에서 나오지 않는 이유는 ?
 	* g(x, y)를 좌표평면에 그래프를 그리면 (0, 0)에서 뾰족점을 갖기 때문에 (0, 0)에서 접선을 가지 않기 때문이다
 <img src="/assets/themes/Snail/img/Math/LagrangeMultiplier/ex4.png" alt="">  
 
