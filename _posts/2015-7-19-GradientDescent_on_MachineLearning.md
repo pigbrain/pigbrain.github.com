@@ -39,7 +39,7 @@ tags: [MachineLearning]
 	
 
 # 기울기 하강의 문제점 #
-* Local Minimum에 빠질 수 있다 
+* Local Minimum에 빠질 수 있다  
 * 해에 근접할수록 |∇f|가 0에 가까워지기 때문에 수렴속도가 느려진다
 
 
