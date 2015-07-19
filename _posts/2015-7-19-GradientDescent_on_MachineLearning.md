@@ -8,7 +8,6 @@ tags: [MachineLearning]
 
 <!--more-->
 
-#기울기 하강(Gradient Descent) ?#
 * 미분의 개념을 최적화 문제에 적용한 방법 
 * 함수의 Local Minimum을 찾는 방법
 
@@ -42,9 +41,6 @@ tags: [MachineLearning]
 # 기울기 하강의 문제점 #
 * Local Minimum에 빠질 수 있다 
 * 해에 근접할수록 |∇f|가 0에 가까워지기 때문에 수렴속도가 느려진다
-
-
-<img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/logistic_regression.png" alt="">  
 
 
 #참고#
