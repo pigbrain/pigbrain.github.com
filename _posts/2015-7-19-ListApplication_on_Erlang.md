@@ -10,7 +10,7 @@ tags: [Erlang]
 
 <img src="/assets/themes/Snail/img/Erlang/ListApplication/list-1.png" alt="">  
 
-* 표기법 [F(X) || X <- L]은 리스트 L로 부터 X를 받는 리스트 F(X)라는 의미
+* 표기법 [F(X) ││ X <- L]은 리스트 L로 부터 X를 받는 리스트 F(X)라는 의미
 
 <br>
 
