@@ -11,11 +11,11 @@ tags: [MachineLearning]
 * 미분의 개념을 최적화 문제에 적용한 방법 
 * 함수의 Local Minimum을 찾는 방법
 
-#기울기 상승(Gradient Ascent)과 기울기 하강(Gradient Descent)#
+#기울기 상승(Ascent)과 기울기 하강(Descent)#
 * **기울기 상승** : 어떤 함수의 극대점을 찾기 위해 현재 위치에서의 기울기 방향으로 이동해 가는 방법  
 * **기울기 하강** : 극소점을 찾기 위해 gradient 반대 방향으로 이동해 가는 방법
 
-# 기울기(Gradient) 공식#
+# 기울기(Gradient) ?#
 * 다변수 함수 f(X1, X2, ... Xn)에 대한 기울기
 
 <img src="/assets/themes/Snail/img/MachineLearning/GradientDescent/gradient.png" alt="">  
