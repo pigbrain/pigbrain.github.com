@@ -13,7 +13,8 @@ tags: [Math]
 <img src="/assets/themes/Snail/img/Math/MethodOfLeastSquares/sample.png" alt="">    
   
 #공식#
-<img src="/assets/themes/Snail/img/Math/MethodOfLeastSquares/formula.png" alt="">    
+<img src="/assets/themes/Snail/img/Math/MethodOfLeastSquares/formula.png" alt="">  
+
 * 위 공식이 최소가 되도록 하는 함수 f(x)를 구하는 것이 최소제곱법의 원리
 
 #원리#
