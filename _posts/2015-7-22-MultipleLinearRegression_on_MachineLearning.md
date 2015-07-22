@@ -29,7 +29,7 @@ tags: [MachineLearning]
 	* 선형회귀에서의 계산 법과 동일하다
 
 * 비용 함수 (Cost Function)
-<img src="/assets/themes/Snail/img/MachineLearning/LinearRegression/costFunction.png" alt="">  
+<img src="/assets/themes/Snail/img/MachineLearning/MultipleLinearRegression/costFunction.png" alt="">  
 
 * 비용 함수(Cost Function)을 계산하기 위해서는 θ0, θ1, ... θn 값이 필요
 	* θ0, θ1, ... θn을 구하기 위해서는 [기울기 하강을 이용한 탐색](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)기법을 사용
