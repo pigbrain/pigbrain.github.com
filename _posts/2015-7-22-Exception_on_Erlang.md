@@ -44,7 +44,7 @@ tags: [Erlang]
 	
 * FuncOrExpressionSequence 내에서 예외가 발생할 경우  
 	*  catch절에 있는 ExPattern1 등과 매치된다  
-	*  
+
 * ExceptionType은 예외가 어떻게 생성되었는지를 알려주는 atom 이다  
 	* atom의 값은 throw, exit, error 중 하나 이다
 	* 만약 ExceptionType을 생략하면 throw가 기본값이 된다
