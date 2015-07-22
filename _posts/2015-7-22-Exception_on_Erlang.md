@@ -54,11 +54,13 @@ tags: [Erlang]
 
 <img src="/assets/themes/Snail/img/Erlang/Exception/exception1-1.png" alt="">  
 <br>
+<br>
 <img src="/assets/themes/Snail/img/Erlang/Exception/exception1-2.png" alt="">  
 <br>
 
 * 예외를 잡는 다른 방법으로는 catch 기본명령(primitive)이 있다  
 <img src="/assets/themes/Snail/img/Erlang/Exception/exception2-1.png" alt="">  
+<br>
 <br>
 <img src="/assets/themes/Snail/img/Erlang/Exception/exception2-2.png" alt="">  
 <br> 
@@ -66,6 +68,7 @@ tags: [Erlang]
 * 얼랭에서 스택 추적하기  
 	*  erlang:get_stacktrace()를 사용  
 <img src="/assets/themes/Snail/img/Erlang/Exception/exception3-1.png" alt="">  
+<br>
 <br>
 <img src="/assets/themes/Snail/img/Erlang/Exception/exception3-2.png" alt="">  
 <br> 
