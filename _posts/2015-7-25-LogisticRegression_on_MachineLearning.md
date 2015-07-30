@@ -27,7 +27,7 @@ tags: [MachineLearning]
 * [기울기 하강을 이용한 탐색](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)  
 
   
-#분류방법#
+#로지스틱 회귀의 특징#  
 * 예측 함수(Hypothesis Function)는 0과 1사이의 값을 갖는다  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/hypohesisFunction_range.png" alt="">    
     
@@ -42,10 +42,22 @@ tags: [MachineLearning]
 * h(x)의 결과 값에 따라 0과 1로 분류  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/decisionBoundary_definition.png" alt="">
   
-* 위 시그모이드 함수 그래프에서 다음과 같은 성질을 확인 가능
+* 위 시그모이드 함수 그래프에서 다음과 같은 특징을 확인 가능
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/decisionBoundary_features.png" alt="">  
   
-
+#분류 방법#  
+* 예측 함수(Hypothesis Function)은 다음과 같은 형태를 갖는다  
+<img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/costFunction.png" alt="">  
+  
+* 시그모이드 함수의 특징 처럼 비용 함수(Cost Function)도 다음과 같은 특징을 갖는다  
+<img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/costFunction_features.png" alt="">  
+  
+* 선형 회귀와 마찬가지로 최적의 θ값을 찾기 위해 기울기 하강 탐색 방법을 이용  
+<img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/gradient_descent.png" alt="">  
+  
+#증명#
+* 기울기 하강 탐색에서 사용한 J(θ)' 는 다음과 같이 도출 가능하다  
+<img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/proof.png" alt="">  
 
 
 #용어#
@@ -53,10 +65,12 @@ tags: [MachineLearning]
 	* 훈련 데이터 집합에만 과하게 적합되어 검증 데이터 집합이나 다른 입력에 대해 부정확한 결과를 내는 것을 오버피팅이라 한다
 	* 위와 반대로 모호한 결과를 내는 것을 언더피팅이라 한다.
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/overfitting_underfitting.png" alt="">
-
+  
+  
 * [기울기 하강](https://ko.wikipedia.org/wiki/%EA%B2%BD%EC%82%AC_%ED%95%98%EA%B0%95%EB%B2%95)
-
+  
 #참고#
-* http://terms.naver.com/entry.nhn?docId=2323285&cid=42419&categoryId=42419
-* http://blog.secmem.org/647
-* https://people.cs.pitt.edu/~milos/courses/cs2710/lectures/Class22.pdf
+* http://terms.naver.com/entry.nhn?docId=2323285&cid=42419&categoryId=42419  
+* http://blog.secmem.org/647  
+* https://people.cs.pitt.edu/~milos/courses/cs2710/lectures/Class22.pdf  
+* https://share.coursera.org/wiki/index.php/ML:Logistic_Regression
