@@ -29,14 +29,14 @@ tags: [Erlang]
 <br>  
 * 사전 정의된 속성  
 	* 미리 정해진 의미가 있으며 어떠한 함수 정의보다도 앞서 나와야한다  
-  	
+  	<br>
 	* module(modname). 
 		* 모듈 선언  
 		* modname 은 atom이어야 한다  
 		* 이 속성은 파일의 첫 번째 속성이어야 한다  
 		* 관례적으로 modname의 코드는 modname.erl이라는 파일에 저장된다  
 		* modname.erl로 저장하지 않을 경우 자동 코드 로딩이 제대로v동작하지 않을 수 있다  
-
+  	<br>
 	* import(Mod, [Name1/Arity1, Name2/Arity2...]).  
 		* Arity1 개의 인수를 가지는 함수 Name1이 모듈 Mod로 부터 improt될 것임을 지정  
 		* 모듈로부터 함수가 import되면 그 함수는 모듈 이름을 지정하지 않고도 호출할 수 있다  
@@ -47,23 +47,23 @@ tags: [Erlang]
 				f(L) ->  
 					L1 = map(fun(X) -> 2*X end, L),  
 					lists:sum(L1)  
-  
+  	<br>  
 		* export([Name1/Arity1, Name2/Arity2...]).  
 			* 함수 Name1/Arity1, Name2/Arity2... 등을 현재의 모듈에서 export 한다 
 			* export된 함수만이 모듈 밖에서 호출될 수 있다  
-  
+  	<br>
 		* compile(Options).  
 			* 컴파일러 옵션 목록에 Options를 추가  
 			* Options는 단일한 컴파일 옵션 또는 컴파일러 옵션들의 리스트이다  
 			* 컴파일러 옵션인 -compile(export_all).은 종종 프로그램을 디버깅할 때 사용  
 				* 이렇게 하면 명시적으로 -export라고 표기하지 않아도 모듈의 모든 함수를 export한다.
-  ﻿
+  	<br>
 		* vsn(Version).  
 			* 모듈의 버전을 지정  
 			* Version은 어떠한 문자열도 가능  
 			* Version은 아무런 구문이나 의미를 가지지 않는다  
 			* 분석 프로그램에서나 또는 문서화 목적으로 사용  
-<br>  
+  	<br><br>
   
 * 사용자 정의 속성  
 	* -SomeTag(Value). 와 같은 형태로 정의  
