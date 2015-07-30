@@ -9,7 +9,7 @@ tags: [Erlang]
 <!--more-->
 
 **-바이너리 데이터에 들어 있는 개별 비트 혹은 연속한 비트들을 추출하고 묶는 데 사용하는 패턴 매칭의 확장판**  
-**-프로토콜 프로그래밍용으로 개발되어 프로토콜 데이터를 묶고 푸는 데 있어 매우 효율적인 코드를 만들수 있**  
+**-프로토콜 프로그래밍용으로 개발되어 프로토콜 데이터를 묶고 푸는 데 있어 매우 효율적인 코드를 만들수 있다**  
   
 <img src="/assets/themes/Snail/img/Erlang/BitSyntax/BitSyntax-1.png" alt="">  
 
@@ -37,10 +37,10 @@ tags: [Erlang]
 * Size는 정수로 평가되는 식이어야 한다. 언바인드 변수일 수 없다  
 * TypeSpecifierList는 End-Sign-Type-Unit의 형태를 갖는 항목들을 하이픈으로 구분한 명시자 리스트이다
 	* 명시자 리스트에 있는 항목은 다음의 값을 가질 수 있다  
-		* End = big | little | native (Default : big)  
-		* Sign = signed | unsigned (Default : unsigned)  
-		* Type = integer | float | binary (Default : integer)  
-		* Unit = 1 | 2 | ... 255 ( Unit의 Default 값은 Type에 따라 다르며 Type이 정수거나 부동형이면 1, 바이너리이면 8)  
+		* End = big │ little │ native (Default : big)  
+		* Sign = signed │ unsigned (Default : unsigned)  
+		* Type = integer │ float │ binary (Default : integer)  
+		* Unit = 1 │ 2 │ ... 255 ( Unit의 Default 값은 Type에 따라 다르며 Type이 정수거나 부동형이면 1, 바이너리이면 8)  
 
 <img src="/assets/themes/Snail/img/Erlang/BitSyntax/BitSyntax-2.png" alt="">  
 
