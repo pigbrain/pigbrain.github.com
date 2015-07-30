@@ -45,7 +45,6 @@ tags: [Erlang]
 				-import(lists, [map/2]).  
 
 				f(L) ->  
-
 					L1 = map(fun(X) -> 2*X end, L),  
 					lists:sum(L1)  
   
@@ -64,5 +63,15 @@ tags: [Erlang]
 			* Version은 어떠한 문자열도 가능  
 			* Version은 아무런 구문이나 의미를 가지지 않는다  
 			* 분석 프로그램에서나 또는 문서화 목적으로 사용  
+<br>  
+  
+* 사용자 정의 속성  
+	* -SomeTag(Value). 와 같은 형태로 정의  
+		* SomeTag는 atom 이여야 한다  
 
+				-module(attrs).
+				-vsn(1234).
+
+				-author({joe, armstrong}).  
+				-purpose("example of attributes").     
 
