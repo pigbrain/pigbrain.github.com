@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: 함수 참조, 리스트 연산++/--, 매크
+title: 함수 참조, 리스트 연산++/--, 매크로 
 tagline: by Pigbrain
 tags: [Erlang]
 ---
