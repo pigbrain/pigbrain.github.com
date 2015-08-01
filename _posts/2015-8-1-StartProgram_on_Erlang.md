@@ -7,7 +7,7 @@ tags: [Erlang]
 ---
 
 <!--more-->
-  
+
 <img src="/assets/themes/Snail/img/Erlang/RunProgram/runProgram-1.png" alt="">  
 
 * io와 io_lib 모듈에서 **~n**은 줄바꿈을 의미  
