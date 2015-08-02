@@ -20,9 +20,6 @@ tags: [Erlang]
 * 얼랭에서 프로세스 프로그래밍은 spawn, send, receive 명령만 있으면 가능
 
 <br>  
-<br>  
-
-
 * **Pid = spawn(Fun)**  
 	* Fun을 실행하는 새 프로세스를 생성  
 	* 새로 생성된 프로세스는 호출한 프로세스와 병행으로 실행된다  
@@ -41,6 +38,7 @@ tags: [Erlang]
 				Pattern2 [when Guard2] -> Expression2;
 				.......
 			end  
+
 		*  ﻿첫 번째 패턴이 매치하지 않으면 Pattern2와 매치시키는 식으로 진행된다  
 		*  어떠한 패턴과도 매치하지 않으면 메시지는 나중에 처리하기 위해 저장된다  
 		*  프로세스는 다음 메시지를 기다린다  
@@ -56,6 +54,7 @@ tags: [Erlang]
 <img src="/assets/themes/Snail/img/Erlang/MultiprocessProgramming/mp-3.png" alt="">  
 * rpc 함수는 해당 Pid 프로세스로 요청을 보내고 응답을 기다리는 부분을 캡슐화 한 것이다  
 <br>
+<br>
 <img src="/assets/themes/Snail/img/Erlang/MultiprocessProgramming/mp-4.png" alt="">  
 * 위 코드의 문제점
 	* 프로세스가 여러개 있을때 A라는 프로세스로 요청을 보냈고 응답을 기다리고 있다  
@@ -63,6 +62,7 @@ tags: [Erlang]
 	* A로 보낸 요청에 대한 응답이 올때까지 무작정 기다리는 것이다  
 	* 다른 프로세스가 보낸 메세지를 A로 부터온 응답으로 오인 할 수도 있다  
 	* receive 문을 아래와 같이 변경해야 한다
+<br>
 <br>
 <img src="/assets/themes/Snail/img/Erlang/MultiprocessProgramming/mp-5.png" alt="">  
 	* rpc 함수로 진입하면 Pid는 어떤 값과 바운드한다  
