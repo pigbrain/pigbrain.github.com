@@ -69,4 +69,26 @@ tags: [Erlang]
 	* 패턴 {Pid, Response}에서 Pid는 바운드이고 Response는 언바운드이다  
 		* 수신된 메세지들 중 첫번쨰 요소가 Pid와 매칭되는 것들만 처리한다  
 		* 나머지는 모두 큐에 쌓인다  
+<br>  
+<br>  
 
+* 아래 경우에서는 receive 문이 결코 오지 않을 메시지를 영원히 기다릴 수도 있다  
+	* 프로그램에 논리적 오류가 있는 경우  
+	* 메시지를 보내려고 했던 프로세스가 그 메시지를 보내기 전에 죽을 경우   
+* receive 문에 타임아웃을 추가하여 위 문제를 해결한다  
+
+		receive
+			Pattern1 [when Guard1] -> Expression1;
+			Pattern2 [when Guard2] -> Expression2;
+			.......
+		after Time -> Expressions
+		end  
+	
+	* Time 밀리초 내에 매치되는 메시지가 도착하지 않을 경우  
+		* 프로세스는 메시지를 기다리는 것을 멈추고 Expressions를 실행한다  
+	* 타임아웃 값이 0이면 타임아웃의 구문이 즉시 실행된다  
+
+#예제 - 타이머 구현하기#  
+<img src="/assets/themes/Snail/img/Erlang/MultiprocessProgramming/timer-1.png" alt="">
+<br>
+<img src="/assets/themes/Snail/img/Erlang/MultiprocessProgramming/timer-2.png" alt="">
