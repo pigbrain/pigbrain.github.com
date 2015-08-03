@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: 등록된 프로세(Registered Process)
+title: 등록된 프로세스(Registered Process)
 tagline: by Pigbrain
 tags: [Erlang]
 ---
@@ -24,7 +24,7 @@ tags: [Erlang]
 * **unregister(AnAtom)**  
 	* AnAtm과 연관된 모든 등록을 제거한다  
 
-* **whereis(AnAtom) -> Pid | undefined**
+* **whereis(AnAtom) -> Pid │ undefined**
 	* AnAtom이 등록되었는지 조사한다  
 		* 이것은 프로세스 식별자인 Pid를 반환허가나 AnAtom과 연결된 프로세스가 없는 경우 atom인 undefined를 반환한다  
 * **registered() -> [AnAtom::atom()]**
