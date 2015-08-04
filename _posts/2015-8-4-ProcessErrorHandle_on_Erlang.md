@@ -9,8 +9,8 @@ tags: [Erlang]
 <!--more-->
 
 # 프로세스 연결하기  #
-	* 한 프로세스가 다른 프로세스에 의존할 경우, 자신이 의존하는 다른 프로세스의 상태를 모니터링 해야 한다  
-	* BIF인 **link**를 사용
+* 한 프로세스가 다른 프로세스에 의존할 경우, 자신이 의존하는 다른 프로세스의 상태를 모니터링 해야 한다  
+* BIF인 **link**를 사용
 <br>
 
 #시스템 프로세스(System Process)#  
@@ -41,9 +41,9 @@ tags: [Erlang]
 <tr><td>true</td><td>X</td><td>메일 박스에 {'EXIT, Pid, X}를 추가한다</td></tr>
 <tr><td>false</td><td>normal</td><td>계산한다: 아무 것도 하지 않고 신호가 사라진다.</td></tr>
 <tr><td>false</td><td>kill</td><td>죽는다: 종료 신호 killed를 link집합으로 동보한다.</td></tr>
-<tr><td>false</td><td>X</td><td><죽는다: 종료 신호 X를 link집합으로 동보한다/td></tr>
-</table>
-<br>
+<tr><td>false</td><td>X</td><td><죽는다: 종료 신호 X를 link집합으로 동보한다</td></tr>  
+</table>  
+<br>  
 
 #오류 처리 명령어#  
 * spawn_link(Fun) -> Pid
