@@ -41,7 +41,7 @@ tags: [Erlang]
 <tr><td>true</td><td>X</td><td>메일 박스에 {'EXIT, Pid, X}를 추가한다</td></tr>
 <tr><td>false</td><td>normal</td><td>계산한다: 아무 것도 하지 않고 신호가 사라진다.</td></tr>
 <tr><td>false</td><td>kill</td><td>죽는다: 종료 신호 killed를 link집합으로 동보한다.</td></tr>
-<tr><td>false</td><td>X</td><td><죽는다: 종료 신호 X를 link집합으로 동보한다</td></tr>  
+<tr><td>false</td><td>X</td><td>죽는다: 종료 신호 X를 link집합으로 동보한다</td></tr>  
 </table>  
 <br>  
 
