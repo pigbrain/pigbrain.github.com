@@ -51,10 +51,9 @@ tags: [MachineLearning]
   
 #뉴럴 네트워크 예#  
 * AND 연산을 하는 뉴럴 네트워크  
+	* 0 또는 1을 입력으로 받는다  
+	* g(Χ)의 함수는 [시그모이드 함수](http://pigbrain.github.io/math/2015/07/10/SigmoidFunction_on_Math/)를 이용  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/neuralNetwork_and.png" alt="">  
-<br>  
- * 0 또는 1을 입력으로 받는다  
- * g(Χ)의 함수는 [시그모이드 함수](http://pigbrain.github.io/math/2015/07/10/SigmoidFunction_on_Math/)를 이용  
 <br>  
 
 #비용 함수(Cost Function)#
