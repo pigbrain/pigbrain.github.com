@@ -23,7 +23,8 @@ tags: [MachineLearning]
 
 #뉴런 (Neuron)#  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/neuron.png" alt="">
-<br>
+<br>  
+
 * 뉴런의 동작  
 	* 수상돌기는 다른 여러개의 뉴런으로 부터 **입력**을 받는다  
 	* 각 연결부의 신호의 강도는 다르다  
