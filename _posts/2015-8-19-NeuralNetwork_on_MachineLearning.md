@@ -67,8 +67,11 @@ tags: [MachineLearning]
 
   
 #역 전파(Back Propagation)#
+ * 역 전파 기법은 뉴럴네트워크에서 비용 함수를 최소화 하는 방법이다  
+ * 선형회귀, 로지스틱 회귀에서와 마찬가지로 [기울기 하강 탐색 방법](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)을 사용한다  
   
-  
+<img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/backPropagation.png" alt="">  
+
 #참고#
 * https://share.coursera.org/wiki/index.php/ML:Neural_Networks:_Representation  
 * https://share.coursera.org/wiki/index.php/ML:Neural_Networks:_Learning
