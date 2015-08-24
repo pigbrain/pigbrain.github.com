@@ -39,11 +39,11 @@ tags: [MachineLearning]
 
 * 뉴럴 네트워크의 동작  
 	* 각각의 동그라미는 하나의 뉴런을 의미 한다  
-	* 각각의 뉴런은 예측 함수(Hypothesis Function)를 통하여 출력 값을 만들어 낸다  
+	* 각각의 뉴런은 함수(Activation 이라 칭함)를 통하여 출력 값을 만들어 낸다  
 	* 초록색 뉴런은 입력을 받는다  
 	* 초록색 뉴런은 입력 값에 가중치를 곱하여 파란색 뉴런으로 데이터를 전달 한다  
-	* 파란색 뉴런은 입력 된 값들로 연산하여 노란색으로 데이터를 전달 한다  
-	* 노란색 뉴런은 입력 된 값들을 연산하여 결과 값을 출력한다  
+	* 파란색 뉴런은 입력 된 값들로 연산(Activation 수행)하여 노란색으로 데이터를 전달 한다  
+	* 노란색 뉴런은 입력 된 값들을 연산(Activation 수행)하여 결과 값을 출력한다  
 
 <br>  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/neuralNetwork_sample.png" alt="">  
@@ -53,12 +53,19 @@ tags: [MachineLearning]
 #뉴럴 네트워크 예#  
 * AND 연산을 하는 뉴럴 네트워크  
 	* 0 또는 1을 입력으로 받는다  
-	* g(Χ)의 함수는 [시그모이드 함수](http://pigbrain.github.io/math/2015/07/10/SigmoidFunction_on_Math/)를 이용  
+	* g(Χ)의 함수(Activation)는 [시그모이드 함수](http://pigbrain.github.io/math/2015/07/10/SigmoidFunction_on_Math/)를 이용  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/neuralNetwork_and.png" alt="">  
 <br>  
 
 #비용 함수(Cost Function)#
-  
+* Activation 함수로 [로지스틱 회귀](http://pigbrain.github.io/machinelearning/2015/07/25/LogisticRegression_on_MachineLearning/)를 사용할 경우 비용 함수는 다음과 같다  
+<img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/costFunction.png" alt="">  
+<br>  
+	* L : 레이어의 총 개수  
+	* Sι : 레이어 l에서의 노드 개수 
+	* K : 출력 노드 개수
+
+
   
 #역 전파(Back Propagation)#
   
