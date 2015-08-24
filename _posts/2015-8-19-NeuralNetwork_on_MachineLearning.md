@@ -20,7 +20,7 @@ tags: [MachineLearning]
 * 단점
 	* Local Minimum에 빠지기 쉽다  
 	* 초기 가중치의 선택이 학습성능에 영향을 끼친다  
-
+<br>  
 
 #뉴런 (Neuron)#  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/neuron.png" alt="">
@@ -31,7 +31,7 @@ tags: [MachineLearning]
 	* 각 연결부의 신호의 강도는 다르다  
 	* 입력받은 신호의 강도의 합이 일정값 이상이 되면 축색돌기로 신호를 전달한다  
 	* 축색돌기의 신호가 다른 뉴런들에게 전달(**출력**)된다  
-
+<br>  
 
 #뉴럴 네트워크(Neural Network)#  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/neuralNetwork.png" alt="">  
@@ -50,6 +50,8 @@ tags: [MachineLearning]
 
 * 위 그림에서 Wαβ은 α에서 β로 이동할때 곱해지는 가중치를 의미한다  
   
+<br>  
+
 #뉴럴 네트워크 예#  
 * AND 연산을 하는 뉴럴 네트워크  
 	* 0 또는 1을 입력으로 받는다  
@@ -63,14 +65,15 @@ tags: [MachineLearning]
 	* L : 레이어의 총 개수  
 	* Sι : 레이어 l에서의 노드 개수 
 	* K : 출력 노드 개수
-
-
+<br>  
   
 #역 전파(Back Propagation)#
  * 역 전파 기법은 뉴럴네트워크에서 비용 함수를 최소화 하는 방법이다  
  * 선형회귀, 로지스틱 회귀에서와 마찬가지로 [기울기 하강 탐색 방법](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)을 사용한다  
   
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/backPropagation.png" alt="">  
+  
+<br>  
 
 #참고#
 * https://share.coursera.org/wiki/index.php/ML:Neural_Networks:_Representation  
