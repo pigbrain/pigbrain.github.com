@@ -60,7 +60,6 @@ tags: [MachineLearning]
 #비용 함수(Cost Function)#
 * Activation 함수로 [로지스틱 회귀](http://pigbrain.github.io/machinelearning/2015/07/25/LogisticRegression_on_MachineLearning/)를 사용할 경우 비용 함수는 다음과 같다  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/costFunction.png" alt="">  
-<br>  
 	* L : 레이어의 총 개수  
 	* Sι : 레이어 l에서의 노드 개수 
 	* K : 출력 노드 개수
