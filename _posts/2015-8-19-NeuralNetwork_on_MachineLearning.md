@@ -77,7 +77,8 @@ tags: [MachineLearning]
 
 #참고#
 * https://share.coursera.org/wiki/index.php/ML:Neural_Networks:_Representation  
-* https://share.coursera.org/wiki/index.php/ML:Neural_Networks:_Learning
+* https://share.coursera.org/wiki/index.php/ML:Neural_Networks:_Learning  
 * http://chocbar.tistory.com/51  
-* http://no-smok.net/nsmk/NeuralNetwork#s-4
-* http://blog.secmem.org/197
+* http://no-smok.net/nsmk/NeuralNetwork#s-4  
+* http://blog.secmem.org/197  
+* http://briandolhansky.com/blog/2013/9/27/artificial-neural-networks-backpropagation-part-4
