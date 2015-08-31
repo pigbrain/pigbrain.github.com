@@ -10,10 +10,9 @@ tags: [MachineLearning]
 
 * 예측함수(hypothesis)는 훈련 데이터에 대해서는 낮은 오류율을 보인다  
 * 과적합(Overfitting)과 같은 문제로 실제 데이터에 대해서는 부정확 할 수 있다  
-
 <br>  
 
-#오류율 평가 방법#
+#예측함수(Hypothesis) 평가 방법#
 
 * 훈련 데이터를 다음 두 가지로 분류한다
 	* 훈련 데이터 (80%)  
@@ -22,6 +21,7 @@ tags: [MachineLearning]
 
 * 훈련 데이터를 이용하여 Θ를 계산한다 (예측 함수 모델링)  
 * 테스트 데이터를 이용하여 J(Θ)를 구한다  
+
 <img src="/assets/themes/Snail/img/MachineLearning/EvaluatingHypothesis/errRate.png" alt="">  
 <br>  
 
@@ -36,4 +36,4 @@ tags: [MachineLearning]
 
 
 #참고#
-* 
+* https://share.coursera.org/wiki/index.php/ML:Advice_for_Applying_Machine_Learning
