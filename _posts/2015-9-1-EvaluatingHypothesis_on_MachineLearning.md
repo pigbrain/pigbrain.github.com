@@ -1,26 +1,26 @@
 ---
 layout: post
 category: MachineLearning
-title: 예측함수 평가(Evaluating a Hypothesis)
+title: Evaluating a Hypothesis
 tagline: by Pigbrain
 tags: [MachineLearning]
 ---
 
 <!--more-->
 
-* 예측함수(hypothesis)는 훈련 데이터에 대해서는 낮은 오류율을 보인다  
-* 과적합(Overfitting)과 같은 문제로 실제 데이터에 대해서는 부정확 할 수 있다  
+* Hypothesis는 훈련 데이터에 대해서는 낮은 오류율을 보인다  
+* Overfitting과 같은 문제로 실제 데이터에 대해서는 부정확 할 수 있다  
 <br>  
 
-#예측함수(Hypothesis) 평가 방법#
+#Hypothesis를 평가하는 방법#
 
-* 훈련 데이터를 다음 두 가지로 분류한다
-	* 훈련 데이터 (80%)  
-	* 테스트 데이터 (20%)  
+* Training set을 다음 두 가지로 분류한다
+	* Training set (80%)  
+	* Test set (20%)  
 <br>  
 
-* 훈련 데이터를 이용하여 Θ를 계산한다 (예측 함수 모델링)  
-* 테스트 데이터를 이용하여 J(Θ)를 구한다  
+* Training set을 이용하여 Θ를 계산한다 (Hypothesis 모델링)  
+* Test set을 이용하여 J(Θ)를 구한다  
 
 <img src="/assets/themes/Snail/img/MachineLearning/EvaluatingHypothesis/errRate.png" alt="">  
 <br>  
@@ -29,10 +29,27 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/EvaluatingHypothesis/errFunction.png" alt="">  
 <br>  
 
-* 테스트 데이터들을 이용하여 다음과 같이 오류의 평균을 구할 수 있다  
+* Test set을 이용하여 다음과 같이 오류의 평균을 구할 수 있다  
 	* 평균은 데이터가 오분류된 비율을 나타낸다  
   
 <img src="/assets/themes/Snail/img/MachineLearning/EvaluatingHypothesis/avgErr.png" alt="">  
+
+#Cross Validation Set#
+
+* Training set만 가지고 만든 알고리즘은 Training set에 대해서는 잘 동작하지만 좋은 Hypothesis로 판단하기는 어렵다  
+* Training set에 대해서는 낮은 오류율을 보이지만 다른 데이터들에 대해서는 높은 오류율을 보일 수 있다  
+* 위 문제를 해결하기 위해 전체 훈련 데이터 중 일부를 Cross Validation Set 으로 사용 한다  
+	* Training set  (60%)  
+	* Cross Validation Set (20%)
+	* Test set (20%)  
+
+* Training set을 이용하여 Θ를 계산한다 (Hypothesis 모델링)  
+* Cross Validation Set을 이용하여 오류가 가장 낮은 차수의 Hypothesis를 찾는다 
+* Test set을 이용하여 J(Θ)를 구하여 평가한다  
+<br>  
+
+* Training Set만 이용하여 Hypothesis를 결정하지 않고 Cross Validation Set을 이용함으로써 오류율을 줄일 수 있다  
+<br>
 
 
 #참고#
