@@ -8,12 +8,12 @@ tags: [MachineLearning]
 
 <!--more-->
   
-**-다른 데이터들(훈련데이터)과 가장 유사한 K개의 데이터를 이용하여 값을 예측하는  알고리즘**   
-**-입력 데이터와 훈련 데이터들과의 유사성은 [유클리드거리](https://en.wikipedia.org/wiki/Euclidean_distance)를 이용**
+**-Training Data와 가장 유사한 K개의 데이터를 이용하여 값을 예측하는  알고리즘**   
+**-Input Data와 Training Data들과의 유사성은 [유클리드거리](https://en.wikipedia.org/wiki/Euclidean_distance)를 이용**
 
 * 장점
 	* 높은 정확도
-	* 오류 데이터(outlier)에 둔감
+	* Outlier에 둔감
 	* 데이터에 대한 가정이 필요 없다
 * 단점
 	* 계산 비용이 높다

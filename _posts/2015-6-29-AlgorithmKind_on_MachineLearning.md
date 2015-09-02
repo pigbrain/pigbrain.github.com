@@ -8,9 +8,9 @@ tags: [MachineLearning]
 
 <!--more-->
 
-* **지도 학습(Supervised Learning)** 
+* **Supervised Learning** 
 	* 정의
-		* 훈련 데이터(Training Data)를 이용하여 하나의 결과를 유추해내기 위한 방법
+		* Training Data를 이용하여 하나의 결과를 유추해내기 위한 방법
 	* 종류 
 		* Classification
 		* Regression
@@ -26,7 +26,7 @@ tags: [MachineLearning]
 <br>
 <br>
 <br>
-* **비지도 학습(Unsupervised Learning)** 
+* **Unsupervised Learning** 
 	* 정의 
 		* 데이터가 어떻게 구성되었는지를 알아내기 위한 방법
 	* 종류
