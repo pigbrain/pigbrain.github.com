@@ -59,17 +59,17 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/neuralNetwork_and.png" alt="">  
 <br>  
 
-#비용 함수(Cost Function)#
-* Activation 함수로 [로지스틱 회귀](http://pigbrain.github.io/machinelearning/2015/07/25/LogisticRegression_on_MachineLearning/)를 사용할 경우 비용 함수는 다음과 같다  
+#Cost Function#
+* Activation 함수로 [Logistic Regression](http://pigbrain.github.io/machinelearning/2015/07/25/LogisticRegression_on_MachineLearning/)를 사용할 경우 비용 함수는 다음과 같다  
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/costFunction.png" alt="">  
 	* L : 레이어의 총 개수  
 	* Sι : 레이어 l에서의 노드 개수 
 	* K : 출력 노드 개수
 <br>  
   
-#역 전파(Back Propagation)#
- * 역 전파 기법은 뉴럴네트워크에서 비용 함수를 최소화 하는 방법이다  
- * 선형회귀, 로지스틱 회귀에서와 마찬가지로 [기울기 하강 탐색 방법](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)을 사용한다  
+#Back Propagation#
+ * Back Propagation 기법은 뉴럴네트워크에서 비용 함수를 최소화 하는 방법이다  
+ * Linear Regression, Logistic Regression에서와 마찬가지로 [Gradient Descent](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)을 사용한다  
   
 <img src="/assets/themes/Snail/img/MachineLearning/NeuralNetwork/backPropagation.png" alt="">  
   
