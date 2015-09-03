@@ -1,18 +1,18 @@
 ---
 layout: post
 category: MachineLearning
-title: Evaluating a Hypothesis
+title: Evaluating a Hypothesis Function
 tagline: by Pigbrain
 tags: [MachineLearning]
 ---
 
 <!--more-->
 
-* Hypothesis는 훈련 데이터에 대해서는 낮은 오류율을 보인다  
+* Hypothesis Function은 Training Data에 대해서는 낮은 오류율을 보인다  
 * Overfitting과 같은 문제로 실제 데이터에 대해서는 부정확 할 수 있다  
 <br>  
 
-#Hypothesis를 평가하는 방법#
+#Hypothesis Function을 평가하는 방법#
 
 * Training set을 다음 두 가지로 분류한다
 	* Training set (80%)  
@@ -36,7 +36,7 @@ tags: [MachineLearning]
 
 #Cross Validation Set#
 
-* Training set만 가지고 만든 알고리즘은 Training set에 대해서는 잘 동작하지만 좋은 Hypothesis로 판단하기는 어렵다  
+* Training set만 가지고 만든 알고리즘은 Training set에 대해서는 잘 동작하지만 좋은 Hypothesis Function으로 판단하기는 어렵다  
 * Training set에 대해서는 낮은 오류율을 보이지만 다른 데이터들에 대해서는 높은 오류율을 보일 수 있다  
 * 위 문제를 해결하기 위해 전체 훈련 데이터 중 일부를 Cross Validation Set 으로 사용 한다  
 	* Training set  (60%)  
@@ -48,7 +48,7 @@ tags: [MachineLearning]
 * Test set을 이용하여 J(Θ)를 구하여 평가한다  
 <br>  
 
-* Training Set만 이용하여 Hypothesis를 결정하지 않고 Cross Validation Set을 이용함으로써 오류율을 줄일 수 있다  
+* Training Set만 이용하여 Hypothesis Function을 결정하지 않고 Cross Validation Set을 이용함으로써 오류율을 줄일 수 있다  
 <br>
 
 

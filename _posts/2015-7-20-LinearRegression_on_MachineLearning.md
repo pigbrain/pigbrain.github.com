@@ -36,12 +36,12 @@ tags: [MachineLearning]
 	* 아래 그림에서 빨간 선들의 길이의 제곱의 합이 가장 작아지는 선을 찾아야 한다
 <img src="/assets/themes/Snail/img/MachineLearning/LinearRegression/plot_example.png" alt="">  
 
-* 훈련 데이터의 입력 값 x에 대해 예측된 값 h(x)와 Training Data의 출력 값 y의 차이가 가장 작은 θ0과 θ1을 찾아야 한다
+* Training Data의 입력 값 x에 대해 예측된 값 h(x)와 Training Data의 출력 값 y의 차이가 가장 작은 θ0과 θ1을 찾아야 한다
 
 * 직선과 각 포인트의 거리에 대한 합을 구하는 공식은 아래와 같다 (최소 제곱법을 이용)
 	* Cost Function라고 부른다
 	* 각 차이에 대해 제곱을 한 이유에 대해서는 [최소제곱법](http://pigbrain.github.io/math/2015/07/19/MethodOfLeastSquares_on_Math/) 참조 
-	* m은 훈련 데이터의 개수
+	* m은 Training Data의 개수
 	* m개의 대한 평균과 미분 계산을 쉽게 하기 위해 2m으로 나눴다
 <img src="/assets/themes/Snail/img/MachineLearning/LinearRegression/cost_function.png" alt="">  
 

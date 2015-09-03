@@ -8,7 +8,7 @@ tags: [MachineLearning]
 
 <!--more-->
 
-`선형 회귀에 대해 먼저 이해해야 한다`  
+`Linear Regression에 대해 먼저 이해해야 한다`  
   
 **-Cost Function의 최저점 을 찾기 위한 방법**
 <img src="/assets/themes/Snail/img/MachineLearning/NormalEquation/optimum.png" alt="">  
@@ -32,6 +32,6 @@ tags: [MachineLearning]
 </table>
 <br>
  
-#참고#
-* https://share.coursera.org/wiki/index.php/ML:Linear_Regression_with_Multiple_Variables
+#참고#  
+* https://share.coursera.org/wiki/index.php/ML:Linear_Regression_with_Multiple_Variables  
 * http://eli.thegreenplace.net/2014/derivation-of-the-normal-equation-for-linear-regression  
