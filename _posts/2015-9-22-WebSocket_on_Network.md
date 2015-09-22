@@ -27,14 +27,17 @@ tags: [Network]
 	* 서버에서 해당 프로토콜을 지원한다면 웹소켓 사용을 위한 응답을 보낸다  
 	<img src="/assets/themes/Snail/img/Network/WebSocket/httpHandShake_S2C.png" alt="">  
 <BR>
+  
 * HTTP handshake가 완료 되면 HTTP Connection을 종료한다
 * HTTP Connection 종료 후 웹 소켓 Connection을 위한 TCP Connection을 생성한다
 * HTTP와 동일한 포트를 사용  
 	* HTTP : 80 포트  
 	* HTTPS : 443 포트  
+
 * TCP 통신은 다음과 같은 프로토콜을 사용한다  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocketProtocol.png" alt="">  
 <br>  
+  
 	* Text, Binary 모두 전송 가능  
 	* 패킷은 최소 2bytes로 만들어질 수 있다  
 	* Text 전송 프레임은 0x00, 0xFF바이트를 구분자로 사용하여 UTF-8 인코딩을 사용한다  
