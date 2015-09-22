@@ -44,14 +44,23 @@ tags: [Network]
 # 웹소켓 API
 * 웹소켓 생성  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket1.png" alt="">  
+<br>  
 * 연결 완료 콜백  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket2.png" alt="">  
+<br>  
+
 * 메세지 수신 콜백  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket3.png" alt="">  
+<br>  
+
 * 연결 종료 콜백  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket4.png" alt="">  
+<br>  
+
 * 웹소켓 종료  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket5.png" alt="">  
+<br>  
+
 * 메세지 전송  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket6.png" alt="">  
 <br>  
@@ -68,6 +77,7 @@ tags: [Network]
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocketSupportTable.png" alt="">  
 <br>  
 <br>  
+
 # 웹소켓 지원 브라우저  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocketSupportBrowser.png" alt="">  
 <br>
