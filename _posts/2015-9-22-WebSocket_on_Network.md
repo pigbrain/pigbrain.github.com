@@ -26,6 +26,19 @@ tags: [Network]
 	<img src="/assets/themes/Snail/img/Network/WebSocket/httpHandShake_C2S.png" alt="">  
 	* 서버에서 해당 프로토콜을 지원한다면 웹소켓 사용을 위한 응답을 보낸다  
 	<img src="/assets/themes/Snail/img/Network/WebSocket/httpHandShake_S2C.png" alt="">  
+	* Connection : “Upgrade” 토큰이 반드시 있어야 한다  
+	* Sec-WebSocket-Key : Base64로 인코딩된 랜덤한 16바이트의 문자열  
+	* Sec-WebSocket-Accept :  
+		* Sec-WebSocket-Key + “258EAFA5-E914-47DA-95CA-C5AB0DC85B11”  
+			* uRovscZjNol/umbTt5uKmw==258EAFA5-E914-47DA-95CA-C5AB0DC85B11  
+		* SHA-1으로 해싱  
+			* acb1c2930fd22ac3 bd1801ff65216104 04c32ab5  
+		* Base64로 인코딩  
+			* rLHCkw/SKsO9GAH/ZSFhBATDKrU=  
+	* Sec-WebSocket-Version : 무조건 13 !  
+	* Updage : “websocket” 키워드가 반드시 있어야 한다  
+
+
 <BR>
   
 * HTTP handshake가 완료 되면 HTTP Connection을 종료한다
@@ -40,7 +53,9 @@ tags: [Network]
   
 	* Text, Binary 모두 전송 가능  
 	* 패킷은 최소 2bytes로 만들어질 수 있다  
-	* Text 전송 프레임은 0x00, 0xFF바이트를 구분자로 사용하여 UTF-8 인코딩을 사용한다  
+	* Text 전송 프레임은 0x00, 0xFF바이트를 구분자로 사용  
+		* 0x00 H e l l o W o r l d 0xFF  
+	* UTF-8 인코딩을 사용  
 	* Binary 전송 프레임은 length 필드를 이용한다  
 <br>  
 
