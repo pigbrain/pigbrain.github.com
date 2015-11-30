@@ -75,11 +75,11 @@ tags: [Network]
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket4.png" alt="">  
 <br>  
 
-* 웹소켓 종료  
+* 메세지 전송  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket5.png" alt="">  
 <br>  
 
-* 메세지 전송  
+* 웹소켓 종료  
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocket6.png" alt="">  
 <br>  
 
