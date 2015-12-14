@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: apply, 속성(Proeprty)
+title: apply, 속성(Attribute)
 tagline: by Pigbrain
 tags: [Erlang]
 ---
@@ -23,7 +23,7 @@ tags: [Erlang]
 * ex) apply(erlang, atom_to_list, [hello]).
 
 
-#속성#  
+#속성(Attribute)#  
 * 파일의 특정한 속성을 정의하는데 사용  
 * 사전 정의된 속성과 사용자 정의 속성 두가지 유형이 있다  
 <br>  
@@ -35,7 +35,7 @@ tags: [Erlang]
 		* modname 은 atom이어야 한다  
 		* 이 속성은 파일의 첫 번째 속성이어야 한다  
 		* 관례적으로 modname의 코드는 modname.erl이라는 파일에 저장된다  
-		* modname.erl로 저장하지 않을 경우 자동 코드 로딩이 제대로v동작하지 않을 수 있다  
+		* modname.erl로 저장하지 않을 경우 자동 코드 로딩이 제대로 동작하지 않을 수 있다  
   	<br>
 	* import(Mod, [Name1/Arity1, Name2/Arity2...]).  
 		* Arity1 개의 인수를 가지는 함수 Name1이 모듈 Mod로 부터 improt될 것임을 지정  
