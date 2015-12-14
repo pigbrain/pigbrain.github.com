@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: 멀티 프로세스 프로그래밍(Multi Process Programming)
+title: Multi Process Programming
 tagline: by Pigbrain
 tags: [Erlang]
 ---

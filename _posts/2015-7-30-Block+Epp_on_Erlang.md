@@ -1,14 +1,14 @@
 ---
 layout: post
 category: Erlang
-title: 블록 식(Block Expressions), epp
+title: Block Expressions, epp
 tagline: by Pigbrain
 tags: [Erlang]
 ---
 
 <!--more-->
 
-#블록 식(Block Expressions)#  
+#Block Expressions#  
 * 연속된 식을 묶을 때 사용   
 * begin...end 블록의 리턴 값은 블록에서 마지막 식(ExprN)의 값이다  
 			
@@ -18,8 +18,9 @@ tags: [Erlang]
 				..... ,
 				ExprN
 			end  
-<br>
-
+  
+<br>  
+  
 #epp#  
 * 얼랭 모듈은 컴파일되기 전에 자동으로 전처리기인 epp에 의해 처리된다  
 

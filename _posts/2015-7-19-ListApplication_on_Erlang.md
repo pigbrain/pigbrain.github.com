@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: 리스트 응용
+title: List Comprehensions
 tagline: by Pigbrain
 tags: [Erlang]
 ---
@@ -10,17 +10,17 @@ tags: [Erlang]
 
 <img src="/assets/themes/Snail/img/Erlang/ListApplication/list-1.png" alt="">  
 
-* 표기법 [F(X) ││ X <- L]은 리스트 L로 부터 X를 받는 리스트 F(X)라는 의미
+* 표기법 [F(X) ││ X <- L]은 리스트 L로 부터 X를 받는 리스트 F(X)라는 의미  
 
-<br>
+<br>  
 
 <img src="/assets/themes/Snail/img/Erlang/ListApplication/list-2.png" alt="">  
-
-<br>
+  
+<br>  
 
 <img src="/assets/themes/Snail/img/Erlang/ListApplication/list-3.png" alt="">
 
-<br>
+<br>  
   
 #예제 - 퀵소트#
 <img src="/assets/themes/Snail/img/Erlang/ListApplication/quickSort-1.png" alt="">  

@@ -26,15 +26,17 @@ tags: [Erlang]
 	* Pid가 Why라는 사유로 죽으면 Fun(Why)가 실행된다  
 	* **process_flag(trap_exit, true)**는 프로세스를 시스템 프로세스로 전환한다는 의미  
 	* **link(Pid)**는 새로 실행된 프로세스를 Pid와 연결한다  
-
-<br>
+  
+<br>  
 <img src="/assets/themes/Snail/img/Erlang/ProcessErrorHandle/errorHandle-2.png" alt="">  
 <br>  
-	* Pid에 atom을 보내면 프로세스는 종료되고 on_exit 핸들러가 호출될 것이다  
-		* 리스트가 아닌 것에 대해 list_to_atom을 실행하려 했기 때문에 프로세스가 종료 된다   
-	* 프로세스가 죽을 때 호출되는 함수는 어떠한 계산이든 수행할 수 있다  
-		* 오류를 무시할 수도 있고, 오류 로그를 남기거나 또는 어플리케이션을 재시작할 수도 있다  
- 
+
+* Pid에 atom을 보내면 프로세스는 종료되고 on_exit 핸들러가 호출될 것이다  
+	* 리스트가 아닌 것에 대해 list_to_atom을 실행하려 했기 때문에 프로세스가 종료 된다   
+* 프로세스가 죽을 때 호출되는 함수는 어떠한 계산이든 수행할 수 있다  
+	* 오류를 무시할 수도 있고, 오류 로그를 남기거나 또는 어플리케이션을 재시작할 수도 있다  
+<br>  
+<br>  
 <table>
 <tr><td>trap_exit</td><td>종료신호</td><td>동작</td></tr>
 <tr><td>true</td><td>kill</td><td>죽는다: 종료 신호 killed를 link집합으로 동보한다</td></tr>
@@ -54,7 +56,7 @@ tags: [Erlang]
 
 * process_flag(trap_exit, true)  
 	* 현재 프로세스를 시스템프로세스로 만든다  
-	* 
+  
 * link(Pid) -> true  
 	* 프로세스 Pid로 link가 존재하지 않을 경우 link를 생성한다  
 	* 만약 프로세스 Pid가 존재하지 않으면 noproc 종료 예외가 발생한다  

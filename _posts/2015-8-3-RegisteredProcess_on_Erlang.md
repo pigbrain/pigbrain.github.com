@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: 등록된 프로세스(Registered Process)
+title: Registered Process
 tagline: by Pigbrain
 tags: [Erlang]
 ---
@@ -11,8 +11,8 @@ tags: [Erlang]
 * 어떤 프로세스로 메시지를 보내려면 그 프로세스의 PID를 알아야 한다  
 	* 그 프로세스와 통신하고자 하는 모든 프로세스로 PID를 보내야 하기 때문에 번거로울 수 있다   
 * 얼랭에서는 프로세스 식별자를 공개함으로써 시스템에 있는 어떤 프로세스라도 이 공개된 프로세스와 통신할 수 있는 방법을 제공한다  
-	* 식별자가 공개된 프로세스를 가리켜 등록된 프로세스(registered process)라 부른다  
-	* 등록된 프로세스를 관리하는 BIF가 4개 있다  
+	* 식별자가 공개된 프로세스를 가리켜 Registered Process라 부른다  
+	* Registered Process를 관리하는 BIF가 4개 있다  
 
 <br>
 <br>

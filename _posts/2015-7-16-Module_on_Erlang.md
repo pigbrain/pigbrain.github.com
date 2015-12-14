@@ -16,13 +16,14 @@ tags: [Erlang]
 #예제-1#
 **geometry.erl**
 <img src="/assets/themes/Snail/img/Erlang/Module/module-1.png" alt="">  
-<br>
+<br>  
+
 * 각 절(Cluase)은 세미콜론으로 구분  
 * 마지막 절은 마침표로 끝난다  
 * 함수를 모듈 밖에서 호출하고자 한다면 export 를 꼭 써줘야 한다  
-<br>
+<br>  
 <img src="/assets/themes/Snail/img/Erlang/Module/module-2.png" alt="">  
-<br>
+<br>  
 
 #예제-2#
 **shop.erl**

@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: 비트 구문(Bit Syntax)
+title: Bit Syntax
 tagline: by Pigbrain
 tags: [Erlang]
 ---
@@ -17,7 +17,7 @@ tags: [Erlang]
 
 <br>
 
-#비트구문 식의 형태#
+#Bit Syntax의 형태#
 
 	<< >>
 	<<E1, E, ...., En>> 
