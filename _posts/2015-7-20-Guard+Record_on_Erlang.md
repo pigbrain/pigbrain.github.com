@@ -11,8 +11,9 @@ tags: [Erlang]
 #Guard#  
 * 패턴 매칭의 능력을 증가시키는 데 사용할 수 있는 구조  
 	* X와 Y의 최대값을 계산하는 max(X, Y)를 가드를 이용한 작성 예  
-		* `max(X, Y)  when  X > Y  -> X;`  
-		`max(X, Y)  -> Y.`
+		
+			max(X, Y)  when  X > Y  -> X;
+			max(X, Y)  -> Y.
 
 * Guard가 식으로 사용될 경우에는 true / false 중 하나로 평가된다
 
@@ -22,7 +23,9 @@ tags: [Erlang]
 * Guard Sequence G1;G2;...;Gn은 적어도 가드 G1, G2, ... 중 하나가 true로 평가되어야 true 이다  
 * Guard Sequence G1,G2,...,Gn은 G1, G2, ... 모두가 true로 평가되어야 true이다  
 * Guard Sequence 예  
-	* `f(X, Y) when is_integer(X), X > Y, Y < 6 -> .............`  
+	
+		f(X, Y) when is_integer(X), X > Y, Y < 6 -> ......  
+		
 	* "X가 정수이며 X가 Y보다 크고 Y가 6보다 작을 때"라는 의미  
 <br>  
 
