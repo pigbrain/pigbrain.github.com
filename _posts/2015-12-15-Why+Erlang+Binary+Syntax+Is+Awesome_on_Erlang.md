@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Erlang
-title: [요약]Why Erlangs bit syntax is awesome
+title: Why Erlangs bit syntax is awesome
 tagline: by Pigbrain
 tags: [Erlang]
 ---
