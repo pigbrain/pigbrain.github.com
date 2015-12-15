@@ -38,6 +38,8 @@ tags: [Erlang]
 		   Timestamp:32/big-unsigned-integer, 
 		   SyncSource:32/big-unsigned-integer, 
 		   _/binary >>  
+
+
 	* 첫 두 비트는 버전을 정의한다 (현재 버전은 2)  
 	* 프로토콜 각 자리별로 유의미한 이름과 비트 자리 수를 정의한다 
 		* Padding 은 1비트  
@@ -79,6 +81,8 @@ tags: [Erlang]
 				  	end;  
 				 _ -> false  
 			end.  
+  
+  
 <br>  
 <br>  
 
