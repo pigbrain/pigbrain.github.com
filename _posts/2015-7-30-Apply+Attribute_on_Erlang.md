@@ -75,3 +75,7 @@ tags: [Erlang]
 				-author({joe, armstrong}).  
 				-purpose("example of attributes").     
 
+* 속성 정보 확인하기  
+	* 사전 정의된 속성이나 사용자 정의 속성은 ?MODULE:module_info() 를 통하여 확인 가능  
+	
+
