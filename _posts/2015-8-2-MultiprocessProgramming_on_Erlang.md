@@ -18,8 +18,9 @@ tags: [Erlang]
 	* 프로세스가 상호작용하는 유일한 방법은 메시지 전달 뿐이다  
 		* 얼랭은 Pure Message Passing Language 라고도 불린다  
 * 얼랭에서 프로세스 프로그래밍은 spawn, send, receive 명령만 있으면 가능
-
+  
 <br>  
+  
 * **Pid = spawn(Fun)**  
 	* Fun을 실행하는 새 프로세스를 생성  
 	* 새로 생성된 프로세스는 호출한 프로세스와 병행으로 실행된다  
