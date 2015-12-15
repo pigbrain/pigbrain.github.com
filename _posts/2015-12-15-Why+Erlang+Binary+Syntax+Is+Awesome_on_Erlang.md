@@ -8,12 +8,14 @@ tags: [Erlang]
 
 <!--more-->
 
-#얼랭의 Bit syntax #  
+#Bit syntax #  
 * [Bit syntax](http://pigbrain.github.io/erlang/2015/07/30/BitSyntax_on_Erlang/)
 * 바이너리 프로토콜을 처리하는데 효율적이다  
 * 프로토콜과 같은 바이너리 데이터들의 스펙을 간단하게 정의 가능하다  
 * 얼랭은 패턴매칭 방식을 사용하기 때문에 데이터 유효성 체크도 쉽게 가능하다  
-
+  
+<br>  
+  
 #Bit Syntax 예제#
 
 * Bit 연산
