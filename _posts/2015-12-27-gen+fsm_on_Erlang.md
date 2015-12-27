@@ -62,14 +62,15 @@ tags: [Erlang]
 	* 각각의 상태(state)는 다음과 같은 콜백 형태들로 작성되어야 한다  
 		* http://www.erlang.org/doc/man/gen_fsm.html  
 		
-			StateName(Event, StateData) ->  
-				.. code for actions here ...  
-    			{next_state, NewStateName, NewStateData}  
-  
+				StateName(Event, StateData) ->  
+					.. code for actions here ...  
+	    			{next_state, NewStateName, NewStateData}  
+	  
 
-			StateName(Event, From, StateData) ->  
-				.. code for actions here ...  
-				{next_state, Reply, NewStateName, NewStateData}  
+
+				StateName(Event, From, StateData) ->  
+					.. code for actions here ...  
+					{next_state, Reply, NewStateName, NewStateData}  
 
 	* Tuple 형태로 리턴을 하되, 다음 상태에(NewStateName) 대한 명시가 되어 있어야 한다  
 * 상태전환  
