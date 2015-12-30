@@ -10,7 +10,7 @@ tags: [Erlang]
 
 #intet:setopts(Socket, Options)#  
 * 하나 이상의 소켓 옵션을 설정한다  
-* 리턴 값 : ok | {error, posix()}  
+* 리턴 값 : ok │ {error, posix()}  
   
 <br>  
   
@@ -38,7 +38,6 @@ tags: [Erlang]
 		* passive mode로 변경되면 **setopts/2**를 통하여 다시 소켓 옵션을 변경해줘야 active 모드로 변경된다  
 
 <br>  
-<br>  
 
 #Note#  
 * {active, true} 모드는 flow control을 제공하지 않는다  
@@ -53,6 +52,9 @@ tags: [Erlang]
 	* 소켓에서 데이터를 수신할때마다 소켓의 처리 방법(behaviour)이 자동으로 변경된다  
   
   
+<br>  
+<br>  
+
 #원문#  
 * http://www.erlang.org/doc/man/inet.html
 
