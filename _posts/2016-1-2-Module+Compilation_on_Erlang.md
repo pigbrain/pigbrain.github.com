@@ -71,14 +71,18 @@ tags: [Erlang]
 * 위 모듈은 3개의 함수를 가지고 2개의 함수만(same/1, double/1) export 되었다   
 
 <br>  
+  
+
 #Compiling Modules#  
 * Emulator  
 	* 얼랭 에뮬레이터에서 코드를 컴파일 하기 위해서는 BIF 중 **c(module_name)**를 사용한다  
 	
 			1> c(md).  
 			 {ok, md}  
-
+  
+  
 	* 컴파일 과정에서 오류가 발생하지 않았다면 .beam 파일이 생성되었을 것이다  
+
 * Erlang Compiler (erlc)  
 	* **c(module_name)** 외에 erlc를 통하여 beam을 생성하는 방법도 있다  
 		* **Erl**ang **C**ompiler  
