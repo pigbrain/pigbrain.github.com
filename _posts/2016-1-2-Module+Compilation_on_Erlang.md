@@ -87,8 +87,8 @@ tags: [Erlang]
 	* **c(module_name)** 외에 erlc를 통하여 beam을 생성하는 방법도 있다  
 		* **Erl**ang **C**ompiler  
 
-				\$ erlc md.erl  
-				\$ ls
+				$ erlc md.erl  
+				$ ls
 			 	 md.beam  md.erl
 
 <br>  
