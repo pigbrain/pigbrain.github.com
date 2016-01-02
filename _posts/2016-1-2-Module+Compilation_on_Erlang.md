@@ -72,7 +72,7 @@ tags: [Erlang]
 
 <br>  
   
-
+  
 #Compiling Modules#  
 * Emulator  
 	* 얼랭 에뮬레이터에서 코드를 컴파일 하기 위해서는 BIF 중 **c(module_name)**를 사용한다  
