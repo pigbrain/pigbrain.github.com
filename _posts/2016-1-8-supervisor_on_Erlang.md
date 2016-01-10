@@ -28,21 +28,21 @@ tags: [Erlang]
 
 
 * OTP supervisor init/1 콜백 함수의 리턴 형태  
-	* {ok, {{**RestartStrategy**, **MaxRestart**, **MaxTime**},[**ChildSpecs**]}}.
+	* \{ok, \{\{**RestartStrategy**, **MaxRestart**, **MaxTime**\},[**ChildSpecs**]\}\}.
 
-			{ok, {{one_for_all, 5, 60},
-				[{fake_id,
-				 {fake_mod, start_link, [SomeArg]},
+			{ok, \{\{one_for_all, 5, 60\},
+				[\{fake_id,
+				 \{fake_mod, start_link, [SomeArg]\},
 				 permanent,
 				 5000,
 				 worker,
-				 [fake_mod]},
-				 {other_id,
-				 {event_manager_mod, start_link, []},
+				 [fake_mod]\},
+				 \{other_id,
+				 \{event_manager_mod, start_link, []\},
 				 transient,
 				 infinity,
 				 worker,
-				 dynamic}]}}.  
+				 dynamic\}]\}\}.  
 
 * ChildSpec은 자식 worker, supervisor의 spec
 * RestartStrategy은 자식 worker, superviosr가 죽었을때 재실행 하는 방법을 설정  
@@ -55,7 +55,7 @@ tags: [Erlang]
 		* 자식 노드가 종료되면 다른 자식 노드들도 종료 시킨후 모두 재시작한다  
 <img src="/assets/themes/Snail/img/Erlang/Supervisor/restart-one-for-all.png" alt="">  
 <br>  
-
+ 
 	* **rest_for_one**  
 		* 자식 노드를 실행 시킨 순서에 의존한다  
 		* A -> B -> C 노드 순서대로 실행 됬을 경우, 만약 A가 종료되었다면 B, C를 종료 시킨후 A, B, C를 재시작한다  
