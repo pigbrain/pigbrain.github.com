@@ -61,10 +61,9 @@ tags: [Erlang]
 		* A -> B -> C 노드 순서대로 실행 됬을 경우, 만약 A가 종료되었다면 B, C를 종료 시킨후 A, B, C를 재시작한다  
 		* A -> B -> C 노드 순서대로 실행 됬을 경우, 만약 B가 종료되었다면 C를 종료 시킨후 B, C를 재시작한다  
 		* A -> B -> C 노드 순서대로 실행 됬을 경우, 만약 C가 종료되었다면 C를 재시작한다  
-	
 <img src="/assets/themes/Snail/img/Erlang/Supervisor/restart-rest-for-one.png" alt="">  
 <br>  
-
+ 
 	* **simple_one_for_one**  
 		* 동적으로 자식 노드를 추가하고자 할때 사용된다  
 			* one_for_one / one_for_all / rest_for_one 는 초기에 정적으로 자식 노드를 추가하는 방법이다  
