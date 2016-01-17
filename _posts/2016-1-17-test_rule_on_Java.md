@@ -3,7 +3,7 @@ layout: post
 category: Erlang
 title: JUnit @Rule Annotation
 tagline: by Pigbrain
-tags: [Erlang]
+tags: [Java]
 ---
 
 <!--more-->
@@ -20,7 +20,9 @@ tags: [Erlang]
 	* **TestWatcher** : 테스트 메소드 실행 중 특정 이벤트가 발생하면 추가적인 로직이 실행 되도록 한다  
 	* **Timeout** : 테스트 메소드 실행 시간의 타임 아웃 설정이 가능하다    
 	* **Verifier** : 오브젝트 상태를 체크하여 테스트의 실패여부를 체크 할 수 있다  
+
 <br>  
+
 #Example - Timeout#  
 	@Rule
 	public Timeout timeOutRule = new Timeout(2);
@@ -44,6 +46,7 @@ tags: [Erlang]
 	}  
 
 <br>  
+
 #Example - TestName#
 	@Rule
 	public TestName testNameRule = new TestName();
