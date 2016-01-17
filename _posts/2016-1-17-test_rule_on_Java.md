@@ -14,8 +14,8 @@ tags: [Java]
 * TestRule 인터페이스를 구현한 클래스를 @Rule로 지정가능하다  
 	* **ErrorCollector** : 하나의 테스트 메소드에서 발생하는 여러 예외를 체크 가능하다    
 	* **ExpectedException** : 발생하는 예외에 대해 부가적인 Assertion이 가능하다    
-	* **ExternalResource** : 한 예로 서버를 실행/종료 할 수 있다    
-	* **TemporaryFolder** : 파일 / 폴더를 생성하고 삭제 한다    
+	* **ExternalResource** : 한 예로 서버를 실행/종료를 할 수 있다    
+	* **TemporaryFolder** : 임시 파일 / 폴더를 생성하고 삭제 한다    
 	* **TestName** : 테스트 메소드가 실행되는 동안 메소드 이름이 저장된다    
 	* **TestWatcher** : 테스트 메소드 실행 중 특정 이벤트가 발생하면 추가적인 로직이 실행 되도록 한다  
 	* **Timeout** : 테스트 메소드 실행 시간의 타임 아웃 설정이 가능하다    
