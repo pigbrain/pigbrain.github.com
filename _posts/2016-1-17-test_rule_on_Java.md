@@ -67,5 +67,3 @@ tags: [Java]
 * http://junit.org/apidocs/org/junit/rules/TestRule.html  
 
 
-
-A TestRule may add additional checks that cause a test that would otherwise fail to pass, or it may perform necessary setup or cleanup for tests, or it may observe test execution to report it elsewhere.
