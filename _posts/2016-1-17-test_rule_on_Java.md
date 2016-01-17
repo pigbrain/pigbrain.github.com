@@ -1,6 +1,6 @@
 ---
 layout: post
-category: Erlang
+category: Java
 title: JUnit @Rule Annotation
 tagline: by Pigbrain
 tags: [Java]
