@@ -18,51 +18,84 @@ tags: [Thesis]
 	* 파일에 기존 데이터를 덮어쓰기보다는 새로운 데이터를 추가한다(append)      
 		* 새로운 데이터를 추가하여 파일을 수정함으로써 성능과 원자성을 보장할 수 있다  
 	* 어플리케이션과 파일시스템 API를 통합 설계하는 것이 유연성을 증가시키면서 시스템 전체적으로 이익을 가져온다  
-  
+    
 <br>  
-  
+    
 ##2 DESIGN OVERVIEW##  
+  
 ###2.1 Assumtions###  
+  
 ###2.2 Interface###  
+  
 ###2.3 Architecture###  
+  
 ###2.4 Single Master###  
+  
 ###2.5 Cunk Size###  
+  
 ###2.6 Metadata####  
-#####2.6.1 In-Memory Data Structures #####    
-#####2.6.2 Chunk Locations #####  
-#####2.6.3 Operation Log #####  
-###2.7 Consistency Model####  
-#####2.7.1 Guarantees by GFS #####    
-#####2.7.2 iMPLICATIONS FOR aPPLICATIONS #####    
   
+#####2.6.1 In-Memory Data Structures #####
+      
+#####2.6.2 Chunk Locations #####
+    
+#####2.6.3 Operation Log #####
+    
+###2.7 Consistency Model####
+    
+#####2.7.1 Guarantees by GFS #####  
+      
+#####2.7.2 iMPLICATIONS FOR aPPLICATIONS #####  
+      
+    
 <br>  
-  
+    
 ##3 SYSTEM INTERACTIONS##  
+  
 ###3.1 Leases and Mutation Order###  
+  
 ###3.2 Data Flow###  
+  
 ###3.3 Atomic Record Appends###  
+  
 ###3.4 Snapshot###  
   
-<br>  
-   
-##4 MASTER OPERATION##  
-###4.1 Namespace Management and Locking###  
-###4.2 Replica Placement###  
-###4.3 Creation, Re-replication, Rebalancing###  
-###4.4 Gabage Collection###  
-#####4.4.1 Mechanism #####  
-#####4.4.1 Discussion #####  
-###4.5 Stale Replica Detection###  
-     
-<br>    
   
+<br>  
+     
+##4 MASTER OPERATION##  
+  
+###4.1 Namespace Management and Locking###  
+  
+###4.2 Replica Placement###  
+  
+###4.3 Creation, Re-replication, Rebalancing###  
+  
+###4.4 Gabage Collection###  
+  
+#####4.4.1 Mechanism #####  
+  
+#####4.4.1 Discussion #####  
+  
+###4.5 Stale Replica Detection###  
+  
+       
+<br>    
+    
 ##5 FAULT TOLERANCE AND DIAGNOSIS##  
+ 
 ###5.1 High Availability ###  
+  
 #####5.1.1 Fast Recovery#####  
+      
 #####5.1.2 Chunk Replication#####  
-#####5.1.3 Master Replication#####      
+    
+#####5.1.3 Master Replication#####  
+        
 ###5.2 Data Integrity ###  
-###5.3 Diagnostic Tools ###    
+    
+###5.3 Diagnostic Tools ###  
+    
   
 <br>
 <br>  
