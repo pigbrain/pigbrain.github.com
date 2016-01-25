@@ -76,14 +76,24 @@ tags: [Thesis]
 	* 클라이언트는 파일 이름과 정해진 chunk size를 이용하여 바이트 오프셋을 chunk index로 변환하여 마스터에게 전송한다  
 	* 마스터는 chunk handle과 청크 위치들을 클라이언트에게 알려준다  
 	* 클라이언트는 파일 이름과 chunk index를 키로 이용하여 이 청크 위치 정보를 캐싱한다  
-	* 클라이언트는 가장 가까이있는 청크에게 read 요청을 보낸다
+	* 클라이언트는 가장 가까이있는 청크에게 read 요청을 보낸다  
 		* read 요청에는 chunk handle과 읽어들일 byte 범위가 포함되어 있다  
 	* 클라이언트에서 동일한 청크에 대한 요청은 캐싱 시간이 만료되기 전까지 또는 파일을 다시 열기 전까지는 마스터에게 청크에 대한 정보를 묻지 않고 직접 요청한다  
 
   <img src="/assets/themes/Snail/img/Thesis/gfs/architecture.png" alt="">  
   
 ###2.5 Cunk Size###  
-  
+* chunk size는 중요한 파라미터이다  
+* 일반적인 파일 시스템의 block size 보다는 크게 chunk size를 64MB로 지정하고있다  
+* 각각 청크에 대한 사본은 청크 서버내에 일반적인 리눅스 파일 형태로 저장된다  
+* 필요에 따라 64MB 보다 크게 확장 될 수 있다  
+* Lazy space allocation 기법은 내부 단편화를 방지 할 수 있다  
+* chunk size 를 크게 지정함으로써 얻는 장점  
+	* read/write를 동일한 chunk에 대해서만 처리할 가능성이 높기 때문에 마스터와 계속해서 통신할 필요가 없다  
+	* read/write를 동일한 chunk에 대해서만 처리할 가능성이 높기 때문에 chunk 서버에 연결된 tcp 커넥션을 유지하여 네트워크 비용을 줄인다  
+	* 마스터에서 관리되는 메타데이터의 양을 줄일 수 있다  
+* chunk size 를 크게 지정함으로써 얻는 단점
+
 ###2.6 Metadata####  
   
 #####2.6.1 In-Memory Data Structures #####
