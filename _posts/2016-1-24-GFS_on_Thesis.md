@@ -80,6 +80,8 @@ tags: [Thesis]
 		* read 요청에는 chunk handle과 읽어들일 byte 범위가 포함되어 있다  
 	* 클라이언트에서 동일한 청크에 대한 요청은 캐싱 시간이 만료되기 전까지 또는 파일을 다시 열기 전까지는 마스터에게 청크에 대한 정보를 묻지 않고 직접 요청한다  
 
+  <img src="/assets/themes/Snail/img/Thesis/gfs/architecture.png" alt="">  
+  
 ###2.5 Cunk Size###  
   
 ###2.6 Metadata####  
