@@ -35,6 +35,13 @@ tags: [Thesis]
 * 높은 네트워크 대역폭이 있어야 한다      
 	  
 ###2.2 Interface###  
+* 파일은 디렉토리내에서 계층 구조로 관리된다  
+* 파일은 경로명으로 구분된다  
+* create, delete, open, close, read, write 기능을 제공한다  
+* snapshot 기능 제공  
+	* 낮은 비용으로 파일이나 디렉토리를 복사하는 기능  
+* Record append 기능 제공  
+	* 원자성을 보장하며 여러 클라이언트가 동일한 파일에 동시에 데이터를 추가할 수 있도록 하는 기능  
   
 ###2.3 Architecture###  
   
