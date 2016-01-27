@@ -120,14 +120,31 @@ tags: [Thesis]
 	* 파일 namespace는 64byte보다 적은 공간을 차지한다 (prefix를 압축한 상태로 파일명을 저장)  
   
 #####2.6.2 Chunk Locations #####
-    
-#####2.6.3 Operation Log #####
-    
-###2.7 Consistency Model####
+* 마스터 서버는 chunk의 replica가 어디에 저장되어 있는지에 대한 정보를 영구적으로 보관하지 않는다  
+* chunk 서버가 실행될때 chunk에 대한 정보를 물어보고 가져온다  
+* chunk 서버가 실행 된 이후에는 chunk에 대한 관리(replica, migration,,등)를 하트비를 통하여 마스터에서 주가되어 하기 때문에 chunk 정보를 최신 상태로 유지 가능하다  
+
+#####2.6.3 Operation Log #####  
+* operation log는 중요한 정보이기 때문에 안전하게 저장해야 한다  
+* operation log는 중요한 메타데이터가 변경된 이력을 포함한다  
+* 메타데이터를 영구적으로 보관한다  
+* 논리적인 타임 라인을 기록함으로써 동시에 요청된 operation에 대한 순서를 확인 할 수 있다  
+* 파일, chunk 그리고 버전 등등 이것들이 생성됬을 당시의 논리적인 시간으로 가지고 구분된다 
+* operation log를 마스터 서버의 로컬이아닌 다른 머신에 replica를 만들어둬야한다   
+* 메타데이터에 대한 변경/저장이 완료 될때 까지 변경 정보를 클라이언트에게 반영해선 안된다  
+	* operation log를 로컬/원격에 모두 저장이 완료 되었을때 클라이언트요 청에 대한 응답을 준다  
+* 마스터 서버는 실행시에 operation log를 통하여 마스터 서버 내에서 관리하던 파일 시스템들의 상태를 복구 할 수 있다  
+	* 마스터 서버 실행 시간을 줄이기 위해 operation log는 작게 유지한다  
+	* operation log가 특징 크기를 넘을때마다 체크포인트를 생성한다  
+	* 체크포인트는 namespace를 검색하는데 불필요한 파싱을 없애고 메모리에 직관적으로 매핑되게 하기 위해서 B-tree 형태로 생성된다. 
+	* 오래된 체크포인트는 자연스럽게 제거된다  
+	* 체크포인트 생성에 실패하더라도 마스터 서버의 recovery 관련 코드에서 정상적인 체크포인트가 아니라는걸 판단 가능하기때문에 문제가 되지 않는다  
+  
+###2.7 Consistency Model####  
     
 #####2.7.1 Guarantees by GFS #####  
       
-#####2.7.2 iMPLICATIONS FOR aPPLICATIONS #####  
+#####2.7.2 IMPLICATIONS FOR APPLICATIONS #####  
       
     
 <br>  
