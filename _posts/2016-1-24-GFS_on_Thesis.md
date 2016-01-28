@@ -143,8 +143,36 @@ tags: [Thesis]
 ###2.7 Consistency Model####  
     
 #####2.7.1 Guarantees by GFS #####  
+* 파일 namespace 변경이나 파일생성과 같은 작업은 원자성 가진다  
+	* 이 작업들은 마스터에서만 실행된다  
+* 데이터 변경 후 파일 영역에 대한 상태는 다음과 같은 상황에 따라 달라진다  
+	* 변경 작업의 종류  
+	* 변경 성공 여부  
+	* 동시에 진행된 다른 변경 작업의 결과  
+* 파일 영역에 대한 상태  
+	* consistent  
+		* 모든 클라이언트가 replica 상관 없이 동일한 데이터를 보는 상태  
+	* defined  
+		* consistent 상태에서 클라이언트가 요청한 write 작업이 완료된 상태  
+		* 동시에 요청된 변경 작업이 완료되었을때 변경된 부분은 defined 상태가 된다  
+		* 동시에 요청된 변경 작업은 consitent 하지만 undefined 상태 일 수 있다  
+			* 모든 클라이언트는 동일한 데이터를 보지만 일부 변경이 적용되지 않은 상태일 수 있다  
+	* inconsistent  
+		* 변경에 실패한 상태 
+			* 각각의 클라이언트는 서로 다른 데이터를 보게 된다  
+  
+  <img src="/assets/themes/Snail/img/Thesis/gfs/fileRegion.png" alt="">  
+  
+* 파일 변경 작업이 chunk replica에 정상적으로 적용되었는지는 chunk version number를 가지고 판단한다  
+* 파일 변경 작업이 제대로 이루어지지 않은 chunk 서버에 대해서는 garbage collect 과정에서 수거된다  
+	* 클라이언트가 chunk 서버의 위치를 물어볼때에도 해당 chunk서버는 포함되지 않는다  
+	* 클라이언트에 해당 chunk 서버의 위치가 캐싱되어 있는 정보는 일정 시간이 지난 경우나 파일 open 요청이 있을 경우 캐시에서 삭제된다  
+	* 대부분의 작업은 append이기 때문에 replica에 문제가 생겼을경우 클라이언트는 제대로된 결과를 받지 못하게되어 재시도하거나 마스터에게 chunk정보를 다시 요청하게 된다  
+* 마스터는 chunk서버에 문제가 있는지 확인하기위해 handshake를 주기적으로 요청한다  
+	* 체크섬을 통하여 데이터에 문제가 발생했는지 확인한다  
+* chunk서버에서 문제가 발생하게 되면 가능한 빨리 정상적인 다른 chunk서버로 부터 데이터를 복사하여 복구한다  
       
-#####2.7.2 IMPLICATIONS FOR APPLICATIONS #####  
+#####2.7.2 Implications for Applications #####
       
     
 <br>  
