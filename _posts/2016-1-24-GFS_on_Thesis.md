@@ -173,6 +173,10 @@ tags: [Thesis]
 * chunk서버에서 문제가 발생하게 되면 가능한 빨리 정상적인 다른 chunk서버로 부터 데이터를 복사하여 복구한다  
       
 #####2.7.2 Implications for Applications #####
+* 파일에 overwrite를 하지 않고 append를 한다  
+* checkpoint를 생성한다  
+* self-validating  
+* self-identifying  
       
     
 <br>  
