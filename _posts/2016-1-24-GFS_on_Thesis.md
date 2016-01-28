@@ -178,13 +178,19 @@ tags: [Thesis]
 * self-validating  
 * self-identifying  
       
-    
 <br>  
     
 ##3 SYSTEM INTERACTIONS##  
+* 모든 동작에대해 마스터의 관여가 최소화되도록 디자인 되었다  
   
 ###3.1 Leases and Mutation Order###  
+* mutation은 파일 데이터나 chunk의 metadata를 변경하는 동작이다  
+	* write와 append가 이에 속한다  
+
+  <img src="/assets/themes/Snail/img/Thesis/gfs/writeControl.png" alt="">  
   
+
+
 ###3.2 Data Flow###  
   
 ###3.3 Atomic Record Appends###  
