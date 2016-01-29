@@ -186,7 +186,15 @@ tags: [Thesis]
 ###3.1 Leases and Mutation Order###  
 * mutation은 파일 데이터나 chunk의 metadata를 변경하는 동작이다  
 	* write와 append가 이에 속한다  
-
+* lease를 이용하여 replica들 사이에 consistent를 유지하도록 한다  
+* 마스터는 replica중 primary를 선정하여 chunk lease를 할당한다  
+* primary는 chunk들 사이에 mutation 작업순서를 지정한다  
+	* primary를 제외한 replica들은 이 순서에의해 muatation이 된다  
+* lease는 마스터의 오버헤드를 최소화하기 위해 고안된 방법이다  
+* lease의 타임아웃은 60초 이지만 primary가 마스터에게 시간 연장을 요청할 수 있다  
+	* primary가 마스터에게 lease 시간에 대해 요청하는 패킷은 하트비트 패킷 뒤에 붙어서 보내진다(piggyback)  
+* 마스터와 primary의 통신이 끊기더라도 마스터는 이전 lease가 만료된 이후에 새로운 lease를 생성하여 다른 replica에게 요청 할 수 있다  
+  
   <img src="/assets/themes/Snail/img/Thesis/gfs/writeControl.png" alt="">  
   
 
