@@ -197,6 +197,26 @@ tags: [Thesis]
   
   <img src="/assets/themes/Snail/img/Thesis/gfs/writeControl.png" alt="">  
   
+* 클라이언트는 마스터에게 어떤 chunk서버가 lease를 소유하고 있는지 물어본다  
+	* 만약 lease를 소유하고있는 chunk서버가 없을 경우 마스터는 chunk서버를 하나 지정하여 lease를 할당한다  
+* 마스터는 클라이언트에게 primary와 다른 2대의 replica 정보를 전달해준다  
+	* 클라이언트는 이 정보를 캐싱한다  
+	* 클라이언트에서 primary나 replica에 연결이 되지 않을 경우 마스터에게 다시 물어보게 된다  
+* 클라이언트는 모든 replica에 순서 상관없이 데이터를 전송한다  
+	* chunk서버는 수신된 데이터를 내부 LRU 캐쉬버퍼에 저장한다  
+		* 데이터가 처리되거나 오래되면 캐쉬 버퍼에서 삭제한다  
+* 클라이언트가 모든 replica들에게 데이터 전송을 완료하면 primary에게 write 요청을 보낸다  
+	* primary는 연속된 serial number를 모든 mutation작업에 할당을 하게된다  
+	* primary 내부에서 serial number순서대로 mutation을 적용한다  
+* primary 는 write 요청을 모든 secondary replica에게 전달한다  
+	* 각각의 secondary replica는 muatation 작업을 적용한다  
+	* secondary replica 역시 serial number 순서대로 mutation이 적용된다  
+* secondary replica들은 작업이 완료되면 primary에게 응답을 준다  
+* primary는 작업의 결과를 클라이언트에게 알려준다  
+	* 오류가 발생할 경우 발생한 오류에 대한 정보를 클라이언트에게 알려준다  
+	* 오류가 발생한 경우 변경된 파일 region은 inconsistent 상태가 된다  
+	* 클라이언트는 오류가 발생하면 해당 작업을 재요청하게 된다 (앞 단계들을 반복)  
+
 
 
 ###3.2 Data Flow###  
