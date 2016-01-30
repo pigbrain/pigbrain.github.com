@@ -85,7 +85,7 @@ tags: [Thesis]
 ###2.5 Cunk Size###  
 * chunk size는 중요한 파라미터이다  
 * 일반적인 파일 시스템의 block size 보다는 크게 chunk size를 64MB로 지정하고있다  
-* 각각 chunk에 대한 replication은 chunk 서버내에 일반적인 리눅스 파일 형태로 저장된다  
+* 각각 chunk에 대한 replication은 일반적인 리눅스 파일 형태로 저장된다  
 * 필요에 따라 64MB 보다 크게 확장 될 수 있다  
 * Lazy space allocation 기법은 내부 단편화를 방지 할 수 있다  
 * chunk size 를 크게 지정함으로써 얻는 장점  
@@ -199,28 +199,34 @@ tags: [Thesis]
   
 * 클라이언트는 마스터에게 어떤 chunk서버가 lease를 소유하고 있는지 물어본다  
 	* 만약 lease를 소유하고있는 chunk서버가 없을 경우 마스터는 chunk서버를 하나 지정하여 lease를 할당한다  
-* 마스터는 클라이언트에게 primary와 다른 2대의 replica 정보를 전달해준다  
+* 마스터는 클라이언트에게 primary(chunk서버)와 다른 2대의 secondary(chunk서버) 정보를 전달해준다  
 	* 클라이언트는 이 정보를 캐싱한다  
-	* 클라이언트에서 primary나 replica에 연결이 되지 않을 경우 마스터에게 다시 물어보게 된다  
-* 클라이언트는 모든 replica에 순서 상관없이 데이터를 전송한다  
-	* chunk서버는 수신된 데이터를 내부 LRU 캐쉬버퍼에 저장한다  
-		* 데이터가 처리되거나 오래되면 캐쉬 버퍼에서 삭제한다  
-* 클라이언트가 모든 replica들에게 데이터 전송을 완료하면 primary에게 write 요청을 보낸다  
-	* primary는 연속된 serial number를 모든 mutation작업에 할당을 하게된다  
-	* primary 내부에서 serial number순서대로 mutation을 적용한다  
-* primary 는 write 요청을 모든 secondary replica에게 전달한다  
-	* 각각의 secondary replica는 muatation 작업을 적용한다  
-	* secondary replica 역시 serial number 순서대로 mutation이 적용된다  
-* secondary replica들은 작업이 완료되면 primary에게 응답을 준다  
+	* 클라이언트에서 primary나 secondary 에 연결이 되지 않을 경우 마스터에게 다시 물어보게 된다  
+* 클라이언트는 primary, secondary 상관없이 데이터를 전송한다  
+	* 데이터를 수신한 chunk서버는 다른 chunk서버에도 데이터를 전달한다    
+	* chunk서버는 수신된 데이터를 내부 LRU 캐쉬버퍼에 저장한다     
+		* 데이터가 처리되거나 오래되면 캐쉬 버퍼에서 삭제한다    
+* 클라이언트가 데이터 전송을 완료하면 primary에게 write 요청을 보낸다  
+	* primary는 연속된 serial number를 모든 mutation작업에 할당을 하게된다    
+	* primary 내부에서 serial number순서대로 mutation을 적용한다    
+* primary 는 write 요청을 모든 secondary chunk서버에게 전달한다  
+	* 각각의 secondary chunk서버는 muatation 작업을 적용한다  
+	* secondary chunk서버 역시 serial number 순서대로 mutation이 적용된다  
+* secondary chunk서버들은 작업이 완료되면 primary에게 응답을 준다  
 * primary는 작업의 결과를 클라이언트에게 알려준다  
 	* 오류가 발생할 경우 발생한 오류에 대한 정보를 클라이언트에게 알려준다  
 	* 오류가 발생한 경우 변경된 파일 region은 inconsistent 상태가 된다  
 	* 클라이언트는 오류가 발생하면 해당 작업을 재요청하게 된다 (앞 단계들을 반복)  
-
-
-
 ###3.2 Data Flow###  
-  
+* 네트워크 병목을 피하기 위해 각각의 서버들은 데이터를 전달할때 가까운 서버에게 전달한다  
+	* 클라이언트가 서버S1에게 데이터를 전달하면 S1은 자신에게서 가장 가까운 서버로 데이터를 전달한다  
+	* IP 주소를 가지고 서버의 거리를 계산한다  
+* B bytes 를 R개의 chunk서버에 전송하는 비용 : B/T + RL
+	* T : 네트워크 Throughput  
+	* L : Latency   = 1/T   
+		* 네트워크 T가 100Mbps 일 경우 L은 1ms  
+	* 이상적인 환경에서 1MB는 80ms내에 전달이 완료된다  
+
 ###3.3 Atomic Record Appends###  
   
 ###3.4 Snapshot###  
