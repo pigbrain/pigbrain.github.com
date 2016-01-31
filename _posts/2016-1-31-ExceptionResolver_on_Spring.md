@@ -35,6 +35,7 @@ tags: [Spring]
 <br>  
 
 #Controller Based Exception Handling#  
+
 ###Using @ExceptionHandler###     
 * 컨트롤러 내에서 발생한 오류는 @ExceptionHandler로 지정한 메소드를 통하여 별도로 처리 가능하다  
 	* @ResponseStatus 어노테이션 없이 예외를 처리 할 수 있다    
@@ -42,7 +43,7 @@ tags: [Spring]
 	* HTTP응답코드를 지정 할 수 있다    
   
   
-  			@Controller
+			＠Controller
 			public class ExceptionHandlingController {
 			
 				// @RequestHandler methods
@@ -99,16 +100,17 @@ tags: [Spring]
 <br>  
     
 #Global Exception Handling#  
+
 ###Using @ControllerAdvice Classes###  
 * @ControllerAdvice 어노테이션을 이용하여 개별 컨트롤러가 아닌 전체 어플리케이션에서 발생하는 예외를 처리 할 수 있다  
 * @ControllerAdvice 어노테이션으로 지정한 클래스는 controller-advice 가 된다  
-* @ControllerAdvice 어노테이션으로 지정한 클래스는 다음과 같은 기능을 제공 가능하다  
+* @ControllerAdvice 어노테이션으로 지정한 클래스는 다음과 같은 기능을 제공 가능하다    
 	* @ExceptionHandler  
 	* @ModelAttribute  
 	* @InitBinder  
 
 
-			@ControllerAdvice
+			＠ControllerAdvice
 			class GlobalControllerExceptionHandler {
 				@ResponseStatus(HttpStatus.CONFLICT)  // 409
 				@ExceptionHandler(DataIntegrityViolationException.class)
@@ -119,7 +121,7 @@ tags: [Spring]
 
 	* 어떠한 예외도 처리 가능한 default handler가 필요하다면 다음과 같이 할 수 있다  
 
-			@ControllerAdvice
+			＠ControllerAdvice
 			class GlobalDefaultExceptionHandler {
 				public static final String DEFAULT_ERROR_VIEW = "error";
 			
@@ -145,6 +147,7 @@ tags: [Spring]
 <br>  
   
 #Going Deeper#  
+
 ###HandlerExceptionResolver### 
 
 #원문#  
