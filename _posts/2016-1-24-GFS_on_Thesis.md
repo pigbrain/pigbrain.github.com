@@ -228,10 +228,41 @@ tags: [Thesis]
 	* 이상적인 환경에서 1MB는 80ms내에 전달이 완료된다  
 
 ###3.3 Atomic Record Appends###  
-  
+* 데이터를 추가할떄 원자성을 유지하기 위해 record append 기능을 제공한다  
+* 기존에는 클라이언트가 데이터를 적을 위치(offset)를 정했다  
+	* 이 방식은 동시에 여러 데이터가 쓰여질때 원자성을 유지하지 못한다  
+* record append는 클라이언트가 데이터만 제공하고 GFS에서 파일 위치(offset)를 지정하고 원자성을 유지하면서 데이터를 추가한다    
+	* 데이터를 추가한 이후에는 클라이언트에게 파일 offset을 리턴한다  
+* record append 는 primary(chunk서버)에서 추가적인 동작을 할뿐 mutation의 일종이다  
+* record append 과정  
+	* 클라이언트가 chunk서버에 데이터를 보내고 primary에 write 요청을한다  
+	* primary는 record를 추가하려는 chunk의 크기가 최대 크기(64MB)를 넘었는지 확인한다  
+	* record append는 fragmentation의 최악인 경우를 막기 위해 최소 chunk 최대 크기의 1／4만큼의 데이터를 유지하도록한다
+		* 패딩을 넣어서 1／4크기를 만든다  
+	* record append에 성공하면 클라이언트에게 응답을 준다  
+	* record append에 실패하면 클라이언트는 재시도를 해야한다  
+	* record append가 한번이라도 실패하면 전체 혹은 일부분의 데이터가 중복될 수 있다  
+		* GFS는 파일에 중복된 데이터가 생기는 것을 막아주지 않는다  
+			* ㅂ1해준다  
+
 ###3.4 Snapshot###  
-  
-  
+* snapshot은 현재 진행중인 작업(mutation)에 상관없이 즉시 파일이나 디렉토리의 사본을 만드는 기능이다  
+* 사용자들은 이 기능을 사용하여 빠르고 쉽게 데이터의 사본이나 checkpoint를 만들 수 있다  
+* 마스터가 snapshot 생성 요청을 받게되면 다음과 같은 일을 한다  
+	* 아직 처리되지 않은 lease에 대해서는 중지 시킨다  
+		* lease를 중지하게되면 write 작업을 할떄 마스터를 통해 lease를 획득해야한다  
+	* lease들을 중지시킴으로써 마스터가 snapshot 생성을 할 수 있도록 한다  
+	* 메모리내에 metadata를 복사한다 
+		* 한 chunk를 가리키고 있는 metadata는 2개가 된다     
+* snapshot은 copy-on-write 기법을 활용하여 구현되었다  
+* snapshot 요청 후에 클라이언트가 chunk C에 write 요청을 보낼 경우 다음과 같이 동작된다     
+	* 마스터는 chunk C의 현재 reference count가 1보다 큰것을 확인한다    
+		* snapshot 생성 요청되었을떄 metatdata가 복사되어 reference count 는 2가 되었다  
+	* chunk C를 가지고 있는 각 chunk서버에게 C＇을 만들도록 한다  
+		* 데이터 복사는 각각의 로컬에서 이루어진다  
+	* 마스터는 새로운 chunk C＇에게 lease를 할당하고 클라이언트에게 응답을 보낸다  
+	* 클라이언트는 자신이 전달받은 chunk의 정보가 새로 생성된 것인지 알지 못한다  
+
 <br>  
      
 ##4 MASTER OPERATION##  
