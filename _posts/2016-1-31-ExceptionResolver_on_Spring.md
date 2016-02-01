@@ -15,7 +15,7 @@ tags: [Spring]
 		@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No such Order")  // 404  
 		public class OrderNotFoundException extends RuntimeException {  
 			// ...
-			}
+		}
 
 
 		...
@@ -163,7 +163,65 @@ tags: [Spring]
 		* @ResponseStatus로 지정된 예외를 처리할 수 있다  
 	* **DefaultHandlerExceptionResolver**  
 		* 예외를 처리할 수 있고 HTTP 응답 코드를 지정할 수 있는 HandlerExceptionResolver의 기본 구현체이다  
-	* 이 Resolver들은 체인처럼 리스트로 연결되어 있고 스프링 내부의 **HandlerExceptionResolverComposite**빈에 의하여 처리된다  
+	* 이 Resolver들은 체인처럼 리스트로 연결되어 있고 스프링 내부에 있는 **HandlerExceptionResolverComposite**빈에 의하여 처리된다  
+  
+  
+###SimpleMappingExceptionResolver###  
+* 스프링은 오래전부터 HandlerExceptionResolver를 구현한 **SimpleMappingExceptionResolver**를 제공하고 있다  
+* 아래와 같은 옵션을 제공한다  
+	* 에외 클래스 이름을 view 이름에 맵핑시킨다  
+		* 패키지 이름을 제외한 클래스 이름만 쓰면 된다  
+	* 처리되지 않은 예외에 대한 기본 오류 페이지를 지정할 수 있다  
+	* 로그를 남길수 있다 
+		* 기본은 비활성화 상태이다  
+	* JSP와 같은 뷰에서 사용하기 위해 Model에 exception의 이름을 넣는다  
+		* 기본적으로 attribute의 이름은 exception 이다  
+		* 비활성화 시키고자 한다면 null로 설정하면 된다  
+	* @ExceptionHandler에 의하여 리턴된 view는 excpetion에 접근이 불가능하지만 SimpleMappingExceptionResolver에 정의된 view 는 접근이 가능하다  
+  
+  
+* XML을 이용한 설정
+
+		<bean id="simpleMappingExceptionResolver"
+			class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+			<property name="exceptionMappings">
+				<map>
+					<entry key="DatabaseException" value="databaseError"/>
+					<entry key="InvalidCreditCardException" value="creditCardError"/>
+				</map>
+			</property>
+			<!-- See note below on how this interacts with Spring Boot -->
+			<property name="defaultErrorView" value="error"/>
+			<property name="exceptionAttribute" value="ex"/>
+	
+			<!-- Name of logger to use to log exceptions. Unset by default, so logging disabled -->
+			<property name="warnLogCategory" value="example.MvcLogger"/>
+		</bean>
+  
+* JAVA를 이용한 설정  
+
+		@Configuration
+		@EnableWebMvc // Optionally setup Spring MVC defaults if you aren’t doing so elsewhere
+		public class MvcConfiguration extends WebMvcConfigurerAdapter {
+			
+			@Bean(name=“simpleMappingExceptionResolver”)
+			public SimpleMappingExceptionResolver createSimpleMappingExceptionResolver() {
+				SimpleMappingExceptionResolver r = new SimpleMappingExceptionResolver();
+
+				Properties mappings = new Properties();
+				mappings.setProperty("DatabaseException", "databaseError");
+				mappings.setProperty("InvalidCreditCardException", "creditCardError");
+				
+				r.setExceptionMappings(mappings);  // None by default
+				r.setDefaultErrorView("error");    // No default
+				r.setExceptionAttribute("ex");     // Default is "exception"
+				r.setWarnLogCategory("example.MvcLogger");     // No default
+				return r;
+			}  
+			
+			...
+		}
+
 
 #원문#  
 * https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc  
