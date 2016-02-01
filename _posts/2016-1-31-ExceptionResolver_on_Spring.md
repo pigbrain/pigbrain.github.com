@@ -158,13 +158,15 @@ tags: [Spring]
   
 * 3가지 타입의 Resolver가 있다  
 	* **ExceptionHandlerExceptionResolver**  
-		* @ExceptionHandler로 지정된 메소드에서 처리되지 않은 예외를 처리할 수 있다  
+		* @ExceptionHandler로 지정된 메소드에서 catch되지 않은 예외를 처리할 수 있다  
 	* **ResponseStatusExceptionResolver**  
 		* @ResponseStatus로 지정된 예외를 처리할 수 있다  
 	* **DefaultHandlerExceptionResolver**  
 		* 예외를 처리할 수 있고 HTTP 응답 코드를 지정할 수 있는 HandlerExceptionResolver의 기본 구현체이다  
 	* 이 Resolver들은 체인처럼 리스트로 연결되어 있고 스프링 내부에 있는 **HandlerExceptionResolverComposite**빈에 의하여 처리된다  
-  
+	* **AnnotationMethodHandlerExceptionResolver** 는 **Deprecated**되었다  
+		* @ExceptionHandler로 지정된 예외를 처리 할 수 있다  
+
   
 ###SimpleMappingExceptionResolver###  
 * 스프링은 오래전부터 HandlerExceptionResolver를 구현한 **SimpleMappingExceptionResolver**를 제공하고 있다  
