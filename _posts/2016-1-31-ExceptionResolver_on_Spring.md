@@ -221,6 +221,113 @@ tags: [Spring]
 			
 			...
 		}
+  
+###Extending SimpleMappingExceptionResolver###  
+* properties들을 직접 설정하기 위한 생성자 제공  
+* **buildLogMessage**를 로깅하는 기능을 오버라이딩할 수 있다  
+	* 기본으로 구현된 로깅 기능은 다음과 같은 고정된 문자열을 출력해준다  
+		* ＜ul style="margin-left: 2em"＞＜i＞Handler execution resulted in exception＜/i＞＜/ul＞
+* **doResolveException**를 오버라이딩 하여 error view에 추가적인 정보를 담을 수 있다  
+
+
+		public class MyMappingExceptionResolver extends SimpleMappingExceptionResolver {
+			public MyMappingExceptionResolver() {
+				// Enable logging by providing the name of the logger to use
+				setWarnLogCategory(MyMappingExceptionResolver.class.getName());
+			}
+
+			@Override
+			public String buildLogMessage(Exception e, HttpServletRequest req) {
+				return "MVC exception: " + e.getLocalizedMessage();
+			}
+
+			@Override
+			protected ModelAndView doResolveException(HttpServletRequest request,
+				HttpServletResponse response, Object handler, Exception exception) {
+				// Call super method to get the ModelAndView
+				ModelAndView mav = super.doResolveException(request, response, handler, exception);
+				
+				// Make the full URL available to the view - note ModelAndView uses addObject()
+				// but Model uses addAttribute(). They work the same. 
+				mav.addObject("url", request.getRequestURL());
+				return mav;
+			}
+		}
+  
+###Extending ExceptionHandlerExceptionResolver###
+* ExceptionHandlerExceptionResolver를 상속하여 **doResolveHandlerMethodException**를 오버라이딩 할 수 있다  
+* 사용할때 order property를 지정해줘야하는데 MAX_INT보다 작게 설정해야한다  
+
+		public class ExampleExceptionHandlerExceptionResolver extends ExceptionHandlerExceptionResolver {
+		
+			/**
+			 * The default <tt>ExceptionHandlerExceptionResolver</tt> has order MAX_INT
+			 * (lowest priority - see {@link Ordered#LOWEST_PRECEDENCE). The constructor
+			 * gves this slightly higher precedence so it runs first. Also enable
+			 * logging to this classe's logger by default.
+			 */
+			public ExampleExceptionHandlerExceptionResolver() {
+				// Turn logging on by default
+				setWarnLogCategory(getClass().getName());
+				
+				// Make sure this handler runs before the default
+				// ExceptionHandlerExceptionResolver
+				setOrder(LOWEST_PRECEDENCE - 1);
+			}
+		
+			/**
+			 * Override the default to generate a log message with dynamic content.
+			 */
+			@Override
+			public String buildLogMessage(Exception e, HttpServletRequest req) {
+				return "MVC exception: " + e.getLocalizedMessage();
+			}
+		
+			/**
+			 * This method uses the newee API and gets passed the handler-method
+			 * (typically the method on the <tt>@Controller</tt>) that generated the
+			 * exception.
+			 */
+			@Override
+			protected ModelAndView doResolveHandlerMethodException(
+					HttpServletRequest request, HttpServletResponse response,
+					HandlerMethod handlerMethod, Exception exception) {
+		
+				// Get the ModelAndView to use
+				ModelAndView mav = super.doResolveHandlerMethodException(request,
+						response, handlerMethod, exception);
+		
+				// Make more information available to the view
+				mav.addObject("exception", exception);
+				mav.addObject("url", request.getRequestURL());
+				mav.addObject("timestamp", new Date());
+				mav.addObject("status", 500);
+				return mav;
+			}
+		}
+
+###Errors and REST
+* Restful Get 요청도 예외를 발생시킨다  
+* 이 과정에서 발생한 오류 정보에 대해 리턴하고자한다면 다음처럼 한다  
+
+		public class ErrorInfo {
+			public final String url;
+			public final String ex;
+			
+			public ErrorInfo(String url, Exception ex) {
+				this.url = url;
+				this.ex = ex.getLocalizedMessage();
+			}
+		}
+			
+		....
+			
+		@ResponseStatus(HttpStatus.BAD_REQUEST)
+		@ExceptionHandler(MyBadDataException.class)
+		@ResponseBody 
+		ErrorInfo handleBadRequest(HttpServletRequest req, Exception ex) {
+			return new ErrorInfo(req.getRequestURL(), ex);
+		}
 
 
 #원문#  
