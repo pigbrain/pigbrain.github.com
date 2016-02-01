@@ -14,21 +14,21 @@ tags: [Spring]
 
 		@ResponseStatus(value=HttpStatus.NOT_FOUND, reason="No such Order")  // 404  
 		public class OrderNotFoundException extends RuntimeException {  
-        	// ...
-    	}
+			// ...
+			}
 
 
 		...
 
 		@RequestMapping(value="/orders/{id}", method=GET)
-    	public String showOrder(@PathVariable("id") long id, Model model) {
-        	Order order = orderRepository.findOrderById(id);
-        	
+		public String showOrder(@PathVariable("id") long id, Model model) {
+			Order order = orderRepository.findOrderById(id);
+			
 			if (order == null) throw new OrderNotFoundException(id);
-        	
+			
 			model.addAttribute(order);
-        	return "orderDetail";
-    	}
+			return "orderDetail";
+		}
   
 	* OrderNotFoundException 예외가 발생하면 HTTP 404 응답코드가 리턴된다  
   
@@ -148,7 +148,22 @@ tags: [Spring]
   
 #Going Deeper#  
 
-###HandlerExceptionResolver### 
+###HandlerExceptionResolver###  
+* **HandlerExceptionResolver** 인터페이스를 구현한 빈(bean)은 스프링 내에서 발생하는 예외들을 처리할 수 있다  
+
+		public interface HandlerExceptionResolver {
+			ModelAndView resolveException(HttpServletRequest request, 
+					HttpServletResponse response, Object handler, Exception ex);
+		}  
+  
+* 3가지 타입의 Resolver가 있다  
+	* **ExceptionHandlerExceptionResolver**  
+		* @ExceptionHandler로 지정된 메소드에서 처리되지 않은 예외를 처리할 수 있다  
+	* **ResponseStatusExceptionResolver**  
+		* @ResponseStatus로 지정된 예외를 처리할 수 있다  
+	* **DefaultHandlerExceptionResolver**  
+		* 예외를 처리할 수 있고 HTTP 응답 코드를 지정할 수 있는 HandlerExceptionResolver의 기본 구현체이다  
+	* 이 Resolver들은 체인처럼 리스트로 연결되어 있고 스프링 내부의 **HandlerExceptionResolverComposite**빈에 의하여 처리된다  
 
 #원문#  
 * https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc  
