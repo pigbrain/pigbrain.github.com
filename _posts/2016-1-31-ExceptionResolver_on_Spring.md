@@ -166,7 +166,11 @@ tags: [Spring]
 	* 이 Resolver들은 체인처럼 리스트로 연결되어 있고 스프링 내부에 있는 **HandlerExceptionResolverComposite**빈에 의하여 처리된다  
 	* **AnnotationMethodHandlerExceptionResolver** 는 **Deprecated**되었다  
 		* @ExceptionHandler로 지정된 예외를 처리 할 수 있다  
-
+	* Resolver들은 WebMvcConfigurationSupport.java에서 생성된다  
+		* WebMvcConfigurationSupport는 Java Config의 @EnableWebMvc이나 xml Config의 <mvc:annotation-driven /> 선언을 통하여 초기화 된다  
+  
+<img src="/assets/themes/Snail/img/Spring/ExceptionHandler/WebMvcConfigurationSupport.png" alt="">  
+  
   
 ###SimpleMappingExceptionResolver###  
 * 스프링은 오래전부터 HandlerExceptionResolver를 구현한 **SimpleMappingExceptionResolver**를 제공하고 있다  
