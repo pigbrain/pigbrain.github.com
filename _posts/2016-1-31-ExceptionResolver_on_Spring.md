@@ -168,7 +168,7 @@ tags: [Spring]
 	* **AnnotationMethodHandlerExceptionResolver** 는 **Deprecated**되었다  
 		* @ExceptionHandler로 지정된 예외를 처리 할 수 있다  
 	* Resolver들은 WebMvcConfigurationSupport.java에서 생성된다  
-		* WebMvcConfigurationSupport는 Java Config의 @EnableWebMvc이나 xml Config의 ＜mvc:annotation-driven /＞ 선언을 통하여 초기화 된다  
+		* WebMvcConfigurationSupport는 Java Config의 @EnableWebMvc이나 xml Config의  선언을 통하여 초기화 된다  
   
 <img src="/assets/themes/Snail/img/Spring/ExceptionHandler/WebMvcConfigurationSupport.png" alt="">  
   
