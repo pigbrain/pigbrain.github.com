@@ -56,6 +56,6 @@ tags: [Math]
 	* ∠ 각의 크기를 나타내는 기호
 	* ⊥ 서로 직교를 나타내는 기호
 
-#참고
+# 참고
 * http://image.search.daum.net/dsa/search?w=imgviewer&q=%BC%F6%C7%D0%B1%E2%C8%A3&page_offset=3&page=1&lpp=28
 * http://blog.bagesoft.com/965

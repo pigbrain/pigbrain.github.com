@@ -8,13 +8,13 @@ tags: [Erlang]
 
 <!--more-->
 
-#Arity#  
+# Arity    
 * 함수가 가지는 인수의 수  
 * Erlang에서 동일한 모듈에서 이름은 같고 Arity가 다른 함수 두개는 전적으로 다른 함수를 의미  
 * sum/2라는 것은 인수 2개를 갖는 sum 함수를 의미  
   
   
-#Fun#
+# Fun  
 * Fun은 익명(Anonymous)함수이다  
 * 인수의 수가 틀리다면 7행과 같은 오류가 발생  
 <img src="/assets/themes/Snail/img/Erlang/Fun_Arity/fun-1.png" alt="">  

@@ -12,12 +12,12 @@ tags: [Math]
 **-값을 정확하게 측정할 수 없는 경우에 유용하게 사용**
 <img src="/assets/themes/Snail/img/Math/MethodOfLeastSquares/sample.png" alt="">    
   
-#공식#
+# 공식  
 <img src="/assets/themes/Snail/img/Math/MethodOfLeastSquares/formula.png" alt="">  
 
 * 위 공식이 최소가 되도록 하는 함수 f(x)를 구하는 것이 최소제곱법의 원리
 
-#원리#
+# 원리  
 <img src="/assets/themes/Snail/img/Math/MethodOfLeastSquares/proof-1.png" alt="">    
 
 * 위의 그림에서 각 데이터 좌표에서 최적 함수까지의 거리
@@ -29,7 +29,7 @@ tags: [Math]
 	
 <img src="/assets/themes/Snail/img/Math/MethodOfLeastSquares/proof-2.png" alt="">
 
-#참고
+# 참고
 * https://en.wikipedia.org/wiki/Least_squares
 * http://bongoras.tistory.com/446
 * http://phylab.yonsei.ac.kr/board.aphp?board=excel&indexorder=2&command=body&no=17

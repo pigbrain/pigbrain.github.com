@@ -8,12 +8,12 @@ tags: [Erlang]
 
 <!--more-->
 
-#모듈#
+# 모듈  
 * 모듈은 Erlang에서 코드의 기본 단위
 * 사용자가 작성한 모든 함수는 모듈에 담긴다
 * 모듈은 확장자가 .erl인 파일에 저장
 
-#예제-1#
+# 예제-1  
 **geometry.erl**
 <img src="/assets/themes/Snail/img/Erlang/Module/module-1.png" alt="">  
 <br>  
@@ -25,7 +25,7 @@ tags: [Erlang]
 <img src="/assets/themes/Snail/img/Erlang/Module/module-2.png" alt="">  
 <br>  
 
-#예제-2#
+# 예제-2  
 **shop.erl**
 <img src="/assets/themes/Snail/img/Erlang/Module/module-3.png" alt="">  
 <br>
@@ -33,6 +33,6 @@ tags: [Erlang]
 <img src="/assets/themes/Snail/img/Erlang/Module/module-4.png" alt="">  
 <br>
 
-#실행#
+# 실행  
 <img src="/assets/themes/Snail/img/Erlang/Module/module-5.png" alt="">  
 

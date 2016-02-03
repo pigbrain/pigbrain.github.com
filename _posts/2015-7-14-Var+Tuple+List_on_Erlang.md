@@ -8,14 +8,14 @@ tags: [Erlang]
 
 <!--more-->
 
-#변수#
+# 변수  
 * 모든 변수명은 대문자로 시작해야 한다
 * 다른 언어와 다르게 한번 변수에 값을 할당하면 변경 할 수 없다
 * 모든 명령의 마지막은 마침표(.)를 찍어야 한다
 <img src="/assets/themes/Snail/img/Erlang/Var_Tuple_List/var.png" alt="">  
 	* 이미 값이 할당된 X에 Y의 값을 대입하려 하니 오류가 발생  
 
-#튜플#
+# 튜플  
 * 튜플은 c의 구조체와 유사하다
 * 튜플은 선언할 때 자동으로 생성되고 더 이상 사용되지 않을 때 제거된다 
 * Erlang은 GC(Garbage Collector)를 사용한다
@@ -25,7 +25,7 @@ tags: [Erlang]
 * 튜플에서 값을 추출하기 위해서는 다음과 같이 한다  
 <img src="/assets/themes/Snail/img/Erlang/Var_Tuple_List/tuple-2.png" alt="">  
 
-#리스트#
+# 리스트  
 * 가변적인 무언가를 저장할 때는 리스트를 사용한다
 * 리스트의 첫째 요소를 헤드(Head)라고 부르고, 헤드를 제거 했을 때, 남은 부분은 테일(Tail)이라 부른다. 
 	* Ex ) 리스트[1,2,3,4,5]

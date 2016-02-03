@@ -19,7 +19,7 @@ tags: [Erlang]
 	* erlang:error(Why)  
 		* Crashing Error 를 표시하는데 사용
 
-#예외 처리 구문#  
+# 예외 처리 구문    
 
 	try FuncOrExpressionSequence of  
 	    Pattern1 [when Guard1] -> Expression1;  
@@ -50,7 +50,7 @@ tags: [Erlang]
 	* 만약 ExceptionType을 생략하면 throw가 기본값이 된다
 
   
-#예제#
+# 예제  
 
 <img src="/assets/themes/Snail/img/Erlang/Exception/exception1-1.png" alt="">  
 <br>

@@ -19,7 +19,7 @@ tags: [DataStructure]
 **-집합 내 원소의 숫자가 증가할수록 긍정 오류 발생 확률도 증가**  
 
 
-#구조
+# 구조
 * 블룸 필터는 _**m**_비트 크기의 비트 배열 구조를 가진다
 * 블룸 필터에서는 **k**가지의 서로 다른 해시 함수를 사용한다
 	* 각 해시 함수는 입력된 원소에 대해 **m**가지의 값을 균등한 확률로 출력해야 한다.  
@@ -31,7 +31,7 @@ tags: [DataStructure]
 		* 모든 비드가 1인 경우 원소가 속한다고 판단
 		* 그외에는 속하지 않는다고 판단  
 
-#예제
+# 예제
 <img src="/assets/themes/Snail/img/DataStructure/BloomFilter/360px-Bloom_filter.png" alt="">
 이미지 출처 : https://en.wikipedia.org/wiki/Bloom_filter  
  

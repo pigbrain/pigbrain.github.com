@@ -22,7 +22,7 @@ tags: [Erlang]
 
 <br>  
   
-#예제 - 퀵소트#
+# 예제 - 퀵소트  
 <img src="/assets/themes/Snail/img/Erlang/ListApplication/quickSort-1.png" alt="">  
 <br>
 <img src="/assets/themes/Snail/img/Erlang/ListApplication/quickSort-2.png" alt="">  

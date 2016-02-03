@@ -8,7 +8,7 @@ tags: [Erlang]
 
 <!--more-->
 
-#case 구문#  
+# case 구문    
 
 	case Expression of  
 	    Pattern1 [when Guard1] -> Expr_seq1;  
@@ -23,7 +23,7 @@ tags: [Erlang]
 
 <br>
 
-#filter(P, L)#
+# filter(P, L)  
 
     filter(P, [H|T])          ->  filter1(P(H), H, P, T);  
 	filter(P, [])             -> [];  
@@ -33,7 +33,7 @@ tags: [Erlang]
 * filter(P, L)는 L에서 P(X)가 true인 요소 X를 반환하는 기능을 수행
 
 
-#case 예제 - filter(P, L)#
+# case 예제 - filter(P, L)  
 
 	filter(P, [H|T])    ->  
 	    case P(H) of  
@@ -43,7 +43,7 @@ tags: [Erlang]
 	filter(P, []) -> [].   
   
 
-#if 구문#
+# if 구문  
 
 	if 
 		Guard1 -> Expr_seq1;

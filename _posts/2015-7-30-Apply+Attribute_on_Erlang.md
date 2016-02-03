@@ -8,7 +8,7 @@ tags: [Erlang]
 
 <!--more-->
 
-#apply#  
+# apply    
 
 * BIF의 한 종류  
 * apply는 인수를 전달하여 모듈에 있는 함수를 호출하도록 해준다  
@@ -23,7 +23,7 @@ tags: [Erlang]
 * ex) apply(erlang, atom_to_list, [hello]).
 
 
-#속성(Attribute)#  
+# 속성(Attribute)    
 * 파일의 특정한 속성을 정의하는데 사용  
 * 사전 정의된 속성과 사용자 정의 속성 두가지 유형이 있다  
 <br>  

@@ -34,6 +34,6 @@ tags: [Math]
 <img src="/assets/themes/Snail/img/Math/Bayes/proof.png" alt="">
 
  
-#참고
+# 참고
 * https://en.wikipedia.org/wiki/Bayes'_theorem
 * http://blog.naver.com/lucifer246/188508160

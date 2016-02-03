@@ -17,5 +17,5 @@ tags: [Math]
 <img src="/assets/themes/Snail/img/Math/HeavisideStepFunction/formula2.png" alt="">  
   
 
-#참고
+# 참고
 * https://en.wikipedia.org/wiki/Heaviside_step_function

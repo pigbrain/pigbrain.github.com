@@ -12,7 +12,7 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/Regularization/function.png" alt="">  
 <br>
   
-#Cost Function#  
+# Cost Function    
 * 아래와 함수는 Overfitting되어 있다고 가정  
 <img src="/assets/themes/Snail/img/MachineLearning/Regularization/function.png" alt="">  
   
@@ -27,7 +27,7 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/Regularization/costfunction.png" alt="">  
 <br>
 
-#Regularization을 적용한 Linear Regression#  
+# Regularization을 적용한 Linear Regression    
 * Gradient Descent  
 	* θj의 함수에서 빨간색으로 표시된 부분은 항상 1보다 작다  
 		* θj의 값은 계산 과정에서 계속해서 줄어든다  
@@ -38,7 +38,7 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/Regularization/linearRegression_NormalEquation.png" alt="">  
 <br>
 
-#Regularization을 적용한 Logistic Regression#    
+# Regularization을 적용한 Logistic Regression     
 * Cost Function  
 <img src="/assets/themes/Snail/img/MachineLearning/Regularization/logisticRegression_CostFunction.png" alt="">  
   
@@ -46,6 +46,6 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/Regularization/logisticRegression_GradeintDescent.png" alt="">  
   
   
-#참고#
+# 참고  
 * https://en.wikipedia.org/wiki/Regularization_(mathematics)  
 * https://share.coursera.org/wiki/index.php/ML:Regularization  

@@ -15,15 +15,15 @@ tags: [MachineLearning]
 
 **-Gradient Descent 처럼 많은 반복 계산이 필요 없다**  
 
-#공식#
+# 공식  
 <img src="/assets/themes/Snail/img/MachineLearning/NormalEquation/normalEquation.png" alt="">
 <br>
   
-#증명#
+# 증명  
 <img src="/assets/themes/Snail/img/MachineLearning/NormalEquation/proof.png" alt="">
 <br>
 
-#Gradient Descent와의 비교#
+# Gradient Descent와의 비교  
 <table>
 <tr><td>Gradient Descent/td><td>Normal Equation/td></tr>
 <tr><td>최적의 a혹은 λ를 구해야 한다</td><td>a혹은 λ를 구할 필요가 없다</td></tr>
@@ -32,6 +32,6 @@ tags: [MachineLearning]
 </table>
 <br>
  
-#참고#  
+# 참고   
 * https://share.coursera.org/wiki/index.php/ML:Linear_Regression_with_Multiple_Variables  
 * http://eli.thegreenplace.net/2014/derivation-of-the-normal-equation-for-linear-regression  

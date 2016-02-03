@@ -89,7 +89,7 @@ tags: [Erlang]
 		* 프로세스는 메시지를 기다리는 것을 멈추고 Expressions를 실행한다  
 	* 타임아웃 값이 0이면 타임아웃의 구문이 즉시 실행된다  
 
-#예제 - 타이머 구현하기#  
+# 예제 - 타이머 구현하기    
 <img src="/assets/themes/Snail/img/Erlang/MultiprocessProgramming/timer-1.png" alt="">
 <br>
 <img src="/assets/themes/Snail/img/Erlang/MultiprocessProgramming/timer-2.png" alt="">

@@ -16,16 +16,16 @@ tags: [MachineLearning]
 	* 훈련 데이터에 민감하게 작용한다
 
 
-#배경지식#
+# 배경지식  
 * [조건부 확률](http://pigbrain.github.io/math/2015/07/04/ConditionalProbability_on_Math/)
 * [베이스 정리](http://pigbrain.github.io/math/2015/07/05/Bayes_on_Math/)
-  
-#분류방법#
+   
+#분류방법  
 * 속성(x, y)가 있다. 이 속성이 분류1에 속할 확률을**P1**, 분류2에 속할 확률을**P2** 라고 한다
 * P1(x, y) > P2(x, y) 이면 속성(x, y)는 분류항목1에 속한다
 * P1(x, y) < P2(x, y) 이면 속성(x, y)는 분류항목2에 속한다
 
-#예제#  
+# 예제   
   
 <table>
 <tr><td>영화</td><td>단어</td><td>분류</td></tr>

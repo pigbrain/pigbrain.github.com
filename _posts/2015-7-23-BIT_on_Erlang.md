@@ -8,7 +8,7 @@ tags: [Erlang]
 
 <!--more-->
 
-#BIT(Built-In Function)#  
+# BIT(Built-In Function)   
 * BIF는 Erlang 언어의 일부라고 볼 수 있다
 	* Erlang으로 작성된 것처럼 보이지만, 실제로는 Erlang 가상 머신에서 원시 연산으로 구현한 것이다
 		* 리스트를 튜플로 변환하거나 또는 현재 시간과 날짜를 알아내는 것등이 BIF에 해당한다  
@@ -23,7 +23,7 @@ tags: [Erlang]
 <br>  
 <br>
 
-#바이너리(Binary)#  
+# 바이너리(Binary)   
 * 원시 데이터를 대량 저장할 경우에는 바이너리(Binary)라는 데이터 구조를 사용하여 저장하는 것이 효율적이다  
 * 바이너리는 공간면에서 리스트나 튜플보다 훨씬 효율적인 방식으로 데이터를 저장한다  
 * 런타임 시스템은 바이너리를 효율적으로 입출력하도록 최적화 되어있다
@@ -34,7 +34,7 @@ tags: [Erlang]
 * 바이너리는 <<와 >>로 둘러쌓인 일련의 정수 또는 문자열로 작성되고 출력된다
 <br>  
 
-#바이너리를 다루는 BIF#
+# 바이너리를 다루는 BIF  
 <img src="/assets/themes/Snail/img/Erlang/BIT/bit-3.png" alt="">  
 <br>
 

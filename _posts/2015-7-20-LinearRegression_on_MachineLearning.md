@@ -8,12 +8,12 @@ tags: [MachineLearning]
 
 <!--more-->
 
-#Regression ?#
+# Regression ?  
 * 두 변수 x와 y와의 관계에 적합한 선  
 * Regression이 직선인 경우에는 Regression Line(회귀 직선)이라 한다  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/regression.png" alt="">  
 
-#Linear Regression#   
+# Linear Regression     
 **-머신러닝뿐만 아니라 통계학에서도 다루는 가장 기본적인 알고리즘**  
 **-하나의 입력 값(독립 변수)을 가지고 출력 값(종속 변수)을 예측하고 싶을 때 사용**  
 
@@ -27,7 +27,7 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/LinearRegression/linearRegression.png" alt="">  
 
 
-#Hypothesis Function#
+# Hypothesis Function  
 
 <img src="/assets/themes/Snail/img/MachineLearning/LinearRegression/hypothesisFunction.png" alt="">  
 
@@ -52,7 +52,7 @@ tags: [MachineLearning]
 
 * 최적의 θ0과 θ1을 찾아 h(x) Hypothesis Function을 완성 할 수 있다
 
-#참고#
+# 참고  
 * https://www.coursera.org/learn/machine-learning/supplement/Mc0tF/linear-regression-with-one-variable
 * http://deepcumen.com/2015/04/linear-regression-2/
 * http://www.ftpress.com/articles/article.aspx?p=2248639&seqNum=5

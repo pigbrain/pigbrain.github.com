@@ -17,7 +17,7 @@ tags: [Erlang]
 
 <br>
 
-#Bit Syntax의 형태#
+# Bit Syntax의 형태  
 
 	<< >>
 	<<E1, E, ...., En>> 

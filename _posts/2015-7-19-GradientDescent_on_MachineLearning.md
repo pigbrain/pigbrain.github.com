@@ -11,16 +11,16 @@ tags: [MachineLearning]
 * 미분의 개념을 최적화 문제에 적용한 방법 
 * 함수의 Local Minimum을 찾는 방법
 
-#Gradient Ascent와 Gradient Descent#
+# Gradient Ascent와 Gradient Descent  
 * **Gradient Ascent** : 어떤 함수의 극대점을 찾기 위해 현재 위치에서의 기울기 방향으로 이동해 가는 방법  
 * **Gradient Descent** : 극소점을 찾기 위해 gradient 반대 방향으로 이동해 가는 방법
 
-# Gradient ?#
+# Gradient ?  
 * 다변수 함수 f(X1, X2, ... Xn)에 대한 기울기
 
 <img src="/assets/themes/Snail/img/MachineLearning/GradientDescent/gradient.png" alt="">  
 
-# Gradient-예제#
+# Gradient-예제  
 <img src="/assets/themes/Snail/img/MachineLearning/GradientDescent/gradient-example.png" alt="">  
 
 * (1, 1)에서 f값이 최대로 증가하는 방향은 (2, 2), 기울기는 ││(2, 2)││ 
@@ -38,11 +38,11 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/GradientDescent/ascent-formula.png" alt="">  
 	
 
-# Gradient Descent의 문제점 #
+# Gradient Descent의 문제점  
 * Local Minimum에 빠질 수 있다  
 * 해에 근접할수록 │∇f│가 0에 가까워지기 때문에 수렴속도가 느려진다
 
 
-#참고#
+# 참고  
 * https://en.wikipedia.org/wiki/Gradient_descent
 * http://darkpgmr.tistory.com/133

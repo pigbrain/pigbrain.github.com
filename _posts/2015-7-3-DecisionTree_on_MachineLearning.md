@@ -30,7 +30,7 @@ tags: [MachineLearning]
 이미지 출처 : https://ko.wikipedia.org/wiki/결정_트리_학습법
 
 
-#용어  
+# 용어  
   
 * Overfitting ?
 	* Training Set에 맞춰서 생성되다 보니 테스트 집합이나 실제 분류되지 않은 데이터에 대해서는 큰 에러가 발생하는 문제
@@ -45,7 +45,7 @@ tags: [MachineLearning]
 	* Entroypy가 높다는 것은 데이터가 혼잡(?)하다는 것을 의미  
   
  
-#예제
+# 예제
 <img src="/assets/themes/Snail/img/MachineLearning/DecisionTree/DecisionTree_example.png" alt="">
 이미지 출처 : http://javacan.tistory.com/entry/MachineLearningInAction-03-DecisitionTree-ID3
  

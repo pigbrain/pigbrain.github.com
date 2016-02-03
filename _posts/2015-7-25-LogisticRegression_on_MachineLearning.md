@@ -8,12 +8,12 @@ tags: [MachineLearning]
 
 <!--more-->
 
-#회귀 ?#
+# 회귀 ?  
 * 두 변수 x와 y와의 관계에 적합한 선
 * 회귀가 직선인 경우에는 회귀 직선이라 한다
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/regression.png" alt="">  
 
-#로지스틱 회귀#   
+# 로지스틱 회귀     
 **-종속변수가 이항형 문제(유효한 범주의 개수가 두개인 경우)를 분류할 때 사용**
 
 * 장점
@@ -23,7 +23,7 @@ tags: [MachineLearning]
 	* Underfitting경향이 있어 정확도가 낮게 나올 수 있다 
 
  
-#Logistic Regression의 특징#  
+# Logistic Regression의 특징  
 * Hypothesis Function는 0과 1사이의 값을 갖는다  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/hypohesisFunction_range.png" alt="">    
     
@@ -41,7 +41,7 @@ tags: [MachineLearning]
 * 위 시그모이드 함수 그래프에서 다음과 같은 특징을 확인 가능
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/decisionBoundary_features.png" alt="">  
   
-#분류 방법#  
+# 분류 방법    
 * Hypothesis Function은 다음과 같은 형태를 갖는다  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/costFunction.png" alt="">  
   
@@ -51,12 +51,12 @@ tags: [MachineLearning]
 * Linear Regression가 마찬가지로 최적의 θ값을 찾기 위해 [Gradient Descent](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)을 이용  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/gradient_descent.png" alt="">  
   
-#증명#
+# 증명  
 * Gradient Descent에서 사용한 J(θ)' 는 다음과 같이 도출 가능하다  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/proof.png" alt="">  
 
 
-#용어#
+# 용어  
 * Overfitting과 Underfitting
 	* Training Data에만 과하게 적합되어 검증 데이터 집합이나 다른 입력에 대해 부정확한 결과를 내는 것을 Overfitting과이라 한다
 	* 위와 반대로 모호한 결과를 내는 것을 Underfitting이라 한다.
@@ -65,7 +65,7 @@ tags: [MachineLearning]
   
 * [Gradient Descent](https://ko.wikipedia.org/wiki/%EA%B2%BD%EC%82%AC_%ED%95%98%EA%B0%95%EB%B2%95)
   
-#참고#
+# 참고  
 * http://terms.naver.com/entry.nhn?docId=2323285&cid=42419&categoryId=42419  
 * http://blog.secmem.org/647  
 * https://people.cs.pitt.edu/~milos/courses/cs2710/lectures/Class22.pdf  

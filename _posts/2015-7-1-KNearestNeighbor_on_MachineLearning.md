@@ -20,7 +20,7 @@ tags: [MachineLearning]
 	* 많은 메모리 필요 
 
 
-#예제#
+# 예제  
 <table>
 <tr><td>영화 제목</td><td>발차기 장면 횟수</td><td>키스 장면 횟수</td><td>영화 유형</td></tr>
 <tr><td>A</td><td>3</td><td>104</td><td>로맨스</td></tr>

@@ -8,13 +8,13 @@ tags: [MachineLearning]
 
 <!--more-->
 
-#Multiple Linear Regression#   
+# Multiple Linear Regression    
 
 **-여러개의 입력 값(독립 변수)을 가지고 출력 값(종속 변수)을 예측하고 싶을 때 사용**  
 <img src="/assets/themes/Snail/img/MachineLearning/MultipleLinearRegression/multipleLinearRegression.png" alt="">  
 
 
-#Hypothesis Function#
+# Hypothesis Function  
 
 <img src="/assets/themes/Snail/img/MachineLearning/MultipleLinearRegression/hypothesisFunction.png" alt="">  
 
@@ -31,7 +31,7 @@ tags: [MachineLearning]
 
 * 최적의 θ0, θ1, ... θn을 찾아 h(x) Hypothesis Function를 완성 할 수 있다
 
-#참고#
+# 참고  
 * [최소제곱법](http://pigbrain.github.io/math/2015/07/19/MethodOfLeastSquares_on_Math/)
 * [Gradient Descent](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)
 * [Linear Regression](http://pigbrain.github.io/machinelearning/2015/07/20/LinearRegression_on_MachineLearning/)

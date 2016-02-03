@@ -41,6 +41,6 @@ tags: [Math]
 7. P(B │ A) = **2/15** 
   
  
-#참고
+# 참고
 * http://terms.naver.com/entry.nhn?docId=1994937&cid=50315&categoryId=50315
 * http://blog.naver.com/lucifer246/188508097

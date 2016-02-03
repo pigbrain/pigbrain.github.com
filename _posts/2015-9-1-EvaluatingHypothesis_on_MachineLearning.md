@@ -12,7 +12,7 @@ tags: [MachineLearning]
 * Overfitting과 같은 문제로 실제 데이터에 대해서는 부정확 할 수 있다  
 <br>  
 
-#Hypothesis Function을 평가하는 방법#
+# Hypothesis Function을 평가하는 방법  
 
 * Training set을 다음 두 가지로 분류한다
 	* Training set (80%)  
@@ -34,7 +34,7 @@ tags: [MachineLearning]
   
 <img src="/assets/themes/Snail/img/MachineLearning/EvaluatingHypothesis/avgErr.png" alt="">  
 
-#Cross Validation Set#
+# Cross Validation Set  
 
 * Training set만 가지고 만든 알고리즘은 Training set에 대해서는 잘 동작하지만 좋은 Hypothesis Function으로 판단하기는 어렵다  
 * Training set에 대해서는 낮은 오류율을 보이지만 다른 데이터들에 대해서는 높은 오류율을 보일 수 있다  
@@ -52,5 +52,5 @@ tags: [MachineLearning]
 <br>
 
 
-#참고#
+# 참고  
 * https://share.coursera.org/wiki/index.php/ML:Advice_for_Applying_Machine_Learning

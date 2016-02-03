@@ -12,7 +12,7 @@ tags: [DataStructure]
 
 **-이진검색트리 대체 가능**  
 
-#연결리스트와의 차이점#
+# 연결리스트와의 차이점  
 * 연결리스트는 하나의 'next' 포인터만 갖는다 
 * 스킵리스트는 다수의 'next' 포인터를 갖는다 (Foward 포인터라 불린다)
 	* Forward 포인터를 이용하여 빠르게 탐색 가능
@@ -21,10 +21,10 @@ tags: [DataStructure]
 
 <img src="/assets/themes/Snail/img/DataStructure/SkipList/simple_skiplist.png" alt="">
 
-#구조
+# 구조
 <img src="/assets/themes/Snail/img/DataStructure/SkipList/explain.png" alt="">
 
-#검색#
+# 검색  
 * 가장 상위의 리스트 부터 검색을 시작
 * 현재 위치(**p**)의 값을 x, 다음 노드의 값을 y라고 가정
 	* x == y이면 다음 노드를 반환
@@ -36,7 +36,7 @@ tags: [DataStructure]
   
   
 
-#삽입#
+# 삽입  
 * Ex) 15를 삽입
 	* 15를 검색한다
 	* 15보다 작은 수에서 검색이 종료된다
@@ -45,7 +45,7 @@ tags: [DataStructure]
 <img src="/assets/themes/Snail/img/DataStructure/SkipList/insert.png" alt="">
   
 
-#삭제#
+# 삭제  
 * Ex) 34를 삭제 
 	* 상위 리스트의 값부터 삭제하며 아래로 이동한다
 <img src="/assets/themes/Snail/img/DataStructure/SkipList/delete.png" alt="">
