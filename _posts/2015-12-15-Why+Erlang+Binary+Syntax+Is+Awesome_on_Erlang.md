@@ -8,7 +8,7 @@ tags: [Erlang]
 
 <!--more-->
 
-#Bit syntax #  
+# Bit syntax   
 * [Bit syntax](http://pigbrain.github.io/erlang/2015/07/30/BitSyntax_on_Erlang/)
 * 바이너리 프로토콜을 처리하는데 효율적이다  
 * 프로토콜과 같은 바이너리 데이터들의 스펙을 간단하게 정의 가능하다  
@@ -16,7 +16,7 @@ tags: [Erlang]
   
 <br>  
   
-#Bit Syntax 예제#
+# Bit Syntax 예제  
 
 * Bit 연산
    
@@ -88,5 +88,5 @@ tags: [Erlang]
 <br>  
 <br>  
 
-#원문#
+# 원문  
 * https://forfunand.wordpress.com/2011/10/10/why-erlangs-binary-syntax-is-awesome/

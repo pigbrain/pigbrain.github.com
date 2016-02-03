@@ -8,13 +8,13 @@ tags: [Erlang]
 
 <!--more-->
 
-#intet:setopts(Socket, Options)#  
+# intet:setopts(Socket, Options)  
 * 하나 이상의 소켓 옵션을 설정한다  
 * 리턴 값 : ok │ {error, posix()}  
   
 <br>  
   
-#{active, true | false | once | N}#  
+# {active, true | false | once | N}   
 * active 속성의 기본값은 true이다  
 <br>  
 * active 속성이 true일 경우 
@@ -39,7 +39,7 @@ tags: [Erlang]
 
 <br>  
 
-#Note#  
+# Note  
 * {active, true} 모드는 flow control을 제공하지 않는다  
 	* sender 가 빠르게 메세지를 보낼 수록 receiver는 수시된 메세지들로부터 오버플로우 될 수 있다  
 	* {active, N} 모드 중 N이 0보다 클 때에도 {active, true}와 동일한 형태로 동작한다  
@@ -55,7 +55,7 @@ tags: [Erlang]
 <br>  
 <br>  
 
-#원문#  
+# 원문   
 * http://www.erlang.org/doc/man/inet.html
 
 

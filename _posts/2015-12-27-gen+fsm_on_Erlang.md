@@ -8,13 +8,13 @@ tags: [Erlang]
 
 <!--more-->
 
-#gen_fsm ? #  
+# gen_fsm ?  
 * OTP behaviour의 한 종류이다  
 * FSM(Finite State Machine)을 만드는데 사용된다  
   
 <br>  
   
-#FSM(Finite State Machine)#  
+# FSM(Finite State Machine)  
 * 일반적인 형태
 	* State(S) -> Event(E) ->  Actions(A) -> State(S')  
 		* S 상태  
@@ -35,7 +35,7 @@ tags: [Erlang]
   
 <br>  
   
-#gen_fsm#  
+# gen_fsm  
 * start_link/0
 	* gen_fsm 실행을 위한 새로운 프로세스 생성  
 	* 프로세스 등록(register)  
@@ -79,7 +79,7 @@ tags: [Erlang]
 		* gen_fsm:sync_send_event/2      
 
 			
-#gen_fsm 예제#  
+# gen_fsm 예제  
 * lock / unlock 2가지 상태를 관리  
 * Code(1234) 값이 일치해야 lock <-> unlock 상태 전환 가능  
 
@@ -290,8 +290,8 @@ tags: [Erlang]
 <br>  
 <br>  
 
-#원문#  
+# 원문    
 * https://pdincau.wordpress.com/2010/09/07/an-introduction-to-gen_fsm-behaviour/
 
-#참고#  
+# 참고  
 * http://www.erlang.org/doc/design_principles/fsm.html

@@ -100,7 +100,7 @@ tags: [Network]
 <img src="/assets/themes/Snail/img/Network/WebSocket/webSocketSupportBrowser.png" alt="">  
 <br>
 
-#참고#
+# 참고 
 * https://www.websocket.org/aboutwebsocket.html  
 * http://synvistech.com/blogs/advantages-disadvantages-of-websocket-api  
 * https://github.com/Atmosphere/atmosphere/wiki/Supported-WebServers-and-Browsers  
