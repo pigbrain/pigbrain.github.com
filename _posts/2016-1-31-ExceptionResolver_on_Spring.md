@@ -92,7 +92,7 @@ tags: [Spring]
 		* handleError()처럼 메소드 내부에서 ModelAndView 객체를 생성해야한다 
   
   
-###Exceptions and Views  	
+### Exceptions and Views  	
 * Model에 예외를 담을때에는 사용자에게 stack-trace 같은 내용이 노출되지 않도록 주의해야한다  
 * JSP를 사용한다면 다음과 같은 방법으로 예외를 출력할 수 있다  
   
@@ -100,9 +100,9 @@ tags: [Spring]
     
 <br>  
     
-#Global Exception Handling  
+# Global Exception Handling  
 
-###Using @ControllerAdvice Classes  
+### Using @ControllerAdvice Classes  
 * @ControllerAdvice 어노테이션을 이용하여 개별 컨트롤러가 아닌 전체 어플리케이션에서 발생하는 예외를 처리 할 수 있다  
 * @ControllerAdvice 어노테이션으로 지정한 클래스는 controller-advice 가 된다  
 * @ControllerAdvice 어노테이션으로 지정한 클래스는 다음과 같은 기능을 제공 가능하다    
@@ -147,9 +147,9 @@ tags: [Spring]
 
 <br>  
   
-#Going Deeper  
+# Going Deeper  
 
-###HandlerExceptionResolver###  
+### HandlerExceptionResolver  
 * **HandlerExceptionResolver** 인터페이스를 구현한 빈(bean)은 스프링 내에서 발생하는 예외들을 처리할 수 있다  
 
 		public interface HandlerExceptionResolver {
@@ -174,7 +174,7 @@ tags: [Spring]
 <img src="/assets/themes/Snail/img/Spring/ExceptionHandler/WebMvcConfigurationSupport.png" alt="">  
   
   
-###SimpleMappingExceptionResolver###  
+### SimpleMappingExceptionResolver  
 * 스프링은 오래전부터 HandlerExceptionResolver를 구현한 **SimpleMappingExceptionResolver**를 제공하고 있다  
 * 아래와 같은 옵션을 제공한다  
 	* 에외 클래스 이름을 view 이름에 맵핑시킨다  
@@ -230,7 +230,7 @@ tags: [Spring]
 			...
 		}
   
-###Extending SimpleMappingExceptionResolver###  
+### Extending SimpleMappingExceptionResolver  
 * properties들을 직접 설정하기 위한 생성자 제공  
 * **buildLogMessage**를 로깅하는 기능을 오버라이딩할 수 있다  
 	* 기본으로 구현된 로깅 기능은 다음과 같은 고정된 문자열을 출력해준다  
@@ -262,7 +262,7 @@ tags: [Spring]
 			}
 		}
   
-###Extending ExceptionHandlerExceptionResolver###
+### Extending ExceptionHandlerExceptionResolver
 * ExceptionHandlerExceptionResolver를 상속하여 **doResolveHandlerMethodException**를 오버라이딩 할 수 있다  
 * 사용할때 order property를 지정해줘야하는데 MAX_INT보다 작게 설정해야한다  
 
@@ -314,7 +314,7 @@ tags: [Spring]
 			}
 		}
 
-###Errors and REST
+### Errors and REST
 * Restful Get 요청도 예외를 발생시킨다  
 * 이 과정에서 발생한 오류 정보에 대해 리턴하고자한다면 다음처럼 한다  
 
@@ -338,7 +338,7 @@ tags: [Spring]
 		}
 
 
-#원문#  
+#원문  
 * https://spring.io/blog/2013/11/01/exception-handling-in-spring-mvc  
 
 
