@@ -8,13 +8,13 @@ tags: [Erlang]
 
 <!--more-->
 
-#intet:setopts(Socket, Options)#  
+# intet:setopts(Socket, Options)  
 * 하나 이상의 소켓 옵션을 설정한다  
 * 리턴 값 : ok │ {error, posix()}  
   
 <br>  
   
-#{packet, PacketType}#  
+# {packet, PacketType}  
 * 패킷 타입을 지정  
 * PacketType의 종류   
 	* raw │ 0  
@@ -40,7 +40,7 @@ tags: [Erlang]
 
 <br>  
 
-#원문#  
+# 원문  
 * http://www.erlang.org/doc/man/inet.html
 
 

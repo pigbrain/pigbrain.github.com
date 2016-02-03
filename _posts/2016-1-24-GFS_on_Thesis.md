@@ -8,7 +8,7 @@ tags: [Thesis]
 
 <!--more-->
 
-##1 INTRODUCTION##
+## 1 INTRODUCTION  
 * 빠르게 증가하는 데이터 처리에 대한 요구를 만족시키기 위해 고안된 시스템    
 * 기존의 파일 시스템과의 차별점     
 	* 시스템에서는 언제든지 오류가 발생할 수 있다고 생각한다  
@@ -21,9 +21,9 @@ tags: [Thesis]
     
 <br>  
     
-##2 DESIGN OVERVIEW##  
+## 2 DESIGN OVERVIEW  
   
-###2.1 Assumtions###  
+### 2.1 Assumtions  
 * 전체 시스템은 종종 오류를 발생 시킬 수 있는 값 싼 시스템들로 구성된다  
 	* 모니터링, 오류 검출, Fault Tolerance, 복구 시스템이 갖춰져 있어야 한다  
 * 수만개의 파일을 저장한다  
@@ -34,7 +34,7 @@ tags: [Thesis]
 * 여러 클라이언트가 동시에 같은 파일에 데이터를 쓸수있는 방법이 제공되어야 한다  
 * 높은 네트워크 대역폭이 있어야 한다      
 	  
-###2.2 Interface###  
+### 2.2 Interface 
 * 파일은 디렉토리내에서 계층 구조로 관리된다  
 * 파일은 경로명으로 구분된다  
 * create, delete, open, close, read, write 기능을 제공한다  
@@ -43,7 +43,7 @@ tags: [Thesis]
 * Record append 기능 제공  
 	* 원자성을 보장하며 여러 클라이언트가 동일한 파일에 동시에 데이터를 추가할 수 있도록 하는 기능  
   
-###2.3 Architecture###  
+### 2.3 Architecture   
 * GFS는 하나의 마스터 서버와 여러개의 chunk서버로 구성된다  
 * 파일은 고정된 크기의 chunk로 나뉘어진다  
 * 각각의 chunk는 유니크한 64비트의 chunk handle에 의하여 구분된다  
@@ -65,7 +65,7 @@ tags: [Thesis]
 	* 클라이언트에서 메타데이터는 캐싱할 수 있다  
 	* chunk서버에는 이미 리눅스 버퍼 캐쉬에서 캐싱하고 있어서 별도로 캐싱할 필요가 없다  
   
-###2.4 Single Master###  
+### 2.4 Single Master   
 * 단일 마스터 구조이기 때문에 시스템 구조가 단순화된다  
 * chunk 배치/복제에 대한 결정을 쉽게 할 수 있다  
 * 병목이 발생하지 않도록 read/write와 연관된 동작은 최소화 해야한다  
@@ -82,7 +82,7 @@ tags: [Thesis]
 
   <img src="/assets/themes/Snail/img/Thesis/gfs/architecture.png" alt="">  
   
-###2.5 Cunk Size###  
+### 2.5 Cunk Size  
 * chunk size는 중요한 파라미터이다  
 * 일반적인 파일 시스템의 block size 보다는 크게 chunk size를 64MB로 지정하고있다  
 * 각각 chunk에 대한 replication은 일반적인 리눅스 파일 형태로 저장된다  
@@ -96,7 +96,7 @@ tags: [Thesis]
 	* 작은 파일은 적은 청크(아마도 한개)로 이루어질 것이다  
 		* 클라이언트들이 같은 파일에 접근하려한다면 이 파일은 hot spot이 될 것이다  
 
-###2.6 Metadata####  
+### 2.6 Metadata   
 * 마스터 서버는 3가지 타입의 메타데이터를 저장한다  
 	* 파일과 chunk의 namespace  
 	* 파일과 chunk의 매핑 정보  
@@ -107,7 +107,7 @@ tags: [Thesis]
 * 마스터 서버는 chunk의 위치 정보를 로그와 같이 영구적으로 보관 가능한 방법으로 저장하지 않는다  
 	* chunk서버가 실행될때 (클러스터에 참여될때) 마스터 서버는 chunk서버에게 현재 가지고 있는 chunk의 정보를 물어본다  
  
-#####2.6.1 In-Memory Data Structures #####
+##### 2.6.1 In-Memory Data Structures 
 * 메타데이터가 로컬 메모리에 저장되기때문에 마스터 서버는 빠르게 동작 할 수 있다  
 * 메타데이터를 통해서 청크의 상태들을 백그라운드에서 주기적으로 효율적으로 검사할 수 있다  
 * chunk의 상태를 주기적으로 검사함으로써 다음과 같은 것들을 할 수 있다  
@@ -119,12 +119,12 @@ tags: [Thesis]
 	* 마지막 chunk를 제외한 대부분의 chunk들은 꽉차 있을 것이다  
 	* 파일 namespace는 64byte보다 적은 공간을 차지한다 (prefix를 압축한 상태로 파일명을 저장)  
   
-#####2.6.2 Chunk Locations #####
+##### 2.6.2 Chunk Locations  
 * 마스터 서버는 chunk의 replica가 어디에 저장되어 있는지에 대한 정보를 영구적으로 보관하지 않는다  
 * chunk 서버가 실행될때 chunk에 대한 정보를 물어보고 가져온다  
 * chunk 서버가 실행 된 이후에는 chunk에 대한 관리(replica, migration,,등)를 하트비를 통하여 마스터에서 주가되어 하기 때문에 chunk 정보를 최신 상태로 유지 가능하다  
 
-#####2.6.3 Operation Log #####  
+##### 2.6.3 Operation Log  
 * operation log는 중요한 정보이기 때문에 안전하게 저장해야 한다  
 * operation log는 중요한 메타데이터가 변경된 이력을 포함한다  
 * 메타데이터를 영구적으로 보관한다  
@@ -140,9 +140,9 @@ tags: [Thesis]
 	* 오래된 체크포인트는 자연스럽게 제거된다  
 	* 체크포인트 생성에 실패하더라도 마스터 서버의 recovery 관련 코드에서 정상적인 체크포인트가 아니라는걸 판단 가능하기때문에 문제가 되지 않는다  
   
-###2.7 Consistency Model####  
+### 2.7 Consistency Model  
     
-#####2.7.1 Guarantees by GFS #####  
+##### 2.7.1 Guarantees by GFS  
 * 파일 namespace 변경이나 파일생성과 같은 작업은 원자성 가진다  
 	* 이 작업들은 마스터에서만 실행된다  
 * 데이터 변경 후 파일 영역에 대한 상태는 다음과 같은 상황에 따라 달라진다  
@@ -172,7 +172,7 @@ tags: [Thesis]
 	* 체크섬을 통하여 데이터에 문제가 발생했는지 확인한다  
 * chunk서버에서 문제가 발생하게 되면 가능한 빨리 정상적인 다른 chunk서버로 부터 데이터를 복사하여 복구한다  
       
-#####2.7.2 Implications for Applications #####
+##### 2.7.2 Implications for Applications  
 * 파일에 overwrite를 하지 않고 append를 한다  
 * checkpoint를 생성한다  
 * self-validating  
@@ -180,10 +180,10 @@ tags: [Thesis]
       
 <br>  
     
-##3 SYSTEM INTERACTIONS##  
+## 3 SYSTEM INTERACTIONS  
 * 모든 동작에대해 마스터의 관여가 최소화되도록 디자인 되었다  
   
-###3.1 Leases and Mutation Order###  
+### 3.1 Leases and Mutation Order  
 * mutation은 파일 데이터나 chunk의 metadata를 변경하는 동작이다  
 	* write와 append가 이에 속한다  
 * lease를 이용하여 replica들 사이에 consistent를 유지하도록 한다  
@@ -217,7 +217,7 @@ tags: [Thesis]
 	* 오류가 발생할 경우 발생한 오류에 대한 정보를 클라이언트에게 알려준다  
 	* 오류가 발생한 경우 변경된 파일 region은 inconsistent 상태가 된다  
 	* 클라이언트는 오류가 발생하면 해당 작업을 재요청하게 된다 (앞 단계들을 반복)  
-###3.2 Data Flow###  
+### 3.2 Data Flow  
 * 네트워크 병목을 피하기 위해 각각의 서버들은 데이터를 전달할때 가까운 서버에게 전달한다  
 	* 클라이언트가 서버S1에게 데이터를 전달하면 S1은 자신에게서 가장 가까운 서버로 데이터를 전달한다  
 	* IP 주소를 가지고 서버의 거리를 계산한다  
@@ -227,7 +227,7 @@ tags: [Thesis]
 		* 네트워크 T가 100Mbps 일 경우 L은 1ms  
 	* 이상적인 환경에서 1MB는 80ms내에 전달이 완료된다  
 
-###3.3 Atomic Record Appends###  
+### 3.3 Atomic Record Appends  
 * 데이터를 추가할떄 원자성을 유지하기 위해 record append 기능을 제공한다  
 * 기존에는 클라이언트가 데이터를 적을 위치(offset)를 정했다  
 	* 이 방식은 동시에 여러 데이터가 쓰여질때 원자성을 유지하지 못한다  
@@ -245,7 +245,7 @@ tags: [Thesis]
 		* GFS는 파일에 중복된 데이터가 생기는 것을 막아주지 않는다  
 			* ㅂ1해준다  
 
-###3.4 Snapshot###  
+### 3.4 Snapshot  
 * snapshot은 현재 진행중인 작업(mutation)에 상관없이 즉시 파일이나 디렉토리의 사본을 만드는 기능이다  
 * 사용자들은 이 기능을 사용하여 빠르고 쉽게 데이터의 사본이나 checkpoint를 만들 수 있다  
 * 마스터가 snapshot 생성 요청을 받게되면 다음과 같은 일을 한다  
@@ -265,43 +265,43 @@ tags: [Thesis]
 
 <br>  
      
-##4 MASTER OPERATION##  
+## 4 MASTER OPERATION  
   
-###4.1 Namespace Management and Locking###  
+### 4.1 Namespace Management and Locking  
   
-###4.2 Replica Placement###  
+### 4.2 Replica Placement###  
   
-###4.3 Creation, Re-replication, Rebalancing###  
+### 4.3 Creation, Re-replication, Rebalancing   
   
-###4.4 Gabage Collection###  
+### 4.4 Gabage Collection  
   
-#####4.4.1 Mechanism #####  
+##### 4.4.1 Mechanism  
   
-#####4.4.1 Discussion #####  
+##### 4.4.1 Discussion  
   
-###4.5 Stale Replica Detection###  
+### 4.5 Stale Replica Detection  
   
        
 <br>    
     
-##5 FAULT TOLERANCE AND DIAGNOSIS##  
+## 5 FAULT TOLERANCE AND DIAGNOSIS  
  
-###5.1 High Availability ###  
+### 5.1 High Availability  
   
-#####5.1.1 Fast Recovery#####  
+##### 5.1.1 Fast Recovery  
       
-#####5.1.2 Chunk Replication#####  
+##### 5.1.2 Chunk Replication  
     
-#####5.1.3 Master Replication#####  
+##### 5.1.3 Master Replication  
         
-###5.2 Data Integrity ###  
+### 5.2 Data Integrity  
     
-###5.3 Diagnostic Tools ###  
+### 5.3 Diagnostic Tools  
     
   
-<br>
+<br>  
 <br>  
   
-#원문#  
+# 원문 
 * http://static.googleusercontent.com/media/research.google.com/ko//archive/gfs-sosp2003.pdf  
-* 
+

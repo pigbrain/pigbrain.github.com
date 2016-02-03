@@ -8,19 +8,19 @@ tags: [Erlang]
 
 <!--more-->
 
-#Modules#    
+# Modules    
  * 모듈은 함수의 집합체이다  
  * 대부분의 얼랭 프로그램은 하나 이상의 모듈로 구성된다  
  * 모듈은 Java의 패키지, C의 헤더파일과 비슷한 의미이다  
 
-#Calling a Function#  
+# Calling a Function  
  * 얼랭에서 함수 호출은 다음과 같은 형태를 갖는다  
 
 		%% module_name:function(argument1, argument2, ...)  
 		> lists:max([1, 2, 3]).  
 	 
 
-#Defining Modules (mlists)#
+# Defining Modules (mlists)  
 * mlists.erl 파일을 생성한다  
 	* 파일 이름과 모듈 이름은 동일해야 한다  
 * 모듈 속성(Attribute)를 정의한다  
@@ -50,7 +50,7 @@ tags: [Erlang]
 
 <br>  
   
-#Example#  
+# Example  
 
 	-module(md).
 	-export([same/1, double/1]).
@@ -73,7 +73,7 @@ tags: [Erlang]
 <br>  
   
   
-#Compiling Modules#  
+# Compiling Modules   
 * Emulator  
 	* 얼랭 에뮬레이터에서 코드를 컴파일 하기 위해서는 BIF 중 **c(module_name)**를 사용한다  
 	
@@ -93,7 +93,7 @@ tags: [Erlang]
 
 <br>  
 
-#Loading a Module#  
+# Loading a Module   
 * 컴파일된 모듈은 다음과 같은 형태로 로딩할 수 있다  
 	
 		1> l(md).  
@@ -101,7 +101,7 @@ tags: [Erlang]
 
 <br> 
 
-#Getting the Module's Attributes#  
+# Getting the Module's Attributes  
 * 모든 컴파일된 모듈은 module_info/0, module_info/1 함수를 통하여 해당 모듈의 속성을 가져올 수 있다  
 
 		1> erlang:module_loaded(md).
@@ -132,5 +132,5 @@ tags: [Erlang]
 <br>
 <br>
 
-#원문#
+# 원문  
 * http://trigonakis.com/blog/2011/03/14/introduction-to-erlang-modules-compilation/  

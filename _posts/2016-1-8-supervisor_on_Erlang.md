@@ -8,13 +8,13 @@ tags: [Erlang]
 
 <!--more-->
 
-#Supervisor#  
+# Supervisor  
 * Supervisor 는 프로세스(worker)를 생성하고 link, process_flag(trap_exit,true)설정을 한다  
 * Supervisor는 오류가 발생한 프로세스를 재실행해준다  
   
 <br>  
   
-#Supervisor Concepts#  
+# Supervisor Concepts  
 <img src="/assets/themes/Snail/img/Erlang/Supervisor/sup-tree.png" alt="">  
   
 * Supervisor는 프로세스(worker)뿐만 아니라 다른 supervisor들도 생성/관리 할 수 있다  
@@ -24,7 +24,7 @@ tags: [Erlang]
 <img src="/assets/themes/Snail/img/Erlang/Supervisor/sup-tree-shutdown.png" alt="">  
 <br>  
 
-#Using Supervisors#  
+# Using Supervisors  
 
 
 * OTP supervisor init/1 콜백 함수의 리턴 형태  
@@ -79,7 +79,7 @@ tags: [Erlang]
 	* **MaxTime(second)**안에 **MaxRestart**값 보다  더 많이 실행 되었다면 supervisor는 해당 프로세스를 재실행 하는 것을 중단한다  
 <br>  
 
-#Child Specifications#  
+# Child Specifications  
 * 자식 프로세스의 spec을 설정  
 	* ｛ChildId, StartFunc, Restart, Shutdown, Type, Modules｝.  
 	
@@ -127,7 +127,7 @@ tags: [Erlang]
 		* 자식 프로세스가 gen_event일 경우 dynamic 이라고 입력  
 <br>  
 
-#원문#  
+# 원문  
 * http://learnyousomeerlang.com/supervisors  
 
 

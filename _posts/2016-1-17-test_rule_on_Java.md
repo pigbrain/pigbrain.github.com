@@ -8,7 +8,7 @@ tags: [Java]
 
 <!--more-->
 
-#@Rule#  
+# @Rule  
 * JUnit 4.7 부터 지원  
 * 테스트를 실행할때 부가적인 기능을 제공한다  
 * TestRule 인터페이스를 구현한 클래스를 @Rule로 지정가능하다  
@@ -23,7 +23,7 @@ tags: [Java]
 
 <br>  
 
-#Example - Timeout#  
+# Example - Timeout  
 	@Rule
 	public Timeout timeOutRule = new Timeout(2);
 
@@ -47,7 +47,7 @@ tags: [Java]
 
 <br>  
 
-#Example - TestName#
+# Example - TestName  
 	@Rule
 	public TestName testNameRule = new TestName();
 
@@ -63,7 +63,7 @@ tags: [Java]
   
 <br>  
   
-#원문#  
+# 원문  
 * http://junit.org/apidocs/org/junit/rules/TestRule.html  
 
 
