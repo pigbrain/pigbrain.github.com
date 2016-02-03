@@ -8,7 +8,8 @@ tags: [Spring]
 
 <!--more-->
 
-#Using HTTP Status Codes#  
+#Using HTTP Status Codes
+  
 * 일반적으로 예기치 않은 예외를 처리할때 HTTP 500 응답코드가 리턴된다  
 * @ResponseStatus 어노테이션으로 지정된 예외가 발생하면 HTTP 응답코드를 지정하여 처리할 수 있다      
 
@@ -34,9 +35,9 @@ tags: [Spring]
   
 <br>  
 
-#Controller Based Exception Handling#  
+#Controller Based Exception Handling  
 
-###Using @ExceptionHandler###     
+###Using @ExceptionHandler     
 * 컨트롤러 내에서 발생한 오류는 @ExceptionHandler로 지정한 메소드를 통하여 별도로 처리 가능하다  
 	* @ResponseStatus 어노테이션 없이 예외를 처리 할 수 있다    
 	* 오류페이지로 리다이렉트 시킬 수 있다    
@@ -91,7 +92,7 @@ tags: [Spring]
 		* handleError()처럼 메소드 내부에서 ModelAndView 객체를 생성해야한다 
   
   
-###Exceptions and Views###  	
+###Exceptions and Views  	
 * Model에 예외를 담을때에는 사용자에게 stack-trace 같은 내용이 노출되지 않도록 주의해야한다  
 * JSP를 사용한다면 다음과 같은 방법으로 예외를 출력할 수 있다  
   
@@ -99,9 +100,9 @@ tags: [Spring]
     
 <br>  
     
-#Global Exception Handling#  
+#Global Exception Handling  
 
-###Using @ControllerAdvice Classes###  
+###Using @ControllerAdvice Classes  
 * @ControllerAdvice 어노테이션을 이용하여 개별 컨트롤러가 아닌 전체 어플리케이션에서 발생하는 예외를 처리 할 수 있다  
 * @ControllerAdvice 어노테이션으로 지정한 클래스는 controller-advice 가 된다  
 * @ControllerAdvice 어노테이션으로 지정한 클래스는 다음과 같은 기능을 제공 가능하다    
