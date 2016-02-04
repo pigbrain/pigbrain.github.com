@@ -40,13 +40,13 @@ tags: [MachineLearning]
 
 * 직선과 각 포인트의 거리에 대한 합을 구하는 공식은 아래와 같다 (최소 제곱법을 이용)
 	* Cost Function라고 부른다
-	* 각 차이에 대해 제곱을 한 이유에 대해서는 [최소제곱법](http://pigbrain.github.io/math/2015/07/19/MethodOfLeastSquares_on_Math/) 참조 
+	* 각 차이에 대해 제곱을 한 이유에 대해서는 [최소제곱법](http://pigbrain.github.io/math/2015/07/19/MethodOfLeastSquares_on_Math) 참조 
 	* m은 Training Data의 개수
 	* m개의 대한 평균과 미분 계산을 쉽게 하기 위해 2m으로 나눴다
 <img src="/assets/themes/Snail/img/MachineLearning/LinearRegression/cost_function.png" alt="">  
 
 * Cost Function을 계산하기 위해서는 θ0과 θ1 값이 필요
-	* θ0과 θ1을 구하기 위해서는 [Gradient Descent](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)기법을 사용
+	* θ0과 θ1을 구하기 위해서는 [Gradient Descent](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning)기법을 사용
 	* **θ0과 θ1은 동시에 업데이트하여 적용해야 한다**  
 <img src="/assets/themes/Snail/img/MachineLearning/LinearRegression/gradient_descent.png" alt="">  
 

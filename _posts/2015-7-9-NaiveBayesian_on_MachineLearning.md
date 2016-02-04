@@ -17,8 +17,8 @@ tags: [MachineLearning]
 
 
 # 배경지식  
-* [조건부 확률](http://pigbrain.github.io/math/2015/07/04/ConditionalProbability_on_Math/)
-* [베이스 정리](http://pigbrain.github.io/math/2015/07/05/Bayes_on_Math/)
+* [조건부 확률](http://pigbrain.github.io/math/2015/07/04/ConditionalProbability_on_Math)
+* [베이스 정리](http://pigbrain.github.io/math/2015/07/05/Bayes_on_Math)
    
 #분류방법  
 * 속성(x, y)가 있다. 이 속성이 분류1에 속할 확률을**P1**, 분류2에 속할 확률을**P2** 라고 한다

@@ -28,7 +28,7 @@ tags: [MachineLearning]
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/hypohesisFunction_range.png" alt="">    
     
 * 함수 g(z)는 0과 1사이의 값을 갖는다  
-	* [시그모이드 함수](http://pigbrain.github.io/math/2015/07/10/SigmoidFunction_on_Math/) 이용 (로지스틱 함수라고 부르기도 한다)   
+	* [시그모이드 함수](http://pigbrain.github.io/math/2015/07/10/SigmoidFunction_on_Math) 이용 (로지스틱 함수라고 부르기도 한다)   
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/hypohesisFunction_Representation.png" alt="">   
   
 * Hypothesis Function을 이용하여 아래와 같은 확률을 유추 가능  
@@ -48,7 +48,7 @@ tags: [MachineLearning]
 * 시그모이드 함수의 특징 처럼 Cost Function도 다음과 같은 특징을 갖는다  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/costFunction_features.png" alt="">  
   
-* Linear Regression가 마찬가지로 최적의 θ값을 찾기 위해 [Gradient Descent](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning/)을 이용  
+* Linear Regression가 마찬가지로 최적의 θ값을 찾기 위해 [Gradient Descent](http://pigbrain.github.io/machinelearning/2015/07/19/GradientDescent_on_MachineLearning)을 이용  
 <img src="/assets/themes/Snail/img/MachineLearning/LogisticRegression/gradient_descent.png" alt="">  
   
 # 증명  
