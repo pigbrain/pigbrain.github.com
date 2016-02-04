@@ -43,6 +43,25 @@ tags: [Java]
 * 자바스크립트 코드를 주입하여 실행 할 수 있는 기능을 제공한다  
 	* HtmlPage.executeJavascript(String yourJsCode) 
 
+# Test code
+* [Code](https://github.com/pigbrain/HelloJava/blob/master/src/main/java/htmlunit/HtmlUnit.java)
+
+		try (final WebClient webClient = new WebClient()) {
+			final HtmlPage htmlPage = webClient.getPage("http://www.google.com");
+			Assert.assertEquals("Google", htmlPage.getTitleText());
+
+			Assert.assertTrue(htmlPage.asText().contains("Google+"));
+			
+			final HtmlForm searchForm = htmlPage.getFormByName("f");
+			final HtmlTextInput textField = searchForm.getInputByName("q");
+			textField.setValueAttribute("google");
+
+			final HtmlSubmitInput submitButton = searchForm.getInputByName("btnG");
+			final HtmlPage searchPage = submitButton.click();
+		    
+			Assert.assertTrue(searchPage.asText().contains("Search Options"));
+		}
+
 <br>  
 
 # 원문  
