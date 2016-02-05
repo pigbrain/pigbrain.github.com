@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Java
-title: Does Java pass by reference or pass by value?
+title: Does Java pass by reference or pass by value
 tagline: by Pigbrain
 tags: [Java]
 ---
