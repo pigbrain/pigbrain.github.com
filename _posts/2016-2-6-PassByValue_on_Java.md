@@ -56,14 +56,30 @@ tags: [Java]
 * tricky() 실행 결과로 pnt1의 값은 성공적으로 변경되었다  
 * pnt1와 pnt2를 swap하는 것은 **실패**하였다    
 
+---
+
+### tricky() 메소드가 호출 될때 자바는 orginal refencece의 복사본을 만들어 파라미터로 넣어준다  
+  
+<img src="/assets/themes/Snail/img/Java/PassByValue/passByValue.png" alt="">  
+  
+* reference의 복사본도 original object를 가리키고 있기 때문에 object의 값은 변경에 성공했다  
+* 메소드에 넘어간 reference는 복사본이기 때문에 swap이 실패한다   
+
+### before tricky()  
+  
+  <img src="/assets/themes/Snail/img/Java/PassByValue/beforeTricky.png" alt="">  
+
+### after tricky()  
+   
+  <img src="/assets/themes/Snail/img/Java/PassByValue/afterTricky.png" alt="">  
 
 <br>  
 
-# 자바 object는 reference로 조작된다  
+## 자바 object는 reference로 조작된다  
 
-# 그러나 메소드에는 reference가 복사된 사본이 넘겨진다 (by value)    
+## 그러나 메소드에는 reference가 복사된 사본이 넘겨진다 (by value)    
 
-# 결과적으로 swap메소드를 통한 object 교환은 실패한다  
+## 결과적으로 swap메소드를 통한 object 교환은 실패한다  
 
 
 <br>  
