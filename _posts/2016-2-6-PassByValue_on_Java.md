@@ -8,9 +8,9 @@ tags: [Java]
 
 <!--more-->
 
-#### Q: pass-by reference ? 자바에서 swap 함수가 제대로 동작하지 않는 이유는..?  
+### Q: pass-by reference ? 자바에서 swap 함수가 제대로 동작하지 않는 이유는..?  
 
-#### A: 자바에서 모든 Objcet는 reference로 조작된다. 모든 오브젝트 변수는 reference이다. 자바는 메소드 argument에 reference를 넘기지 않는다  
+### A: 자바에서 모든 Objcet는 reference로 조작된다. 모든 오브젝트 변수는 reference이다. 자바는 메소드 argument에 reference를 넘기지 않는다  
 
 # badSwap()  
 
@@ -75,11 +75,11 @@ tags: [Java]
 
 <br>  
 
-## 자바 object는 reference로 조작된다  
+### 자바 object는 reference로 조작된다  
 
-## 그러나 메소드에는 reference가 복사된 사본이 넘겨진다 (by value)    
+### 그러나 메소드에는 reference가 복사된 사본이 넘겨진다 (by value)    
 
-## 결과적으로 swap메소드를 통한 object 교환은 실패한다  
+### 결과적으로 swap메소드를 통한 object 교환은 실패한다  
 
 
 <br>  
