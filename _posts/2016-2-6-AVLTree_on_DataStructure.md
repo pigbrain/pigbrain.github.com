@@ -66,6 +66,12 @@ tags: [DataStructure]
 
 * RL 회전  
 
+<img src="/assets/themes/Snail/img/DataStructure/AVLTree/LR.png" alt="">
 
+	1. LL 회전  
+	2. RR 회전    
+  
+<br>   
+  
 # 참고
 * http://girlsy7.tistory.com/134
