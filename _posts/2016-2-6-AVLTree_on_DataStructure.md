@@ -34,8 +34,18 @@ tags: [DataStructure]
 		* RL 회전 : 오른쪽으로 회전시킨 후 왼쪽으로 회전시킨다      
 
 # 회전  
+* LL 회전  
 
+<img src="/assets/themes/Snail/img/DataStructure/AVLTree/LL.png" alt="">
+
+	B <- A의 왼쪽 자식 
+	B의 오른쪽 자식을 A의 왼쪽 자식으로 만든다  
+	A를 B의 오른쪽 자식 노드로 만든다  
 <br>  
+
+* RR 회전  
+* LR 회전  
+* RL 회전  
 
 
 # 참고
