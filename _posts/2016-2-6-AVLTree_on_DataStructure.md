@@ -51,10 +51,19 @@ tags: [DataStructure]
 	1. B <- A의 왼쪽 자식 
 	2. B의 왼쪽 자식을 A의 오른쪽 자식으로 만든다  
 	3. A를 B의 왼쪽 자식 노드로 만든다  
-
+  
 <br>  
 
 * LR 회전  
+
+<img src="/assets/themes/Snail/img/DataStructure/AVLTree/LR.png" alt="">
+  
+	1. RR 회전  
+	2. LL 회전    
+  
+<br>  
+  
+
 * RL 회전  
 
 
