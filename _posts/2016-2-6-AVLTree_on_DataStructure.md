@@ -41,6 +41,7 @@ tags: [DataStructure]
 	B <- A의 왼쪽 자식 
 	B의 오른쪽 자식을 A의 왼쪽 자식으로 만든다  
 	A를 B의 오른쪽 자식 노드로 만든다  
+
 <br>  
 
 * RR 회전  
