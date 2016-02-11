@@ -31,7 +31,12 @@ tags: [DataStructure]
 
 <img src="/assets/themes/Snail/img/DataStructure/Treap/example3.png" alt="">  
   
-<br>  
+
+# Code # 
+* [Code](http://users.cis.fiu.edu/~weiss/dsaajava/code/DataStructures/Treap.java)
   
+<br>  
+
 # 참고
-* http://www.cs.cornell.edu/courses/cs312/2003sp/lectures/lec26.html
+* http://www.cs.cornell.edu/courses/cs312/2003sp/lectures/lec26.html  
+* http://users.cis.fiu.edu/~weiss/dsaajava/code/DataStructures/Treap.java  
