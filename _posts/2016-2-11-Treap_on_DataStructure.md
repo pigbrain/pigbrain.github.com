@@ -10,15 +10,14 @@ tags: [DataStructure]
 
 # Treap  
 * Tree + Heap = **Treap**  
-* BST(Binary Search Tree)의 일종이다  
-* Skip List처럼 확률에 기반한 자료구조이다  
-* 노드에 우선순위(priority)가 정해져 있다  
-* 부모 노드는 자식 노드보다 낮은 우선순위(priority) 값을 갖는다  
-* 삽입/삭제시 우선순위(priority)에 대한 규칙이 어긋나면 회전시킨다  
-* Treap은 평균적으로 O(log N)의 시간 복잡도를 가지고 구현하기 쉽다  
+* BST(Binary Search Tree)의 일종이다
+* 정렬된 상태로 BST를 만들게 되면 Liked List와 동일한 형태가되는 문제를 보완한 형태이다        
+* 노드에 우선순위(priority)가 정해져 있다      
+* 부모 노드는 자식 노드보다 낮은 우선순위(priority) 값을 갖는다 (Heap의 특성)        
+	* 삽입/삭제시 우선순위(priority)에 대한 규칙이 어긋나면 회전시킨다    
+* Treap은 평균적으로 O(log N)의 시간 복잡도를 가지고 구현하기 쉽다    
 	* Red-Black Tree, AVL Tree는 모든 연산에서 O(log N)의 시간 복잡도를 가지지만 구현하기 어렵다  
-* 정렬된 상태로 BST를 만들게 되면 Liked List와 동일한 형태가 된다
-	* O(n)의 성능을 갖는다  
+  
 
 <br>  
 
@@ -39,4 +38,5 @@ tags: [DataStructure]
 
 # 참고
 * http://www.cs.cornell.edu/courses/cs312/2003sp/lectures/lec26.html  
-* http://users.cis.fiu.edu/~weiss/dsaajava/code/DataStructures/Treap.java  
+* http://users.cis.fiu.edu/~weiss/dsaajava/code/DataStructures/Treap.java 
+* http://opendatastructures.org/ods-java/7_2_Treap_Randomized_Binary.html   
