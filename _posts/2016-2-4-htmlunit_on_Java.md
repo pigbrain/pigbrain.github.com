@@ -44,7 +44,7 @@ tags: [Java]
 	* HtmlPage.executeJavascript(String yourJsCode) 
 
 # Test code
-* [Code](https://github.com/pigbrain/HelloJava/blob/master/src/main/java/htmlunit/HtmlUnit.java)
+* [Code](https://github.com/pigbrain/HelloJava/blob/master/src/main/java/io/pigbrain/htmlunit/HtmlUnit.java)
 
 		try (final WebClient webClient = new WebClient()) {
 			final HtmlPage htmlPage = webClient.getPage("http://www.google.com");
