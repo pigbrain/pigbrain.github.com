@@ -32,7 +32,7 @@ tags: [DataStructure]
   
 
 # Code # 
-* [Code](http://users.cis.fiu.edu/~weiss/dsaajava/code/DataStructures/Treap.java)
+* [Code](https://github.com/pigbrain/HelloJava/blob/master/src/main/java/io/pigbrain/tree/treap/Treap.java)
   
 <br>  
 
