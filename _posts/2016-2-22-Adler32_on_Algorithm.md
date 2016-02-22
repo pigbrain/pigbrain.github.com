@@ -26,7 +26,7 @@ tags: [Algorithm]
 		A = 1 + D1 + D2 + ... + Dn (mod 65521)  
 		B = (1 + D1) + (1 + D1 + D2) + ... + (1 + D1 + D2 + ... + Dn) (mod 65521)  
 		  = n×D1 + (n−1)×D2 + (n−2)×D3 + ... + Dn + n (mod 65521)  
-
+		  
      	Adler-32(D) = B × 65536 + A
 
 <br>  
