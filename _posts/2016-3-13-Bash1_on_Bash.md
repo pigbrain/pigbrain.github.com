@@ -34,7 +34,7 @@ tags: [Bash]
   
   
 <table>  
-<tr><td>Numeric value</td><td>Meaning</td><td></tr>
+<tr><td>Numeric value</td><td>Meaning</td></tr>
 <tr><td>0</td><td>success</td></tr>  
 <tr><td>2</td><td>Returned by built-in commands to indicate usage errors</td></tr>  
 <tr><td>126</td><td>Command was found but was not executable</td></tr>  
