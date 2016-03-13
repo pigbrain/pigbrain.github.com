@@ -33,14 +33,14 @@ tags: [Bash]
 	* **0 외의 수** : false / failure    
   
   
-<table>
+<table>  
 <tr><td>Numeric value</td><td>Meaning</td><td></tr>
-<tr><td>0</td><td>success</td></tr>
-<tr><td>2</td><td>Returned by built-in commands to indicate usage errors</td></tr>
-<tr><td>126</td><td>Command was found but was not executable</td></tr>
+<tr><td>0</td><td>success</td></tr>  
+<tr><td>2</td><td>Returned by built-in commands to indicate usage errors</td></tr>  
+<tr><td>126</td><td>Command was found but was not executable</td></tr>  
 <tr><td>127</td><td>Command not found</td></tr>
-<tr><td>128 + N</td><td>Command died due to receiving signal number N</td></tr>
-</table>
+<tr><td>128 + N</td><td>Command died due to receiving signal number N</td></tr>  
+</table>  
   
   
 # Example
