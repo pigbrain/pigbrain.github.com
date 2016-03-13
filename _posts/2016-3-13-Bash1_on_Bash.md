@@ -32,6 +32,7 @@ tags: [Bash]
 	* **0** : true / success  
 	* **0 외의 수** : false / failure    
   
+<br>  
   
 <table>  
 <tr><td>Numeric value</td><td>Meaning</td></tr>
