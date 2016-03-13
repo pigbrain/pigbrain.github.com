@@ -30,7 +30,8 @@ tags: [Bash]
 * 명령어 실행이 종료되면 숫자형태의 exit status를 반환한다  
 * exit status의 값
 	* **0** : true / success  
-	* **0 외의 수** : false / failure  
+	* **0 외의 수** : false / failure    
+  
   
 <table>
 <tr><td>Numeric value</td><td>Meaning</td><td></tr>
@@ -41,12 +42,14 @@ tags: [Bash]
 <tr><td>128 + N</td><td>Command died due to receiving signal number N</td></tr>
 </table>
   
+  
 # Example
 
 	prompt> testcommand
 	-bash: testcommand: command not found
 	prompt> echo $?
 	127
+  
 
 <br>  
 
