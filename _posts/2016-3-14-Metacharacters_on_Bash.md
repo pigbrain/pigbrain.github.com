@@ -44,10 +44,13 @@ specify a range (e.g., a-z, A-Z, 0–9)</td></tr>
 	
 <br>  
   
-* extglob (extended pattern matching) 
-  * extglob을 활성화 시키기 위해서는 다음 명령어 실행  
-	  * **shopt -s extglob** 
-
+# extglob (extended pattern matching) 
+* extglob을 활성화 시키기 위해서는 다음 명령어 실행  
+	* **shopt -s extglob** 
+* │를 이용하여 여러개의 패턴을 나열할 수 있다  
+  
+<br>  
+  
 <table>  
 <tr><td>option</td><td>Meaning</td></tr>
 <tr><td>?(pattern)</td><td>Match zero or one instance of pattern</td></tr>
@@ -79,8 +82,7 @@ specify a range (e.g., a-z, A-Z, 0–9)</td></tr>
 	te1te  te2te
 	
 	
-	
-	
+
 	ls
 	-----------------------------
   	a  apple  b  banana  c  case  d  duck  
@@ -88,8 +90,45 @@ specify a range (e.g., a-z, A-Z, 0–9)</td></tr>
 	prompt> ls !(apple|b)
 	a  banana  c  case  d  duck  touch
 	
+  
+# globstar  
+* bash 버전 4부터 추가된 기능  
+* globstar 활성화 시키기 위해서는 다음 명령어 실행  
+	* **shopt -s globstar**  
+  
+<br>  
+  
+<table>  
+<tr><td>Class</td><td>Characters matched</td></tr>  
+<tr><td>alnum </td><td>Alphanumeric characters </td></tr>  
+<tr><td>alpha </td><td>Alphabetic characters </td></tr>  
+<tr><td>blank </td><td>Space or Tab  </td></tr>  
+<tr><td>cntrl </td><td>Control characters </td></tr>  
+<tr><td>digit </td><td>Decimal digits </td></tr>  
+<tr><td>graph </td><td>Nonspace characters </td></tr>  
+<tr><td>lower </td><td>Lowercase characters  </td></tr>  
+<tr><td>print </td><td>Printable characters </td></tr>  
+<tr><td>punct </td><td>Punctuation characters  </td></tr>  
+<tr><td>space </td><td>Whitespace characters </td></tr>  
+<tr><td>upper </td><td>Uppercase characters </td></tr>  
+<tr><td>word </td><td>[[:word:]] is the same as [[:alnum:]_] (not in POSIX) </td></tr>  
+<tr><td>xdigit </td><td>Hexadecimal digits </td></tr>  
+</table>  
 
 <br>  
 
+# Example  
+	
+	prompt> shopt -s globstar  
+
+	ls
+	-----------------------------
+  	a  apple  b  banana  c  case  d  duck
+	
+	prompt> ls [[:alnum:]]pple
+	apple
+  
+<br>  
+  
 # 참고
 * [Bash Pocket Reference](http://www.amazon.com/bash-Pocket-Reference-OReilly/dp/1449387888)  
