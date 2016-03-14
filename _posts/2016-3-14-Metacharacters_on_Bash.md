@@ -113,12 +113,9 @@ specify a range (e.g., a-z, A-Z, 0–9)</td></tr>
 <br>  
 
 # Example  
-	
-	prompt> shopt -s globstar  
-
 	ls
 	-----------------------------
-  	a  apple  b  banana  c  case  d  duck
+	a  apple  b  banana  c  case  d  duck
 	
 	prompt> ls [[:alnum:]]pple
 	apple
