@@ -91,12 +91,7 @@ specify a range (e.g., a-z, A-Z, 0–9)</td></tr>
 	a  banana  c  case  d  duck  touch
 	
   
-# globstar  
-* bash 버전 4부터 추가된 기능  
-* globstar 활성화 시키기 위해서는 다음 명령어 실행  
-	* **shopt -s globstar**  
-  
-<br>  
+# Class
   
 <table>  
 <tr><td>Class</td><td>Characters matched</td></tr>  
