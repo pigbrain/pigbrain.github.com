@@ -24,10 +24,6 @@ tags: [Bash]
 <tr><td>!cmd </td><td> execute cmd, and produce a zero exit status if cmd exits with a nonzero status. produce a nonzero status when
 cmd exits with a zero status</td></tr>  
 </table>  
-   
-# Example  
-	
-	prompt> 
 	
 <br>  
   
