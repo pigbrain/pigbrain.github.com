@@ -1,0 +1,34 @@
+---
+layout: post
+category: OpenSource
+title: RabbitMQ 설치
+tagline: by Pigbrain
+tags: [RabbitMQ]
+---
+
+<!--more-->
+
+# 얼랭 설치
+* [설치방법](http://pigbrain.github.io/erlang/2015/07/14/IntroduceErlangAndSetup_on_Erlang)
+  
+# RabbitMQ 다운로드 및 설치
+* 윈도우  
+	* https://www.rabbitmq.com/install-windows.html 에서 윈도우 바이너리 링크를 통하여 다운로드 받고 설치  
+	
+* 리눅스  
+	* http://www.rabbitmq.com/releases에서 rabbitmq-server를 다운로드  
+	
+		1. wget http://www.rabbitmq.com/releases/rabbitmq-server/v3.0.4/rabbitmq-server-generic-unix-3.0.4.tar.gz  
+		2. tar -xvf rabbitmq-server-generic-unix-3.0.4.tar.gz  
+		3. cd rabbitmq_server-3.0.4/  
+		4. sbin/rabbitmq-server -detached // 실행  
+		5. sbin/rabbitmqctl status // 실행중인 RabbitMQ 의 Attribute 정보를 볼 수 있다  
+		6. sbin/rabbitmqctl stop // 종료
+  
+<br>  
+ 
+# 참고  
+* https://www.rabbitmq.com/  
+* http://www.thegeekstuff.com/2013/04/install-rabbitmq-server/
+
+
