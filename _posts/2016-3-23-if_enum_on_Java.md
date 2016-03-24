@@ -61,6 +61,14 @@ tags: [Java]
 * enum 필드는 final이지만 enum이 가지고 있는 값은 set메소드를 통하여 변경 가능 하다  
 * enum 필드는 final이기때문에 ==로 비교해도 안전하다  
   
+# Enum의 장점  
+* 변수의 타입, 값이 제한적이기 때문에 이상한 값이 들어오는것을 막을 수 있다  
+* 싱글톤 형태를 보장한다  
+* switch / case문을 명시적으로 사용하지 않고 그와 동일한 효과를 낼 수 있다  
+* ordinal() 메소드를 통하여 시퀀스를 생성할 수 있다  
+* **EnumMap**, **EnumSet**으로 응용 가능  
+  
+  
 # Enum의 valueOf  
 * String으로 입력받은 enum의 이름을 enum 객체로 리턴해준다  
 	
