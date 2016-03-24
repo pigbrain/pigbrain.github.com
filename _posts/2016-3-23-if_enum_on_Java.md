@@ -42,20 +42,20 @@ tags: [Java]
 
 * enum 필드에서 메소드를 override 할 수 있다  
 		
-	public enum TempEnum implements Closeable{
-		START(1){
-	        @Override
-	        public String toString(){
-	            return "START";
-	        }
-	    },
-	    RUNNING(2);
-		...
-		@Override
-	    public String toString(){
-	        return "toString";
-	    }
-	}  
+		public enum TempEnum implements Closeable{
+			START(1){
+		        @Override
+		        public String toString(){
+		            return "START";
+		        }
+		    },
+		    RUNNING(2);
+			...
+			@Override
+		    public String toString(){
+		        return "toString";
+		    }
+		}  
 
 * enum 필드는 암묵적으로 static final 이다  
 * enum 필드는 final이지만 enum이 가지고 있는 값은 set메소드를 통하여 변경 가능 하다  
