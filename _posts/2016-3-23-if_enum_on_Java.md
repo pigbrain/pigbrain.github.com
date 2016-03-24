@@ -78,7 +78,7 @@ tags: [Java]
 	* enumConstantDirectory 메소드는 enum 필드를 Map<String, Type> 형태로 관리하고있다  
 	* valueOf가 최초 호출되었을대 enum 필드들을 Map형태로 만들어 놓는다  
 
-## valueOf  코드  
+### valueOf  코드  
 	
 	public static <T extends Enum<T>> TvalueOf(Class<T> enumType, String name) {
 		
@@ -93,7 +93,7 @@ tags: [Java]
 		throw new IllegalArgumentException("No enum const " + enumType +"." + name);
 	}
   
-## enumConstantDirectory  코드  
+### enumConstantDirectory  코드  
 	
 	Map<String, T> enumConstantDirectory() {
 
@@ -110,7 +110,58 @@ tags: [Java]
 		}
 
 		return enumConstantDirectory;
-	}
+	} 
+
+# Enum vs if  
+* enum의 valueOf는 String을 입력 받아서 이름이 동일한 enum 객체를 리턴해준다  
+* String을 입력받아서 enum의 valueOf로 enum객체를 가져오는 것과 if로 String을 비교하여 enum을 가져오는 것을 비교하면 enum의 valueOf가 더욱 빠른 성능을 보인다  
+	
+		public enum TestEnum {
+			A1("A1"),
+			A2("A2"),
+			...
+			A500("A500");
+	
+			private String code; 
+		
+			private Test(String code) {
+				this.code = code;
+			}
+		
+			public String getCode() {
+				return code;
+			}
+		}
+
+		---------------------------------------------------
+
+		long startTime = System.currentTimeMillis();
+		for (int i = 0; i < 100000000L; i++) {
+			Test testEnum = Test.valueOf("A10");
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println(endTime - startTime);	 // 261ms
+
+		---------------------------------------------------
+		
+		String key = "A10";
+		long startTime = System.currentTimeMillis();
+		for (int i = 0; i < 100000000L; i++) {
+			if ("A1".equals(key)) {
+				Test testEnum = Test.A1;
+			} else if ("A2".equals(key)) {
+				Test testEnum = Test.A2;
+			} else if ( ... ) {
+				...
+			} else if ("A10".equals(key)) {
+				Test testEnum = Test.A10;
+			} 
+		}
+		long endTime = System.currentTimeMillis();
+		System.out.println(endTime - startTime);	 // 449ms
+
+* enum의 valueOf는 Map에서 enum을 찾지만 if로 할경우 처음부터 순차적으로 찾기때문에 enum의 valueOf가 더 빠른것 같다  
+	
 
 # 참고  
 * https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html
