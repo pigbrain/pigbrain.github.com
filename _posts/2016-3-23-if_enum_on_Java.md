@@ -161,7 +161,101 @@ tags: [Java]
 		System.out.println(endTime - startTime);	 // 449ms
 
 * enum의 valueOf는 Map에서 enum을 찾지만 if로 할경우 처음부터 순차적으로 찾기때문에 enum의 valueOf가 더 빠른것 같다  
+  
+# if 대신 Enum.valueOf만 이용하여 코딩 할 수 있을까 ? 
+
+### if, else if만 사용하는 경우  
 	
+	-전---------------------------------------------------
+	private final int TYPE_A = 1;
+	private final int TYPE_B = 2;
+	private final int TYPE_C = 3;
+	...
+	private final int TYPE_G = 7;
+	
+	
+	int type= getType(); // 무조건 1~7만 리턴하는 함수
+	
+	// 각 type 에 맞는 String을 리턴 
+	if (type == TYPE_A) {
+		return "TYPE_A";
+	} else if (type == TYPE_B) {
+		return "TYPE_B";
+	} else if (...) {
+		return "TYPE_...";
+	} else if (type == TYPE_G) {
+		return "TYPE_G";
+	}
+
+	-후---------------------------------------------------
+	
+	public enum NumberEnum {
+		_1("TYPE_A"), _2("TYPE_B"), ... _7("TYPE_G");
+		private String type;
+	
+		private NumberEnum(int type) {
+			this.type = type;
+		}
+		
+		public static NumberEnum valueOf(int number) {
+			return NumberEnum.valueOf("_" + String.valueOf(number));
+		}
+	}
+	
+	int type= getType(); // 무조건 1~7만 리턴하는 함수
+	
+	// Enum을 이용하면 if 문 없이 한줄로 처리 가능  
+	return NumberEnum.valueOf(type);
+
+### if, else if, else를 사용하는 경우  
+
+	-전---------------------------------------------------
+	private final int TYPE_A = 1;
+	private final int TYPE_B = 2;
+	private final int TYPE_C = 3;
+	...
+	private final int TYPE_G = 7;
+	
+	
+	int type= getType(); // 무조건 1~7만 리턴하는 함수
+	
+	// 각 type 에 맞는 String을 리턴 
+	if (type == TYPE_A) {
+		return "TYPE_A";
+	} else if (type == TYPE_B) {
+		return "TYPE_B";
+	} else if (...) {
+		return "TYPE_...";
+	} else if (type == TYPE_G) {
+		return "TYPE_G";
+	} else {
+		return "NONE";
+	}
+
+	-후---------------------------------------------------
+	
+	public enum NumberEnum {
+		_1("TYPE_A"), _2("TYPE_B"), ... _7("TYPE_G");
+		private String type;
+	
+		private NumberEnum(int type) {
+			this.type = type;
+		}
+		
+		public static NumberEnum valueOf(int number) {
+			return NumberEnum.valueOf("_" + String.valueOf(number));
+		}
+	}
+	
+	int type= getType(); // 무조건 1~7만 리턴하는 함수
+	
+	// valueOf에서 없는 키값을 찾으려하면 IllegalArgumentException이 발생
+	try {
+		return NumberEnum.valueOf(type);
+	} catch (IllegalArgumentException e) {
+		return "NONE"
+	}
+
 
 # 참고  
 * https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html
