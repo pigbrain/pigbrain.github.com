@@ -88,7 +88,7 @@ tags: [Java]
 
 ### valueOf  코드  
 	
-	public static <T extends Enum<T>> TvalueOf(Class<T> enumType, String name) {
+	public static <T extends Enum<T>> T valueOf(Class<T> enumType, String name) {
 		
 		T result = enumType.enumConstantDirectory().get(name);
 
@@ -168,7 +168,9 @@ tags: [Java]
 		long endTime = System.currentTimeMillis();
 		System.out.println(endTime - startTime);	 // 449ms
 
+* "A10"이 아닌 "A1"을 찾는 경우는 if가 더 빠르다  
 * enum의 valueOf는 Map에서 enum을 찾지만 if로 할경우 처음부터 순차적으로 찾기때문에 enum의 valueOf가 더 빠른것 같다  
+* 위와 같은 형태로 테스트했을때 "A1", "A2"를 찾는 경우는 if 가 더 빠르고 "A3"부터는 enum이 더 빠른 결과를 보였다  
   
 # if 대신 Enum.valueOf만 이용하여 코딩 할 수 있을까 ? 
 
@@ -269,3 +271,4 @@ tags: [Java]
 * https://docs.oracle.com/javase/7/docs/api/java/lang/Enum.html
 * http://www.journaldev.com/716/java-enum-examples-with-benefits-and-class-usage
 * http://stackoverflow.com/questions/9969690/whats-the-advantage-of-a-java-enum-versus-a-class-with-public-static-final-fiel
+* http://www.cubrid.org/blog/cubrid-life/when-you-should-and-should-not-use-enum-data-type/
