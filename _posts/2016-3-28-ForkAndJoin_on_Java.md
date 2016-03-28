@@ -87,7 +87,7 @@ tags: [Java]
 ### 많은 숫자가 들어있는 배열에서 sum을 하는 방법  
 * 배열은 작은 조각(구간)으로 나누고 각각의 쓰레드에서 구간 별로 sum을 구하고 총 합을 구한다  
 
-  <img src="/assets/themes/Snail/img/Java/Collection/sum.png" alt="">  
+  <img src="/assets/themes/Snail/img/Java/ForkAndJoin/sum.png" alt="">  
 
 * Excecutor를 이용하면 간단하게 만들 수 있다  
 	* 배열은 n개의 조각으로 나눈다  
