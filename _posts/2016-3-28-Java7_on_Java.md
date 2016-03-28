@@ -156,7 +156,7 @@ tags: [Java]
 
 		int mask = 0b01010000101;
 		int binary = 0B0101_0000_1010_0010_1101_0000_1010_0010;    // _를 이용한 가독성 향상!
-
+  
 # Java NIO 2.0  
 * 기본파일시스템에 접근도 가능하고 다양한 파일I/O 기능도 제공  
 	* 파일을 이동  
@@ -174,7 +174,8 @@ tags: [Java]
 * 새로운 Garbage Collector가 추가  
 * G1 GC는 Garbage가 가장 많은 영역의 정리를 수행한다  
 * 메모리 집중적인 어플리케이션에 더 큰 Through put을 제공
-* 
+* http://javarevisited.blogspot.kr/2014/04/10-jdk-7-features-to-revisit-before-you.html
+  
 # More Precise Rethrowing of Exception
 * JDK7 이전 버젼에서는 catch 구문내에서 선언한 예외 유형만 밖으로 던질 수 있다  
 * JDK7에서는 catch 구문에서 선언한 예외를 밖으로 던질 수 있다  
