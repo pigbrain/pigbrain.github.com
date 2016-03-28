@@ -119,8 +119,9 @@ tags: [Java]
 	long creditcardNum = 1234_4567_8901_2345_L; // 숫자 끝에 _ 붙일 경우
 	long ssn = _777_99_8888L; // 숫자 시작에 _ 붙일 경우
   
-# Catching Multiple Exception Type in Single Catch Block
-* catch 블럭에서 여러개의 Exception 처리가 가능하다 (Multi-Catch)
+# Catching Multiple Exception Type in Single Catch Block  
+* catch 블럭에서 여러개의 Exception 처리가 가능하다 (Multi-Catch)  
+
 ### JDK7 이전  
 	try {
 		//...... 
@@ -129,6 +130,7 @@ tags: [Java]
 	} catch(SQLException ex) {
 		ex.printStackTrace(); 
 	}
+
 ### JDK7 이후  
 	try {
 		//......
