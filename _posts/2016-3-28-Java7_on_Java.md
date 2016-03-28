@@ -204,4 +204,5 @@ tags: [Java]
 
 # 참고   
 * http://www.jpstory.net/2014/06/java-7-features/
+* http://javarevisited.blogspot.kr/2014/04/10-jdk-7-features-to-revisit-before-you.html
 * https://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
