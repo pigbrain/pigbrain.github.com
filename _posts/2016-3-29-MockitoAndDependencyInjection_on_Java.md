@@ -36,15 +36,15 @@ tags: [Java]
 	}
 
 * 자바 유닛 테스트를 작성할때 클래스의 Dependency들을 Inject할 수 있는 방법이 필요하다  
-* Mockitosms **@InjectMocks**를 이용하여 이런 기능을 지원한다  
+* Mockito는 **@InjectMocks**를 이용하여 이런 기능을 지원한다  
   
 <br>  
   
 * applicatoin context 파일 또는 new Example(), mock(..)과 같은 코드를 사용하지 않고 Example 클래스를 생성하였고 테스트도 통과한다  
 * Example 클래스 생성 과정 
 	* **MockitoJUnitRunner**가 실행되면 Mockito는 @Mock, @Spy으로 선언된 객체들을 생성한다  
-	* @InjectMocks으로 선언된 객체를 생성하고 Mockito는 @Mock, @Spy로 선언되어 생성된 객체들을 주입한다  
-* **@RunWith(MockitoJUnitRunner.class)**을 사용하지 않고 @Before 메소드에  **MockitoAnnotations.initMocks(this)** 를 사용해도 동일하다  
+	* @InjectMocks으로 선언된 객체를 생성하고 @Mock, @Spy로 선언되어 생성된 객체들을 Inject한다  
+* **@RunWith(MockitoJUnitRunner.class)**을 사용하지 않고 **@Before** 메소드에  **MockitoAnnotations.initMocks(this)** 를 사용해도 동일하다  
   
 <br>  
   
