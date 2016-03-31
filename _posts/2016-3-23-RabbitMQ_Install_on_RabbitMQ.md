@@ -56,10 +56,10 @@ tags: [RabbitMQ]
 		1. cd rabbitmq_server-3.0.4/  
 		2. sbin/rabbitmqctl **_add\_vhost_ dev-vhost**  
 			* dev-vhost 라는 vhost를 생성한다  
-		3. sbin/rabbitmqctl **_set\_permissions_ -p dev-vhost admin** ".*" ".*" ".*"
+		3. sbin/rabbitmqctl **_set\_permissions_ -p dev-vhost admin** ".\*" ".\*" ".\*"
  			* dev-vhost의 모든 권한을 admin에 부여한다  
-	 			* ".*" ".*" ".*"는 설정, 쓰기, 읽기에 대한 권한을 의미한다  
-	 			* ".*"를 통해 각 권한에 대한 모든 자원을 허용한다  
+	 			* ".\*" ".\*" ".\*"는 설정, 쓰기, 읽기에 대한 권한을 의미한다  
+	 			* ".\*"를 통해 각 권한에 대한 모든 자원을 허용한다  
   
 <br>  
   
