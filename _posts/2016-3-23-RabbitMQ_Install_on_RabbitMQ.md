@@ -29,7 +29,9 @@ tags: [RabbitMQ]
 			* 종료
   
 <br>  
+
 # RabbitMQ Management 플러그인 설치  
+
 * 리눅스  
 	* Management 플러그인 설치 방법
 		1. cd rabbitmq_server-3.0.4/  
@@ -46,7 +48,9 @@ tags: [RabbitMQ]
 		* sbin/rabbitmqctl set_user_tags admin administrator  
   
 <br>  
-# vhost 추가 
+  
+# vhost 추가  
+
 * 리눅스 
 	* vhost 생성 
 		1. cd rabbitmq_server-3.0.4/  
