@@ -41,7 +41,7 @@ tags: [Java]
 	inventory.sort(comparing(Apple::getWeight));
 
 	/*
-		Lamda                                      Method Reference
+		Lamda                       ->             Method Reference
 		(Apple a) -> a.getWeight                   Apple::getWeight
 		() -> Thread.currentThread().dumpStack()   Thread.currentThread()::dumpStack
 	*/
