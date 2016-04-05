@@ -64,6 +64,27 @@ tags: [Java]
 * Apple 형식의 파라미터 두개를 갖는다  
 * int를 리턴한다(무게 비교 결과)  
   
+# 람다 사용 예 
+
+	Runnable r1 = () -> System.out.println("Hello World 1"); // 람다 사용  
+
+	Runnable r2 = new Runnable() { // 익명 클래스 사용  
+		public void run() {
+			System.out.println("Hello World 2");
+		}
+	}  
+	
+	// -----------------------------------------------------------------
+	public static void process(Runnable r) {
+		r.run();
+	}
+	// -----------------------------------------------------------------
+	
+	process(r1);	// Hello World 1 출력
+	process(r2);	// Hello World 2 출력
+	process(() -> System.out.println("Hello World 3"));	// Hello World 3 출력
+  
+  
 # 람다는 어디에 사용할 수 있는가 ? 
 * 람다는 함수형 인터페이스에 람다를 사용 가능하다  
 
@@ -165,28 +186,6 @@ tags: [Java]
 	* ToIntBiFunction<T, \U>  
 	* ToLongBiFunction<T, \U>  
 	* ToDoubleBiFunction<T, \U>  
-
-
-# 람다 사용 예 
-
-	Runnable r1 = () -> System.out.println("Hello World 1"); // 람다 사용  
-
-	Runnable r2 = new Runnable() { // 익명 클래스 사용  
-		public void run() {
-			System.out.println("Hello World 2");
-		}
-	}  
-	
-	// -----------------------------------------------------------------
-	public static void process(Runnable r) {
-		r.run();
-	}
-	// -----------------------------------------------------------------
-	
-	process(r1);	// Hello World 1 출력
-	process(r2);	// Hello World 2 출력
-	process(() -> System.out.println("Hello World 3"));	// Hello World 3 출력
   
-
 # 참고   
 * [Java8 in Action](http://book.naver.com/bookdb/book_detail.nhn?bid=8883567)  
