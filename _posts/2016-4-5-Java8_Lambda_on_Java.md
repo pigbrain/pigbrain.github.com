@@ -73,20 +73,20 @@ tags: [Java]
 * **@FunctionalInterface** 어노테이션으로 함수형 인터페이스임을 가리킬 수 있다  
 	* 어노테이션을 선언했지만 함수형 인터페이스가 아닐 경우 컴파일 오류가 발생한다  
 
-		// 함수형 인터페이스 O
-		public interface Adder {
-			int add(int a, int b);
-		}
-		
-		
-		// 함수형 인터페이스 X
-		public interface SmartAdder extends Adder {
-			int add(double a, double b);
-		}	
-		
-		// 함수형 인터페이스 X  
-		public interface Nothing {
-		}
+			// 함수형 인터페이스 O
+			public interface Adder {
+				int add(int a, int b);
+			}
+			
+			
+			// 함수형 인터페이스 X
+			public interface SmartAdder extends Adder {
+				int add(double a, double b);
+			}	
+			
+			// 함수형 인터페이스 X  
+			public interface Nothing {
+			}
 			
 
 # 람다 사용 예 
