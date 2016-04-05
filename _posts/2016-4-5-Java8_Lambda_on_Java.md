@@ -27,7 +27,7 @@ tags: [Java]
 		(Apple a1, Apple a2) -> a1.getWeight().compareTo(a2.getWeight);
 		  └ 람다 파라미터            └  바디  
   
-# Java8에서 지원하는 람다의 예  
+# Java8에서 지원하는 람다의 형식  
 
 ### Example 1
 	(String s) -> s.length()  
@@ -89,6 +89,80 @@ tags: [Java]
 			}
 			
 
+# 함수형 인터페이스 종류    
+
+### Predicate<T\>  
+	Predicate<String> stringPreidacte = (String s) -> !s.isEmpty();  
+* T -> boolean  
+* 기본형  
+	* IntPredicate  
+	* LongPredicate  
+	* DoublePredicate  
+  
+### Consumer<T\>  
+	Consumer<Apple> appleConsumer = (Apple a) -> System.out.println(a.getWeight());
+* T -> void  
+* 기본형  
+	* IntConsumer  
+	* LongConsumer  
+	* DoubleConsumer  
+  
+### Function<T, R\>  
+	Function<String, Integer> stringFunction = (String s) -> s.length();
+* T, R -> R  
+* 기본형  
+	* IntFunction<R\>  
+	* LongFunction<R\>
+	* DoubleFunction<R\>  
+	* IntToDoubleFunction  
+	* IntToLongFunction    
+	* LongToDoubleFunction  
+	* LongToIntFunction  
+	* ToIntFunction<T\>  
+	* ToDoubleFunction<T\>  
+	* ToLongFunction <T\>
+  
+### Supplier<T\>  
+	() -> new Apple(); 
+* () -> T
+* 기본형  
+	* BooleanSupplier  
+	* IntSupplier  
+	* LongSupplier  
+	* DoubleSupplier  
+  
+### UnaryOperator<T\>  
+* T -> T
+* 기본형  
+	* IntUnaryOperator  
+	* LongUnaryOperator  
+	* DoubleUnaryOperator  
+  
+### BinaryOperator<T\>  
+* (T, T) -> T  
+* 기본형  
+	* IntBinaryOperator  
+	* LongBinaryOperator  
+	* DoubleBinaryOperator   
+  
+### BiPredicate<L, R\>  
+* (L, R) -> boolean  
+  
+### BiConsumer<T, U\>  
+* (T, U) -> void  
+* 기본형  
+	* ObjIntConsumer<T\>  
+	* ObjLongConsumer<T\>  
+	* ObjDoubleConsumer<T\>  
+  
+### BiFunction<T, U, R\>  
+* (T, U) -> R  
+* 기본형  
+	* ToIntBiFunction<T, \U>  
+	* ToLongBiFunction<T, \U>  
+	* ToDoubleBiFunction<T, \U>  
+
+
 # 람다 사용 예 
 
 	Runnable r1 = () -> System.out.println("Hello World 1"); // 람다 사용  
@@ -108,6 +182,7 @@ tags: [Java]
 	process(r1);	// Hello World 1 출력
 	process(r2);	// Hello World 2 출력
 	process(() -> System.out.println("Hello World 3"));	// Hello World 3 출력
+  
 
 # 참고   
 * [Java8 in Action](http://book.naver.com/bookdb/book_detail.nhn?bid=8883567)  
