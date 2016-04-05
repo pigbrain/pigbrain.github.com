@@ -93,6 +93,7 @@ tags: [Java]
 
 ### Predicate<T\>  
 	Predicate<String> stringPreidacte = (String s) -> !s.isEmpty();  
+
 * T -> boolean  
 * 기본형  
 	* IntPredicate  
@@ -101,6 +102,7 @@ tags: [Java]
   
 ### Consumer<T\>  
 	Consumer<Apple> appleConsumer = (Apple a) -> System.out.println(a.getWeight());
+  
 * T -> void  
 * 기본형  
 	* IntConsumer  
@@ -109,6 +111,7 @@ tags: [Java]
   
 ### Function<T, R\>  
 	Function<String, Integer> stringFunction = (String s) -> s.length();
+  
 * T, R -> R  
 * 기본형  
 	* IntFunction<R\>  
@@ -124,6 +127,7 @@ tags: [Java]
   
 ### Supplier<T\>  
 	() -> new Apple(); 
+  
 * () -> T
 * 기본형  
 	* BooleanSupplier  
