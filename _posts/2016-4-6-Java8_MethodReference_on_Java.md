@@ -25,13 +25,13 @@ tags: [Java]
   
 ## 메서드 레퍼런스를 만드는 방법  
   
-#### static 메서드 레퍼런스  
+### static 메서드 레퍼런스  
 * Integer의 parseInt메서드는 Integer::parseInt로 표현 가능  
   
-#### 인스턴스 메서드 레퍼런스  
+### 인스턴스 메서드 레퍼런스  
 * String 변수의 length 메서드는 String::length로 표현 가능  
   
-#### 객체 인스턴스 메서드 레퍼런스  
+### 객체 인스턴스 메서드 레퍼런스  
 * Transaction 객체의 인스턴스인 t라는 변수가 있고 Transaction 객체에는 getValue메서드가 있다면 t::getValue라고 표현 가능  
   
 # 생성자 레퍼런스(Constructor Reference)  
