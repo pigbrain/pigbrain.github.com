@@ -17,12 +17,14 @@ tags: [Java]
 	
 	// 람다를 이용한 코드  
 	inventory.sort((Apple a1, Apple a2) ->
-						a1.getWeight().compareTo(a2.getWeight());
+			a1.getWeight().compareTo(a2.getWeight());
 	
 	// 메서드 레퍼런스로 변경한 코드  
 	inventory.sort(Comparator.comparing(Apple::getWeight));
   
-# 메서드 레퍼런스를 만드는 방법  
+  
+## 메서드 레퍼런스를 만드는 방법  
+  
 ### static 메서드 레퍼런스  
 * Integer의 parseInt메서드는 Integer::parseInt로 표현 가능  
 ### 인스턴스 메서드 레퍼런스  
