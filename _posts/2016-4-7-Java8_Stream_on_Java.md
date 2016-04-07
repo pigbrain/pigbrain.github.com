@@ -71,6 +71,45 @@ tags: [Java]
 		List<String> names = menu.stream()
 		                       .map(Dish::getName())
 		                       .collect(Collectors.toList());
+  
+# 스트림 연산  
+
+	List<String> names = menu.stream()
+	                      // 중간 연산
+	                      .filter(d -> d.getCalories() > 300)  
+	                      // 중간 연산  
+	                      .map(Dish::getName)  
+	                      // 중간 연산
+	                      .limit(3) 
+	                      // 최종 연산(스트림 -> 리스트 변환)  
+	                      .collect(Collectors.toList());  
+  
+* filter, sort와 같은 중간 연산자들은 스트림을 리턴한다  
+	* 여러 연산자를 연결해서 질의를 생성 가능 하다  
+* 최종 연산에 의해 보통 List, Integer, Void 등 스트림 이외의 결과가 리턴된다  
+	
+### 중간 연산  
+* filter  
+	* Stream<T\> filter(Predicate<? super T\> predicate);
+* map  
+	* Stream<R\> map(Function<T, R\> mapper);
+* limit  
+	* Stream<T\> limit(long maxSize);
+* sorted  
+	*  Stream<T\> sorted();
+* distinct  
+	* Stream<T\> distinct();
+* 등등.. 
+
+### 최종 연산  
+* forEach  
+	* void forEach(Consumer<T\> action);  
+* count  
+	* long count();  
+* collect  
+	* R collect(Collector<T, A, R\> collector);
+* 등등..  
+
 <br>  
   
 
