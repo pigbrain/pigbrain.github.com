@@ -39,9 +39,41 @@ tags: [Java]
 <img src="/assets/themes/Snail/img/Java/Stream/pipeline.png" alt="">  
   
 * 병렬화가 가능하여 성능을 향상 시킬 수 있다  
-
+  
+# 스트림 vs 컬렉션  
+* 데이터를 계산하는 시점에 서로 다르다  
+	* 컬렉션은 현재 자료구조가 포함하는 모든 값을 메모리에 저장한다  
+		* 컬렉션에서 요소를 추가하거나 삭제할 수 있다  
+	* 스트림은 요청이 있을때만 계산을 하는 자료구조 이다  
+		* 스트림에서 요소를 추가하거자 삭제할 수 없다  
+* 스트림은 단 한번만 탐색 할 수 있다  
+	
+		List<String> title = Arrays.asList("Java8", "In", "Action");
+		
+		Stream<String> s = title.stream();
+		s.forEach(System.out::println);	// title이ㅡ 각 단어 출력 
+		
+		s.forEach(System.out::println);	
+		// java.lang.IllegalStateException 발생 
+		// 첫 forEach에서 스트림이 이미 사용되었다 
+		// forEach를 다시한번 실행하기 위해서는 스트림을 새로 생성해야 한다  
+  
+* 컬렉션은 외부에서 사용자가 명시적으로 데이터를 하나씩 가져와서 처리한다 (External Iteration)  
+* 스트림은 내부에서 알아서 처리해주기때문에 사용자가 명시적으로 코드를 작성할 필요가 없다 (Internal Iteration)  
+		
+		// External Iteration  
+		List<String> names = new ArrayList<>();  
+		for (Dish d : menu) {  
+			naems.add(d.getName());  
+		}  
+		
+		// Internal Iteration  
+		List<String> names = menu.stream()
+		                       .map(Dish::getName())
+		                       .collect(Collectors.toList());
 <br>  
   
 
 # 참고   
 * [Java8 in Action](http://book.naver.com/bookdb/book_detail.nhn?bid=8883567)  
+* http://www.oracle.com/technetwork/articles/java/ma14-java-se-8-streams-2177646.html  
