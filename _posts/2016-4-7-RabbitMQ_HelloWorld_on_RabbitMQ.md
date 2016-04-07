@@ -114,9 +114,9 @@ tags: [RabbitMQ]
 		Consumer consumer = new DefaultConsumer(channel) {
 				@Override
 				public void handleDelivery(String consumerTag, 
-										Envelope envelope, 
-										AMQP.BasicProperties properties, 
-										byte[] body)
+				                           Envelope envelope, 
+				                           AMQP.BasicProperties properties, 
+				                           byte[] body)
 								throws IOException {
 					
 					String message = new String(body, "UTF-8");
