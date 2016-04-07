@@ -81,7 +81,7 @@ tags: [RabbitMQ]
 * 메세지 전송 과정에서 오류가 발생한다면 디스크 용량을 확인해본다  
 	* 최소 1Gb가 필요하도록 기본 설정으로 된다  
 	* 설정 정보는 [이곳](http://www.rabbitmq.com/configure.html#config-items)에서 확인 가능하다  
-* 
+  
 ### Receiving  
 	
 	...
