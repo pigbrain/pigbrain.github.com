@@ -89,24 +89,24 @@ tags: [Java]
 * 최종 연산에 의해 보통 List, Integer, Void 등 스트림 이외의 결과가 리턴된다  
 	
 ### 중간 연산  
-* filter  
+* **filter**  
 	* Stream<T\> filter(Predicate<? super T\> predicate);
-* map  
+* **map**  
 	* Stream<R\> map(Function<T, R\> mapper);
-* limit  
+* **limit**  
 	* Stream<T\> limit(long maxSize);
-* sorted  
+* **sorted**  
 	*  Stream<T\> sorted();
-* distinct  
+* **distinct**  
 	* Stream<T\> distinct();
 * 등등.. 
 
 ### 최종 연산  
-* forEach  
+* **forEach**  
 	* void forEach(Consumer<T\> action);  
-* count  
+* **count**  
 	* long count();  
-* collect  
+* **collect**  
 	* R collect(Collector<T, A, R\> collector);
 * 등등..  
 
