@@ -21,7 +21,7 @@ tags: [RabbitMQ]
   
 # Preparation  
   
-### Sender
+### Sender  
 	...
 	String message = getMessage(argv);
 
