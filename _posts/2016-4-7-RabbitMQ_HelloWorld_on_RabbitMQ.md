@@ -133,5 +133,5 @@ tags: [RabbitMQ]
   
 <br>  
   
-# 참고  
+# 원문  
 * http://next.rabbitmq.com/tutorials/tutorial-one-java.html  
