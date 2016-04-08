@@ -24,13 +24,20 @@ tags: [RabbitMQ]
   
 <img src="/assets/themes/Snail/img/OpenSource/RabbitMQ/Publish_Subscribe/exchanges.png" alt="">  
   
-  
 * 4가지 Exchage Type이 있다  
 	* **direct**  
 	* **topic**  
 	* **headeers**  
 	* **fanout**  
 		* 모든 Queue로 메세지를 전달한다  
+* fanout 타입을 갖고 logs라는 이름의 exchange를 생성하기 위해 다음과 같이 한다  
+	
+		channel.exchangeDeclare("logs", "fanout");
+		
+* logs라는 exchange로 메세지를 보내기 위해 다음과 같이 한다  
+		
+		channel.basicPublish("logs", "", null, message.getBytes());
+		
   
   
 ### Listing exchanges  
@@ -76,6 +83,83 @@ tags: [RabbitMQ]
   
 <img src="/assets/themes/Snail/img/OpenSource/RabbitMQ/Publish_Subscribe/bindings.png" alt="">  
   
+* exchange와 Queue를 생성한 후 exchange가 Queue에게 메세지를 전송할 수 있도록 두개 사이의 관계를 생성해야한다  
+	* **Binding**한다고 부른다  
+* logs라는 exchange에 Binding 하기 위해 다음과 같이 한다  
+		
+		channel.queueBind(queueName, "logs", "");
+		
+# Putting it all together  
+  
+<img src="/assets/themes/Snail/img/OpenSource/RabbitMQ/Publish_Subscribe/python-three-overall.png" alt="">  
+  
+
+### EmitLog.java (Sending)  
+	
+	import java.io.IOException;
+	import com.rabbitmq.client.ConnectionFactory;
+	import com.rabbitmq.client.Connection;
+	import com.rabbitmq.client.Channel;
+	
+	public class EmitLog {
+
+		private static final String EXCHANGE_NAME = "logs";
+		
+		public static void main(String[] argv) throws java.io.IOException {
+	
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("localhost");
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+			
+			channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+			
+			String message = getMessage(argv);
+	
+			channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
+			System.out.println(" [x] Sent '" + message + "'");
+			
+			channel.close();
+			connection.close();
+		}
+		//...
+	}  
+  
+### ReceiveLogs.java (Receiving)  
+	
+	import com.rabbitmq.client.*;  
+	import java.io.IOException;  
+	
+	public class ReceiveLogs {
+		private static final String EXCHANGE_NAME = "logs";
+		
+		public static void main(String[] argv) throws Exception {
+		
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("localhost");
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+		
+			channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+			String queueName = channel.queueDeclare().getQueue();
+			channel.queueBind(queueName, EXCHANGE_NAME, "");
+			
+			System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+			
+			Consumer consumer = new DefaultConsumer(channel) {
+				@Override
+				public void handleDelivery(String consumerTag, 
+				                           Envelope envelope,
+				                           AMQP.BasicProperties properties, 
+				                           byte[] body) throws IOException {
+					String message = new String(body, "UTF-8");
+					System.out.println(" [x] Received '" + message + "'");
+				}
+			};
+			
+			channel.basicConsume(queueName, true, consumer);
+		}
+	}
   
 <br>  
   
