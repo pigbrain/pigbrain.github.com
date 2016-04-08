@@ -22,6 +22,7 @@ tags: [RabbitMQ]
 # Preparation  
   
 ### Sender  
+  
 	...
 	String message = getMessage(argv);
 
@@ -135,8 +136,142 @@ tags: [RabbitMQ]
 		
 		./rabbitmqctl list_queues name messages_ready messages_unacknowledged  
   
+# Message durability  
+* Consumer가 죽는 경우에 대해서는 ack 기능을 활용하여 메세지 유실을 막을 수 있었다  
+* RabbitMQ서버 자체가 죽는 경우 Queue와 메세지들은 사라지게 될 것이다  
   
 <br>  
   
+* RabbitMQ서버가 죽을때 Queue가 사라지는 것을 막기 위해 **durable** 속성을 활성화 해야한다  
+	* 동일한 이름의 Queue가 생성되어있는 상태에서 **다르게** 파라미터를 넣을 경우 오류가 발생한다  
+	
+		boolean durable = true;
+		channel.queueDeclare(QUEUE_NAME, durable, false, false, null);  
+  
+* RabbitMQ서버가 죽을때 메세지 유실을 방지하기 위해서는 메세지에 **MessageProperties.PERSISTENT_TEXT_PLAIN** 속성을 줘야한다  
+		
+		channel.basicPublish("", QUEUE_NAME,
+		                         MessageProperties.PERSISTENT_TEXT_PLAIN,
+		                         message.getBytes());
+  
+### Note on message persistence  
+* MessageProperties.PERSISTENT_TEXT_PLAIN 속성을 주더라도 메세지의 영속성을 완벽하게 보장하진 못한다  
+* RabbitMQ가 메세지를 디스크에 쓰긴 하지만 Producer로 부터 메세지를 받고 저장하기전까지의 짧은 틈이 존재한다  
+* RabbitMQ는 모든 메세지를 **fsync**를 이용하여 디스크에 기록하지 않는다  
+	* 메세지는 디스크에 바로 기록되는 것이 아닌 캐쉬에 우선 기록 된다  
+* 영속성을 더욱 보장하고 싶다면 [Publisher Confirms](https://www.rabbitmq.com/confirms.html)를 고려해볼 수 있다  
+  
+# Fair dispatch  
+* 2개의 Worker가 있다고 가정한다  
+* 짝수번째 Task는 처리하는데 오래 걸리고 홀수번째 Task는 처리하는데 짧게 걸린다고 가정한다  
+* 하나의 Worker는 매우 바쁘게 Task를 처리해야하고 다른 Worker는 쉬엄쉬엄 일을 처리하게된다  
+	* RabbitMQ는 메세지를 순차적으로 나누어주기때문에 위와 같은 현상이 발생하게 된다  
+* RabbitMQ는 N번째 메세지는 N번째 Consumer에게 전달한다  
+  
+<br>  
+  
+* 위 현상을 해결하기 위해서는 **basicQos**메소드를 이용해야한다  
+* **basicQos**에 **1**을 넣게 되면  RabbitMQ는 Worker에게 한번에 하나의 Task만 할당한다  
+* Task 처리 후 ack를 보낼때까지 새로운 Task를 할당하지 않는다  
+		
+		int prefetchCount = 1;
+		channel.basicQos(prefetchCount);
+		
+# Putting it all together  
+  
+### NewTask.java (Sending)  
+  
+	import java.io.IOException;
+	import com.rabbitmq.client.ConnectionFactory;
+	import com.rabbitmq.client.Connection;
+	import com.rabbitmq.client.Channel;
+	import com.rabbitmq.client.MessageProperties;
+	
+	public class NewTask {
+
+	private static final String TASK_QUEUE_NAME = "task_queue";
+	
+		public static void main(String[] argv) throws java.io.IOException {
+	
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("localhost");
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+	
+			channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
+			
+			String message = getMessage(argv);
+			
+			channel.basicPublish("", TASK_QUEUE_NAME,
+			                     MessageProperties.PERSISTENT_TEXT_PLAIN,
+			                     message.getBytes());
+	
+			System.out.println(" [x] Sent '" + message + "'");
+	
+			channel.close();
+			connection.close();
+		}      
+
+		//...
+	}
+  
+### Worker.java (Receiving)  
+	
+	import com.rabbitmq.client.*;
+	import java.io.IOException;
+	
+	public class Worker {
+		private static final String TASK_QUEUE_NAME = "task_queue";
+	
+		public static void main(String[] argv) throws Exception {
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("localhost");
+			final Connection connection = factory.newConnection();
+			final Channel channel = connection.createChannel();
+
+			channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
+			System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+			
+			channel.basicQos(1);
+			
+			final Consumer consumer = new DefaultConsumer(channel) {
+				@Override
+				public void handleDelivery(String consumerTag, 
+				                          Envelope envelope, 
+				                          AMQP.BasicProperties properties, 
+				                          byte[] body) throws IOException {
+				
+					String message = new String(body, "UTF-8");
+
+					System.out.println(" [x] Received '" + message + "'");
+				
+					try {
+						doWork(message);
+					} finally {
+						System.out.println(" [x] Done");
+						channel.basicAck(envelope.getDeliveryTag(), false);
+					}
+				}
+			};
+			
+			channel.basicConsume(TASK_QUEUE_NAME, false, consumer);
+		}
+		
+		private static void doWork(String task) {
+			
+			for (char ch : task.toCharArray()) {
+				if (ch == '.') {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException _ignored) {
+						Thread.currentThread().interrupt();
+					}
+				}
+			}
+		}
+	}  
+    
+<br>  
+  
 # 원문   
-* http://next.rabbitmq.com/tutorials/tutorial-one-java.html  
+* http://next.rabbitmq.com/tutorials/tutorial-two-java.html  
