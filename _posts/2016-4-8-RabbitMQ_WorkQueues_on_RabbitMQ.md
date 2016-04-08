@@ -1,7 +1,7 @@
 ---
 layout: post
 category: OpenSource
-title: Work Queues
+title: RabbitMQ Work Queues
 tagline: by Pigbrain
 tags: [RabbitMQ]
 ---

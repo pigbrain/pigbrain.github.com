@@ -1,7 +1,7 @@
 ---
 layout: post
 category: OpenSource
-title: Publish/Subscribe
+title: RabbitMQ Publish/Subscribe
 tagline: by Pigbrain
 tags: [RabbitMQ]
 ---

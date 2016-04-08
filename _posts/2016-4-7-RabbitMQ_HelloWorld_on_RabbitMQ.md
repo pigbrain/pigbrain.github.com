@@ -1,7 +1,7 @@
 ---
 layout: post
 category: OpenSource
-title: Introduction and "Hello World!"
+title: RabbitMQ Introduction and "Hello World!"
 tagline: by Pigbrain
 tags: [RabbitMQ]
 ---
