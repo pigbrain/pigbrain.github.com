@@ -20,6 +20,7 @@ tags: [RabbitMQ]
   
   
 # Preparation  
+  
 ### Sender
 	...
 	String message = getMessage(argv);
