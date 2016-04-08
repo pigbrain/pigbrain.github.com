@@ -177,10 +177,11 @@ tags: [RabbitMQ]
 		int prefetchCount = 1;
 		channel.basicQos(prefetchCount);
   
+  
 <img src="/assets/themes/Snail/img/OpenSource/RabbitMQ/WorkQueues/prefetch-count.png" alt="">  
   
   
-		
+  
 # Putting it all together  
   
 ### NewTask.java (Sending)  
