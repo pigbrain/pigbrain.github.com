@@ -9,7 +9,7 @@ tags: [RabbitMQ]
 <!--more-->  
   
 # Routing (using the Java Client)  
-* [Publish/Subscribe](http://pigbrain.github.io/opensource/2016/04/08/RabbitMQ_3_Publish_Subscribe_on_RabbitMQ)에서는 모든 메세지를 수신했다  
+* [Publish/Subscribe](http://pigbrain.github.io/opensource/2016/04/09/RabbitMQ_3_Publish_Subscribe_on_RabbitMQ)에서는 모든 메세지를 수신했다  
 * Routing 기능을 이용하여 특정 메세지만 수신가능하도록 변경할 것이다  
   
 # Bindings  
