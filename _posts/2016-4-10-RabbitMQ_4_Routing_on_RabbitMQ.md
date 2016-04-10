@@ -31,11 +31,19 @@ tags: [RabbitMQ]
   
 <img src="/assets/themes/Snail/img/OpenSource/RabbitMQ/Routing/direct-exchange.png" alt="">  
   
-	* exchange X에 2개의 Queue(Q1, Q2)가 Binding 되어 있다  
-		* 첫 번째 Queue의 routingKey는 orage이다  
-		* 두 번째 Queue의 routingKeys느 black, green이다   
-	* routingKey를 orage로 설정하고 메세지를 publish 하면 Q1에 들어가진다  
-	* routingKey를 black 혹은 green으로 설정한 메세지는 Q2에 들어가지낟  
+* exchange X에 두개의 Queue(Q1, Q2)가 Binding 되어 있다  
+	* 첫 번째 Queue의 routingKey는 orage이다  
+	* 두 번째 Queue의 routingKeys느 black, green이다   
+* routingKey를 orage로 설정하고 메세지를 publish 하면 Q1에 들어가진다  
+* routingKey를 black 혹은 green으로 설정한 메세지는 Q2에 들어가지낟  
+  
+# Multiple bindings  
+  
+<img src="/assets/themes/Snail/img/OpenSource/RabbitMQ/Routing/direct-exchange-multiple.png" alt="">  
+  
+* 동일한 routingKey(black)로 두개의 Queue(Q1, Q2)에 Binding 하였다  
+* routingKey가 black으로 설정된 메세지를 publish하면 fanout처럼 동작한다  
+	* Q1,Q2에 메세지가 모두 전달 된다  
   
 <br>  
   
