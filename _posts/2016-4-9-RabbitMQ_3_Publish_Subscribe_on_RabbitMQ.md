@@ -15,7 +15,7 @@ tags: [RabbitMQ]
 	* Publishing된 로그 메세지는 모든 Receiver(Consumer)에게 전달된다  
   
 # Exchanges  
-* ["Hello World"](http://pigbrain.github.io/opensource/2016/04/07/RabbitMQ_HelloWorld_on_RabbitMQ)와 ["Work Queues"](http://pigbrain.github.io/opensource/2016/04/08/RabbitMQ_WorkQueues_on_RabbitMQ)에서는 Queue에 직접 데이터를 Publishing하는 것 처럼 보였다    
+* ["Hello World"](http://pigbrain.github.io/opensource/2016/04/07/RabbitMQ_1_HelloWorld_on_RabbitMQ)와 ["Work Queues"](http://pigbrain.github.io/opensource/2016/04/08/RabbitMQ_2_WorkQueues_on_RabbitMQ)에서는 Queue에 직접 데이터를 Publishing하는 것 처럼 보였다    
 * 실제 RabbitMQ는 Queue에 직접적으로 데이터를 넣지 않는다  
 * Producer는 메세지를 오직 **exchange**에게만 전송할 수 있다  
 * exchange의 한쪽에서는 Producer로 부터 메세지를 수신하고 다른 한쪽에서는 Queue로 메세지를 전달한다  
