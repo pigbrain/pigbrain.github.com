@@ -45,8 +45,91 @@ tags: [RabbitMQ]
 * routingKey가 black으로 설정된 메세지를 publish하면 fanout처럼 동작한다  
 	* Q1,Q2에 메세지가 모두 전달 된다  
   
+# Putting it all together  
+  
+<img src="/assets/themes/Snail/img/OpenSource/RabbitMQ/Routing/python-four.png" alt="">  
+  
+### EmitLogDirect.java (Sending)  
+	
+	public class EmitLogDirect {
+
+		private static final String EXCHANGE_NAME = "direct_logs";
+		
+		// argv -> info warning error .... 
+
+		public static void main(String[] argv) throws java.io.IOException {
+		
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("localhost");
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+			
+			channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+			
+			String severity = getSeverity(argv);
+			String message = getMessage(argv);
+			
+			channel.basicPublish(EXCHANGE_NAME, 
+			                       severity, 
+			                       null, 
+			                       message.getBytes());
+			System.out.println(" [x] Sent '" + severity + "':'" + message + "'");
+			
+			channel.close();
+			connection.close();
+		}
+		//..
+	}  
+  
+### eceiveLogsDirect.java (Receiving)
+	
+	import com.rabbitmq.client.*;
+
+	import java.io.IOException;
+	
+	public class ReceiveLogsDirect {
+	
+		private static final String EXCHANGE_NAME = "direct_logs";
+		
+		public static void main(String[] argv) throws Exception {
+		
+			ConnectionFactory factory = new ConnectionFactory();
+			factory.setHost("localhost");
+			Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel();
+			
+			channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+			String queueName = channel.queueDeclare().getQueue();
+			
+			if (argv.length < 1){
+				System.err.println("Usage: ReceiveLogsDirect [info] [warning] [error]");
+				System.exit(1);
+			}
+			
+			for(String severity : argv){
+				channel.queueBind(queueName, EXCHANGE_NAME, severity);
+			}
+
+			System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+			
+			Consumer consumer = new DefaultConsumer(channel) {
+				@Override
+				public void handleDelivery(String consumerTag, Envelope envelope,
+				                     AMQP.BasicProperties properties, 
+				                     byte[] body) throws IOException {
+	
+					String message = new String(body, "UTF-8");
+					System.out.println(" [x] Received '" + envelope.getRoutingKey() + "':'" + message + "'");
+				}
+			};
+			
+			channel.basicConsume(queueName, true, consumer);
+		}
+	}  
+	
+	
 <br>  
   
 
 # 원문   
-* http://next.rabbitmq.com/tutorials/tutorial-three-java.html  
+* http://next.rabbitmq.com/tutorials/tutorial-four-java.html
