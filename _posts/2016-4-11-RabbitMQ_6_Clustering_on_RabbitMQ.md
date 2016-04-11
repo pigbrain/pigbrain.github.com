@@ -118,8 +118,8 @@ tags: [RabbitMQ]
   
 * rabbit@rabbit2에서 RabbitMQ 어플리케이션을 정지시키고 rabbit@rabbit1 에 join 시킨다  
 	* 어플리케이션을 정지 시킬때 **rabbitmqctl stop_app**명령으로 정지시켜야 한다  
-		* stop_app 은 RabbitMQ Management Application만 종료시킨다  
-	*  **rabbitmqctl stop**명령은 서버 자체를 종료시킨다  
+		* stop_app 은 RabbitMQ Application만 종료시킨다  
+	*  **rabbitmqctl stop**명령은 Erlang node 자체를 종료시킨다  
 * Cluster에 join 시키는 것은 node를 reset 시키는것과 동일하다. Clustering 하기 전에 관리되던 모든 데이터는 삭제 된다  
 		
 		rabbit2$ rabbitmqctl stop_app
@@ -179,10 +179,144 @@ tags: [RabbitMQ]
 	
   
 ### Restarting cluster nodes  
+* Clustering된 일부 node들에서 문제가 발생하여 종료되더라도 전체 Cluster에는 아무런 영향을 미치지 않는다  
+* 문제가 발생하여 종료된 node가 재실행 될때 다른 node들은 자동으로 이를 감지하여 다시 Cluster를 구성한다  
+* rabbit@rabbit1와 rabbit@rabbit3을 종료 시키고 cluster 상태를 확인한다  
+		
+		rabbit1$ rabbitmqctl stop
+		  Stopping and halting node rabbit@rabbit1 ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit3,rabbit@rabbit2]}]
+		  ...done.
+		
+		rabbit3$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit3 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit3]}]
+		  ...done.
+		
+		rabbit3$ rabbitmqctl stop
+		  Stopping and halting node rabbit@rabbit3 ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit2]}]
+		  ...done. 
   
+* rabbit@rabbit1을 다시 실행시킨 후 status 를 확인한다  
+		
+		rabbit1$ rabbitmq-server -detached
+
+		rabbit1$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit1 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit1]}]
+		  ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit1,rabbit@rabbit2]}]
+		  ...done.
+		
+		rabbit3$ rabbitmq-server -detached
+		
+		rabbit1$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit1 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit1,rabbit@rabbit3]}]
+		  ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]
+		  ...done.
+		
+		rabbit3$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit3 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit1,rabbit@rabbit3]}]
+		  ...done.  
+
 ### Breaking up a cluster  
+* Clustring된 node들 중 cluster에서 빠져나오고 싶은 경우 reset 명령을 실행한다  
+* rabbit@rabbit3을 cluster에서 제거할 것이다  
+		
+		rabbit3$ rabbitmqctl stop_app
+		  Stopping node rabbit@rabbit3 ...done.
+		
+		rabbit3$ rabbitmqctl reset
+		  Resetting node rabbit@rabbit3 ...done.
+		
+		rabbit3$ rabbitmqctl start_app
+		  Starting node rabbit@rabbit3 ...done.
+		
+* 각 node에서 status를 확인한다  
+		
+		rabbit1$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit1 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit1]}]
+		  ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2]}]},
+		   {running_nodes,[rabbit@rabbit1,rabbit@rabbit2]}]
+		  ...done.
+		
+		rabbit3$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit3 ...
+		  [{nodes,[{disc,[rabbit@rabbit3]}]},{running_nodes,[rabbit@rabbit3]}]
+		  ...done.
+
+* rabbit@rabbit3가 Cluster에서 빠진것을 확인 할 수 있다  
+* **forget_cluster_node** 명령을 이용하여 특정 node를 Cluster에서 제거할 수 있다  
+* forget_cluster_nodes는 특정 node가 반응이 없는 경우에 유용하게 사용할 수 있다  
+		
+		rabbit1$ rabbitmqctl stop_app
+		  Stopping node rabbit@rabbit1 ...done.
+		
+		rabbit2$ rabbitmqctl forget_cluster_node rabbit@rabbit1
+		  Removing node rabbit@rabbit1 from cluster ...
+		  ...done.
   
+* rabbit@rabbit2에서 rabbit@rabbit1를 Cluster에서 제거하였지만 rabbit@rabbit1은 rabbit2와 여전히 Cluster상태라고 생각할 것이다  
+* rabbit@rabbit1을 재시작하면 오류가 발생하며 reset을 해줘야한다  
   
+		rabbit1$ rabbitmqctl start_app
+		  Starting node rabbit@rabbit1 ...
+		  Error: inconsistent_cluster: Node rabbit@rabbit1 thinks it's clustered with node rabbit@rabbit2, but rabbit@rabbit2 disagrees
+		
+		rabbit1$ rabbitmqctl reset
+		  Resetting node rabbit@rabbit1 ...done.
+		
+		rabbit1$ rabbitmqctl start_app
+		  Starting node rabbit@mcnulty ...
+		  ...done.
+		
+		------------------------ status ----------------------------
+		
+		rabbit1$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit1 ...
+		  [{nodes,[{disc,[rabbit@rabbit1]}]},{running_nodes,[rabbit@rabbit1]}]
+		  ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit2]}]},{running_nodes,[rabbit@rabbit2]}]
+		  ...done.
+		
+		rabbit3$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit3 ...
+		  [{nodes,[{disc,[rabbit@rabbit3]}]},{running_nodes,[rabbit@rabbit3]}]
+		  ...done.
+
 <br>  
   
 # 원문   
