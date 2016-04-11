@@ -79,8 +79,104 @@ tags: [RabbitMQ]
 * cookie값이 서로 일치하지 않다면 "Could not auto-cluster"과 같은 오류 로그가 남는다  
   
 ### Starting independent nodes 
+* 각각 node들을 실행 시킨다  
+
+		rabbit1$ rabbitmq-server -detached  
+		rabbit2$ rabbitmq-server -detached  
+		rabbit3$ rabbitmq-server -detached  
+	
+* 세개의 독립적인 RabbitMQ Broker가 실행되었다  
+* 각 node에서 **cluster_status** 명령으를 통하여 상태를 확인 가능하다  
+		
+		rabbit1$ rabbitmqctl cluster_status  
+		  Cluster status of node rabbit@rabbit1 ...  
+		  [{nodes,[{disc,[rabbit@rabbit1]}]},{running_nodes,[rabbit@rabbit1]}]  
+		  ...done.  
+		
+		
+		rabbit2$ rabbitmqctl cluster_status  
+		  Cluster status of node rabbit@rabbit2 ...  
+		  [{nodes,[{disc,[rabbit@rabbit2]}]},{running_nodes,[rabbit@rabbit2]}]  
+		  ...done.  
+		
+		
+		rabbit3$ rabbitmqctl cluster_status  
+		  Cluster status of node rabbit@rabbit3 ...  
+		  [{nodes,[{disc,[rabbit@rabbit3]}]},{running_nodes,[rabbit@rabbit3]}]  
+		  ...done.  
   
-### Creating the cluster
+* rabbitmq-server 스크립트로 실행된 RabbitMQ Broker의 node이름은 rabbit@shorthostname 형태를 갖는다  
+* Window에서 rabbitmq-srever.bat으로 실행할 경우 rabbit@SHORTHOSTNAME(대문자) 형태를 갖는다  
+* node 이름은 정확히 일치해야 하기때문에 대소문자에 주의해야한다  
+  
+### Creating the cluster  
+* 세 node로 Clustering을 구성하기 위해 다음과 같은 작업을 한다  
+	* rabbit@rabbit2가 rabbit@rabbit1에 join 하도록 한다  
+	* rabbit@rabbit3가 rabbit@rabbit1에 join 하도록 한다  
+  
+<br>  
+  
+* rabbit@rabbit2에서 RabbitMQ 어플리케이션을 정지시키고 rabbit@rabbit1 에 join 시킨다  
+	* 어플리케이션을 정지 시킬때 **rabbitmqctl stop_app**명령으로 정지시켜야 한다  
+		* stop_app 은 RabbitMQ Management Application만 종료시킨다  
+	*  **rabbitmqctl stop**명령은 서버 자체를 종료시킨다  
+* Cluster에 join 시키는 것은 node를 reset 시키는것과 동일하다. Clustering 하기 전에 관리되던 모든 데이터는 삭제 된다  
+		
+		rabbit2$ rabbitmqctl stop_app
+		  Stopping node rabbit@rabbit2 ...done.
+		
+		rabbit2$ rabbitmqctl join_cluster rabbit@rabbit1
+		  Clustering node rabbit@rabbit2 with [rabbit@rabbit1] ...done.
+		
+		rabbit2$ rabbitmqctl start_app
+		  Starting node rabbit@rabbit2 ...done.  
+  
+* cluster_status 명령어로 cluster 상태를 확인한다  
+		
+		rabbit1$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit1 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit1]}]
+		  ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2]}]},
+		   {running_nodes,[rabbit@rabbit1,rabbit@rabbit2]}]
+		  ...done.
+	
+* rabbit@rabbit1과 rabbit@rabbit2가 join된 것을 확인 할 수 있다  
+* rabbit@rabbit3도 동일하게 cluster에 join 시킨다  
+		
+		rabbit3$ rabbitmqctl stop_app
+		  Stopping node rabbit@rabbit3 ...done.
+		
+		rabbit3$ rabbitmqctl join_cluster rabbit@rabbit2
+		  Clustering node rabbit@rabbit3 with rabbit@rabbit2 ...done.
+		
+		rabbit3$ rabbitmqctl start_app
+		  Starting node rabbit@rabbit3 ...done.  
+
+* 각 node에서 cluster_status  명령어로 join 상태를 확인한다  
+		
+		rabbit1$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit1 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit3,rabbit@rabbit2,rabbit@rabbit1]}]
+		  ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]}]},
+		   {running_nodes,[rabbit@rabbit3,rabbit@rabbit1,rabbit@rabbit2]}]
+		  ...done.
+		
+		rabbit3$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit3 ...
+		  [{nodes,[{disc,[rabbit@rabbit3,rabbit@rabbit2,rabbit@rabbit1]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit1,rabbit@rabbit3]}]
+		  ...done.
+	
   
 ### Restarting cluster nodes  
   
