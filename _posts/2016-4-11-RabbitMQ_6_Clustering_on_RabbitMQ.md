@@ -45,11 +45,49 @@ tags: [RabbitMQ]
   
   
 ### Failure Handling  
-
+* RabbitMQ Broker들은 개별 node에 문제가 생겨도 전체 기능에 장애를 일이키지 않는다  
+* node들은 즉시 시작시키거나 종료시킬 수 있다  
+* RabbitMQ Clustering은 [network partitions](http://next.rabbitmq.com/partitions.html) 문제를 다루기 위한 모드가 있다  
+* Clustering은 LAN에서 구성할 것을 권장하며 WAN에서의 구성은 권장하지 않는다  
+	* [Shovel](http://next.rabbitmq.com/shovel.html)과 [Federation](http://next.rabbitmq.com/federation.html) plugin들이 WAN에서 구성하기 위한 좋은 솔루션이 될 것이다  
+	* Shovel과 Federation은 실질적으로 Clustering과 동일하지는 않다  
+  
 ### Disk and RAM Nodes  
+* node는 **disk node** 혹은 **RAM node**로 설정할 수 있다  
+	* 일반적으로 dist node를 많이 사용한다  
+	* RAM node는 성능을 향상시키기위해 사용한다  
   
 <br>  
   
-
+# Clustering Transcript
+* rabbit1, rabbit2, rabbit3 이 세 머신에서 Cluster를 구성하는 방법을 설명한다  
+* 가정  
+	* user는 세 머신에 각각 로그인 되어있다  
+	* 세 머신에 RabbitMQ가 설치되어 있다  
+	* rabbitmq-server와 rabbitmqctl 스크립트가 실행 가능하다  
+  
+### How Nodes (and CLI tools) Authenticate to Each Other: the Erlang Cookie  
+* RabbitMQ node들과 CLI tool(e.g. rabbitmqctl)은 서로 통신하기위해 cookie를 사용한다  
+	* 두 개의 node가 서로 통신하게 위해서는 Erlang cookie라고 불리는 동일한 비밀키를 가지고 있어야 한다  
+	* cookie는 단순히 알파벳으로 이루어진 문자열이다  
+	* 모든 Cluster node들은 동일한 cookie값을 갖고있어야 한다  
+* RabbitMQ 서버가 실행될때 Erlang VM은 자동으로 cookie 파일을 생성한다  
+	* 일반적으로 Unix 환경에서 cookie는 /var/lib/rabbitmq/.erlang.cookie 혹은 $HOME/.erlang.cookie에 위치한다  
+	* Windows에서는 C:\\Users\\Current User\\.erlang.cookie, C:\\Documents and Settings\\Current User\\.erlang.cookie 혹은 C:\\Windows\\.erlang.cookie에 존재한다  
+* rabbitmq-server, rabbitmqctl 스크립트에서 "-setcookie cookie" 옵션을 추가하여 cookie값을 설정할 수 있다  
+	* cookie 파일에 있는 값이 아닌 입력된 cookie값을 사용하게 된다  
+* cookie값이 서로 일치하지 않다면 "Could not auto-cluster"과 같은 오류 로그가 남는다  
+  
+### Starting independent nodes 
+  
+### Creating the cluster
+  
+### Restarting cluster nodes  
+  
+### Breaking up a cluster  
+  
+  
+<br>  
+  
 # 원문   
 * http://next.rabbitmq.com/clustering.html
