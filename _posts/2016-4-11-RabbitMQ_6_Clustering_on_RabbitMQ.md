@@ -316,7 +316,85 @@ tags: [RabbitMQ]
 		  Cluster status of node rabbit@rabbit3 ...
 		  [{nodes,[{disc,[rabbit@rabbit3]}]},{running_nodes,[rabbit@rabbit3]}]
 		  ...done.
+  
+  
+# A Cluster on a Single Machine  
+* 하나의 머신에 RabbitMQ node들을 실행시키기 위해서는 node이름, data 저장 장소, log 파일 위치, port 등을 다르게 지정해줘야 한다  
+	* [Configuration guide](http://next.rabbitmq.com/configure.html#define-environment-variables)
+		* RABBITMQ_NODENAME  
+		* RABBITMQ_NODE_PORT  
+		* RABBITMQ_DIST_PORT   
+	* [File and Directory Locations guide](http://next.rabbitmq.com/relocate.html)  
+		* RABBITMQ_MNESIA_DIR  
+		* RABBITMQ_CONFIG_FILE  
+		* RABBITMQ_LOG_BASE  
+* rabbitmq-server 스크립트를 이용하여8 여러개의 node를 실행시킬 수 있다  
+		
+		$ RABBITMQ_NODE_PORT=5672 RABBITMQ_NODENAME=rabbit rabbitmq-server -detached  
+		$ RABBITMQ_NODE_PORT=5673 RABBITMQ_NODENAME=hare rabbitmq-server -detached  
+		$ rabbitmqctl -n hare stop_app  
+		$ rabbitmqctl -n hare join_cluster rabbit@`hostname -s`  
+		$ rabbitmqctl -n hare start_app  
+  
+* AMQP 외에 포트가 열려있을 경우 그것들의 정보도 다시 설정해줘야한다  
+		
+		$ RABBITMQ_NODE_PORT=5672 RABBITMQ_SERVER_START_ARGS="-rabbitmq_management listener [{port,15672}]" RABBITMQ_NODENAME=rabbit rabbitmq-server -detached
+		$ RABBITMQ_NODE_PORT=5673 RABBITMQ_SERVER_START_ARGS="-rabbitmq_management listener [{port,15673}]" RABBITMQ_NODENAME=hare rabbitmq-server -detached
+  
+  
+# Clusters with RAM nodes  
+* RAM node는 metadata를 오직 메모리에서만 관리한다  
+* RAM node는 디스크에 데이터를 쓰지 않기 때문에 disk 타입의 node보다 성능이 뛰어나다  
+	* persistent Queue의 데이터는 디스크에 저장되기 때문에 adding/removing queues, exchange, vhosts와 관련된 작업에만 성능이 향상된다  
+		* 메세지 publishing, consuming 속도는 향상되지 않는다  
+  
+### Creating RAM nodes  
+* RAM node로 선언하고 Cluster에 join한다  
 
+		rabbit2$ rabbitmqctl stop_app
+		  Stopping node rabbit@rabbit2 ...done.
+		
+		rabbit2$ rabbitmqctl join_cluster --ram rabbit@rabbit1
+		  Clustering node rabbit@rabbit2 with [rabbit@rabbit1] ...done.
+		
+		rabbit2$ rabbitmqctl start_app
+		  Starting node rabbit@rabbit2 ...done.
+  
+* status를 통해 RAM node를 확인 할 수 있다  
+		
+		rabbit1$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit1 ...
+		  [{nodes,[{disc,[rabbit@rabbit1]},{ram,[rabbit@rabbit2]}]},
+		   {running_nodes,[rabbit@rabbit2,rabbit@rabbit1]}]
+		  ...done.
+		
+		rabbit2$ rabbitmqctl cluster_status
+		  Cluster status of node rabbit@rabbit2 ...
+		  [{nodes,[{disc,[rabbit@rabbit1]},{ram,[rabbit@rabbit2]}]},
+		   {running_nodes,[rabbit@rabbit1,rabbit@rabbit2]}]
+		  ...done.
+		
+### Changing node types  
+* change_cluster_node_type 명령을 이용하여 node의 타입을 변경할 수 있다(RAM -> disk, disk -> RAM)  
+		
+		rabbit2$ rabbitmqctl stop_app
+		  Stopping node rabbit@rabbit2 ...done.
+		
+		rabbit2$ rabbitmqctl change_cluster_node_type disc
+		  Turning rabbit@rabbit2 into a disc node ...
+		  ...done.
+		  Starting node rabbit@rabbit2 ...done.
+		
+		rabbit1$ rabbitmqctl stop_app
+		  Stopping node rabbit@rabbit1 ...done.
+		
+		rabbit1$ rabbitmqctl change_cluster_node_type ram
+		  Turning rabbit@rabbit1 into a ram node ...
+		
+		rabbit1$ rabbitmqctl start_app
+		  Starting node rabbit@rabbit1 ...done.
+  
+  
 <br>  
   
 # 원문   
