@@ -291,7 +291,7 @@ tags: [RabbitMQ]
   
 		rabbit1$ rabbitmqctl start_app
 		  Starting node rabbit@rabbit1 ...
-		  Error: inconsistent_cluster: Node rabbit@rabbit1 thinks it's clustered with node rabbit@rabbit2, but rabbit@rabbit2 disagrees
+		  Error: inconsistent_cluster: Node rabbit@rabbit1 thinks it\'s clustered with node rabbit@rabbit2, but rabbit@rabbit2 disagrees
 		
 		rabbit1$ rabbitmqctl reset
 		  Resetting node rabbit@rabbit1 ...done.
