@@ -29,13 +29,13 @@ tags: [RabbitMQ]
   
 <table>
 <tr>
-<td>ha-mode&nbsp;&nbsp;&nbsp;</td><td>ha-params&nbsp;&nbsp;&nbsp;</td><td>Result</td>
+<td>ha-mode&nbsp;</td><td>ha-params&nbsp;&nbsp;&nbsp;</td><td>Result</td>
 </tr>
 <tr>
 <td>all</td><td>(absent)</td><td>모든 node들이 mirroring된다. Cluster에 새로운 node가 추가되더라도 즉시 mirroring 된다</td>
 </tr>
 <tr>
-<td>exactly</td><td>count</td><td>count 수 만큼만 mirroring 된다. node의 수가 count보다 적다면 모든 node들이 mirroring된다. node의 수가 count보다 많은 경우 mirroring된 node하나가 죽을 경우 새로운 node를 mirroring 시킨다</td>
+<td>exactly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>count&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td>count 수 만큼만 mirroring 된다. node의 수가 count보다 적다면 모든 node들이 mirroring된다. node의 수가 count보다 많은 경우 mirroring된 node하나가 죽을 경우 새로운 node를 mirroring 시킨다</td>
 </tr>
 <tr>
 <td>nodes</td><td>node names</td><td>node name으로 지정된 node들이 mirroring된다</td>
