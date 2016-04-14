@@ -23,8 +23,26 @@ tags: [RabbitMQ]
 * policy는 언제든지 변경 가능하다  
 * mirroring 설정 되지 않은 Queue와 mirroring 설정 되었지만 slave가 없는 Queue는 다음과 같은 차이가 있다  
 	* mirroring 설정 되지 않은 Queue는 mirroring을 위한 컴포넌트들이 로딩되지 않았기 때문에 실행속도가 더 빠르다  
-
+* mirroring 설정을 하기 위해서는 policy를 생성해야 한다  
+	* ha-mode를 지정해야 한다  
+	* ha-params는 선택적으로 지정해야 한다  
   
+<table>
+<tr>
+<td>ha-mode&nbsp;&nbsp;&nbsp;</td><td>ha-params&nbsp;&nbsp;&nbsp;</td><td>Result</td>
+</tr>
+<tr>
+<td>all</td><td>(absent)</td><td>모든 node들이 mirroring된다. Cluster에 새로운 node가 추가되더라도 즉시 mirroring 된다</td>
+</tr>
+<tr>
+<td>exactly</td><td>count</td><td>count 수 만큼만 mirroring 된다. node의 수가 count보다 적다면 모든 node들이 mirroring된다. node의 수가 count보다 많은 경우 mirroring된 node하나가 죽을 경우 새로운 node를 mirroring 시킨다</td>
+</tr>
+<tr>
+<td>nodes</td><td>node names</td><td>node name으로 지정된 node들이 mirroring된다</td>
+</tr>
+</table>
+  
+* policy가 변경될 경우 새로운 policy대로 동작하기 위한 준비가 될때까지 기존 policy를 유지한다  
   
   
 <br>  
