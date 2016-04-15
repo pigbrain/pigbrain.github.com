@@ -62,7 +62,49 @@ tags: [RabbitMQ]
 # Exclusive queues  
 * Exclusive Queues는 Queue를 생성한 클라이언트와의 연결이 끊어질 경우 삭제된다  
 * 연결이 끊어질때마다 Queue가 삭제되므로 Exclusive Queue는 mirroring 하기에 적합하지 않다  
-* 
+* 위와 같은 이유로 Exclusive Queue는 mirroring 되지 않는다    
+	* policy에 해당하더라도  mirroring 되지 않는다    
+  
+# Some examples  
+* "ha."로 시작하는 이름을 가진 Queue들을 모든 node에 mirroring 한다  
+  
+<table>
+<tr>
+<td>rabbitmqctl</td><td>rabbitmqctl set_policy ha-all "^ha\." '{"ha-mode":"all"}'</td>
+</tr>
+<tr>
+<td>HTTP API</td><td>PUT /api/policies/%2f/ha-all {"pattern":"^ha\.", "definition":{"ha-mode":"all"}}</td>
+</tr>
+</table>
+  
+<br>  
+  
+* "two."로 시작하는 이름을 가진 Queue들을 Cluster내에 2개의 node에 mirroring한다  
+	* automatic synchronisation도 활성화 한다  
+  
+<table>
+<tr>
+<td>rabbitmqctl</td><td>rabbitmqctl set_policy ha-two "^two\." '{"ha-mode":"exactly","ha-params":2,"ha-sync-mode":"automatic"}'</td>
+</tr>
+<tr>
+<td>HTTP API</td><td>PUT /api/policies/%2f/ha-two
+{"pattern":"^two\.", "definition":{"ha-mode":"exactly", "ha-params":2,"ha-sync-mode":"automatic"}}
+</td>
+</tr>
+</table>
+  
+<br>  
+  
+* "nodes."로 시작하는 이름을 가진 Queue들을 Cluster내에 특정 node와 mirroring 한다  
+  
+<table>
+<tr>
+<td>rabbitmqctl</td><td>rabbitmqctl set_policy ha-nodes "^nodes\." '{"ha-mode":"nodes","ha-params":["rabbit@nodeA", "rabbit@nodeB"]}'</td>
+</tr>
+<tr>
+<td>HTTP API</td><td>PUT /api/policies/%2f/ha-nodes {"pattern":"^nodes\.", "definition":{"ha-mode":"nodes", "ha-params":["rabbit@nodeA", "rabbit@nodeB"]}</td>
+</tr>
+</table>
   
 <br>  
   
