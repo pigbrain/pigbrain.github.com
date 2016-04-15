@@ -44,6 +44,25 @@ tags: [RabbitMQ]
   
 * policy가 변경될 경우 새로운 policy대로 동작하기 위한 준비가 될때까지 기존 policy를 유지한다  
   
+# Queue Master Location  
+* RabbitMQ의 모든 Queue는 home node를 가지고 있다  
+	* 이 home node를 Queue master라고 부른다  
+* 모든 Queue의 동작은 master에서 우선 처리되고 slave에서 처리된다  
+	* 이러한 과정으로 인하여 FIFO 방식을 보장할 수 있다  
+* master는 몇가지 전략에 의해서 node들 사이에 분산될 수 있다  
+	* **x-queue-master-locator** 값 사용(Queue선언할때 argument로 등록 가능)  
+	* **queue-master-locator** policy 사용  
+	* [configuration](https://www.rabbitmq.com/configure.html#configuration-file)에 있는 **queue_master_locator** 키값 사용  
+  
+# "nodes" policy and migrating masters  
+* 새로운 policy를 지정할때 타겟 node에 현재 master가 속해있지 않을 경우 현재 master가 종료될 수 있다  
+	* 이 과정에서 메세지 유실을 방지하기 위해 최소 하나의 slave와 동기화가 완료 될때까지 기존 master는 종료되지 않는다  
+	* 기존 master의 동기화 작업이 완료된 경우 master가 종료되기 때문에 consumer들은 연결이 한번 끊어진다  
+  
+# Exclusive queues  
+* Exclusive Queues는 Queue를 생성한 클라이언트와의 연결이 끊어질 경우 삭제된다  
+* 연결이 끊어질때마다 Queue가 삭제되므로 Exclusive Queue는 mirroring 하기에 적합하지 않다  
+* 
   
 <br>  
   
