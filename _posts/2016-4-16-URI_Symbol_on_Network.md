@@ -18,7 +18,8 @@ tags: [Network]
 	* URI Scheme : http  
 	* Hostname : blog.example.com  
 	* Path : /entries/1  
-* 유일한 호스트명/경로를 사용함으로써, URI가 중복되지 않는다  * http://xguru:pass@xguru.net:8000/search?q=test&debug=true#n10  
+* 유일한 호스트명/경로를 사용함으로써, URI가 중복되지 않는다  
+* http://xguru:pass@xguru.net:8000/search?q=test&debug=true#n10  
 	* URI Scheme : http  
 		* 구분자 : **//**  
 	* 사용자정보 : id = xguru, pwd = pass  
