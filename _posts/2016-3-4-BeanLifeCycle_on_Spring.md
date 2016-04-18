@@ -29,6 +29,9 @@ tags: [Spring]
   
 <img src="/assets/themes/Snail/img/Spring/BeanLifeCycle/init.png" alt="">     
   
+  
+* BeanPostProcessor를 구현하게 되면 lazy-init 속성은 무시된다  
+  
 * Bean의 삭제 과정  
 
 <img src="/assets/themes/Snail/img/Spring/BeanLifeCycle/destroy.png" alt="">  
