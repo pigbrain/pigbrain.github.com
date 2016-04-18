@@ -54,7 +54,7 @@ tags: [Java]
 		} // End of class
 	
 * 위 코드는 3번 예외가 발생한다  
-* X의 static initializer가 첫번째 시도에 실패하더라도 모두 실패처리가 된다  
+* X의 static initializer는 모두 실패처리가 되었다  
 		
 		>java Main
 			load attempt #0:
@@ -77,6 +77,12 @@ tags: [Java]
 				at java.lang.Class.forName0(Native Method)
 				at java.lang.Class.forName(Class.java:140)
 				at Main.main(Main.java:17)
+	
+	* 2번째 forName()과정 부터는 NoClassDefFoundError 예외가 발생했다  
+		* JVM은 이미 X class에 대한 정보를 알고있다  
+		* 현재 ClassLoader가 GC에 의하여 사라지기전에는 X class에 대한 정보는 언로드 되지 않는다  
+		* JVM은 Class.forName()이 반복적으로 호출 되었을때 initialization 과정을 반복하지 않고 NoClassDefFoundError 에외를 발생시킨다  
+	* class를 다시 로드하기 위한 방법은 기존 ClassLoader 인스턴스를 삭제하고 새로 생성한다  
   
 <br>  
   
