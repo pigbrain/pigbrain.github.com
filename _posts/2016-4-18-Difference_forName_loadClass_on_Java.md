@@ -22,6 +22,64 @@ tags: [Java]
 	* 초기화 시점을 2번째 boolean 파라미터를 통해 지정할 수 있다  
 	* 항상 이 메소드를 사용하길 권장한다  
   
+# Class initialization errors are tricky 
+* 성공적으로 로딩된 class에서 더 이상 문제가 발생하지 않는다고는 장담 할 수 없다  
+* static initializer 코드가 다시 실행되게 되면 문제가 발생 할 수 있다  
+* 해당 문제는 **java.lang.ExceptionInInitializerError**으로 wrapping 되어 나온다  
+* ExceptionInInitializerError 오류를 처리하고 다시 초기화를 시키도록 시도하더라도 정상적으로 동작하지 않을 것이다  
+		
+		public class Main {
+			public static void main (String [] args) throws Exception {
+				
+				for (int repeat = 0; repeat < 3; ++ repeat) {
+					try {
+						// "Real" name for X is outer class name+$+nested class name:
+						Class.forName ("Main$X");
+					} catch (Throwable t) {
+						System.out.println ("load attempt #" + repeat + ":");
+						t.printStackTrace (System.out);
+					}
+				}
+			}
+			
+			private static class X {
+				static {
+					if (++ s_count == 1)
+						throw new RuntimeException ("failing static initializer...");
+				}
+			} // End of nested class
+				
+			private static int s_count;
+
+		} // End of class
+	
+* 위 코드는 3번 예외가 발생한다  
+* X의 static initializer가 첫번째 시도에 실패하더라도 모두 실패처리가 된다  
+		
+		>java Main
+			load attempt #0:
+			java.lang.ExceptionInInitializerError
+				at java.lang.Class.forName0(Native Method)
+				at java.lang.Class.forName(Class.java:140)
+				at Main.main(Main.java:17)
+			Caused by: java.lang.RuntimeException: failing static initializer...
+				at Main$X.(Main.java:40)
+				... 3 more
+			
+			load attempt #1:
+			java.lang.NoClassDefFoundError
+				at java.lang.Class.forName0(Native Method)
+				at java.lang.Class.forName(Class.java:140)
+				at Main.main(Main.java:17)
+
+			load attempt #2:
+			java.lang.NoClassDefFoundError
+				at java.lang.Class.forName0(Native Method)
+				at java.lang.Class.forName(Class.java:140)
+				at Main.main(Main.java:17)
+  
+<br>  
+  
 # 원문  
 * http://www.javaworld.com/article/2077332/core-java/get-a-load-of-that-name.html  
   
