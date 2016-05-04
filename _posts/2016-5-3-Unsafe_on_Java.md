@@ -194,9 +194,44 @@ tags: [Java]
 	System.out.println(password); // ????????????
 	System.out.println(fake); // ????????????
   
+### Concurrency  
+	
+	interface Counter {
+		void increment();
+		long getCounter();
+	}
+	
+	//------------------------------------------------------
+	
+	class CASCounter implements Counter {
+		private volatile long counter = 0;
+		private Unsafe unsafe;
+		private long offset;
+		
+		public CASCounter() throws Exception {
+			unsafe = getUnsafe();
+			offset = unsafe.objectFieldOffset(CASCounter.class.getDeclaredField("counter"));
+		}
+		
+		@Override
+		public void increment() {
+			long before = counter;
+			while (!unsafe.compareAndSwapLong(this, offset, before, before + 1)) {
+				before = counter;
+			}
+		}
+		
+		@Override
+		public long getCounter() {
+			return counter;
+		}
+	}  
+  
+* Atomic 관련 클래스들은 내부에서 Unsafe를 사용하고 있다  
 
 
 # 원문  
 * http://mishadoff.com/blog/java-magic-part-4-sun-dot-misc-dot-unsafe  
+* http://www.docjar.com/docs/api/sun/misc/Unsafe.html
   
 
