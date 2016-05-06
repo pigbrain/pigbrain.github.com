@@ -1,13 +1,16 @@
 ---
 layout: post
 category: Java
-title: Memory usage of Java objects: general guide 
+title: Memory usage of Java objects  
 tagline: by Pigbrain
 tags: [Java]
 ---
 
 <!--more-->
 
+* 일반적으로 오브젝트들은 힙 메모리에 관리된다   
+* JVM은 작은Thread-Local 오브젝트들은 힙이 아닌 스택 혹은 레지스터에 관리한다  
+  
   
 # General formula for calculating memory usage  
 * 오브젝트 정보(housekeeping)가 관리되는 헤더는 소수의 바이트로 구성된다  
