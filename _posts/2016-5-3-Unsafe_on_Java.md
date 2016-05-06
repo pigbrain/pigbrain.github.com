@@ -121,7 +121,8 @@ tags: [Java]
 
 	Guard guard = new Guard();
 	guard.giveAccess();   // false, no access
-	
+
+	Field f = guard.getClass().getDeclaredField("ACCESS_ALLOWED");
 	unsafe.putInt(guard, unsafe.objectFieldOffset(f), 42); // memory corruption
 	
 	guard.giveAccess(); // true, access granted  
@@ -190,9 +191,10 @@ tags: [Java]
 	
 	unsafe.copyMemory(fake, 0L, null, toAddress(password), sizeOf(password));
 	
-
 	System.out.println(password); // ????????????
 	System.out.println(fake); // ????????????
+
+* copyMmeory 메소드를 통하여 바이트 배열을 순회하지 않고 데이터를 복사 할 수 있다  
   
 ### Concurrency  
 	
@@ -227,6 +229,7 @@ tags: [Java]
 		}
 	}  
   
+* compareAndSwapLong 메소드를 이용하여 lock-free 구조를 만들 수 있다  
 * Atomic 관련 클래스들은 내부에서 Unsafe를 사용하고 있다  
 
 
