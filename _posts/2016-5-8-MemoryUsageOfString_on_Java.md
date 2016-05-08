@@ -48,7 +48,7 @@ tags: [Java]
 * char 배열이 String 오브젝트의 전체 데이터이지 않는가 ?  
 * 이미 존재하는 String 오브젝트에에서 substring을 통하여 새로운 String 오브젝트를 만들경우 내부 char 배열은 공유한다  
 	* String 오브젝트를 유지하는 상태에서 substring으로 새로운 오브젝트를 만들 경우 메모리가 절약된다  
-	* String 오브젝트를 유지하지 않는 상태에서 substring으로 새로운 오브젝트를 만들 경우 메모리가 낭비된다
+	* String 오브젝트를 유지하지 않는 상태에서 substring으로 새로운 오브젝트를 만들 경우 메모리가 낭비된다   
   
   
 ##### Example-1  
