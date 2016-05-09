@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Java
-title: Memory usage of Java Strings and string-related objects  
+title: Memory usage of Java Strings  
 tagline: by Pigbrain
 tags: [Java]
 ---
