@@ -41,7 +41,12 @@ tags: [Java]
 				employeeStatus = employeeStatus.intern();
 				... construct entity ...
 			}  
-* intern()을 이용하면 String을 equal이 아닌 ==로 비교 가능하다  
+* intern()을 이용하면 String을 equal이 아닌 ==로 비교 가능하게되어 비교 연산시 성능 향상을 꾀할 수 있다  
+	* 그러나 intern() 메소드를 호출하였을때 내부에서 string pool에 등록되어있는 모든 문자열들과 일치여부를 검사하기 때문에 문자열을 찾아오는 과정이 오래걸릴 수 있다  
+* intern()을 호출헀을 때 찾으려는 문자열이 존재하지 않는다면 string pool에 해당 문자열을 새로 등록한다  
+* 최초 intern()이 호출되어 string pool에 등록된 문자열은 반대로 삭제하는 기능이 없다(de-intern이 불가능)  
+	* 메모리 릭으로 연결될 수 있다  
+* 다른 문자열들을 계속해서 intern() 한다면 OutOfMemoryError가 발생하게된다 
 
 # 원문  
 * http://www.javamex.com/tutorials/memory/string_saving_memory.shtml  
