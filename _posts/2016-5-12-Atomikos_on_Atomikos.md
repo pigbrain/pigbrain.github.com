@@ -1,7 +1,7 @@
 ---
 layout: post
 category: OpenSource
-title: Atomikos ?
+title: Atomikos
 tagline: by Pigbrain
 tags: [Atomikos]
 ---
@@ -11,39 +11,39 @@ tags: [Atomikos]
 # Atomikos
 
 ### Waht is JTA  
-	* Java Transaction API  
-	* 플랫폼마다 서로 다른 트랜잭션 매니저들과 어플리케이션들이 상호 작용할 수 있는 인터페이스를 정의  
-	* JTA 구현체를 오픈소스로 제공 - Atomikos  
-	* JTA 구현체를 어플리케이션 서버의 일부분으로 제공 - IBM  
-	* [JTA Spec](http://www.oracle.com/technetwork/java/javaee/jta/index.html)  
+* Java Transaction API  
+* 플랫폼마다 서로 다른 트랜잭션 매니저들과 어플리케이션들이 상호 작용할 수 있는 인터페이스를 정의  
+* JTA 구현체를 오픈소스로 제공 - Atomikos  
+* JTA 구현체를 어플리케이션 서버의 일부분으로 제공 - IBM  
+* [JTA Spec](http://www.oracle.com/technetwork/java/javaee/jta/index.html)  
 
 
 ### Waht is XA  
-	* eXtended Architecture  
-	* 하나의 Global Transaction으로 여러개의 데이터베이스에 접근하기 위한 X/Open 그룹 표준  
-	* [XA Spec](http://pubs.opengroup.org/onlinepubs/009680699/toc.pdf)  
-		* Atomikos와 같은 트랜잭션매니저는 어떤 작업이 어떤 트랜잭션의 한 부분으로 실행되고 있는지를 데이터베이스에 알릴 수 있어야 한다  
-		* 트랜잭션의 종료 시점에 2PC를 통하여 커밋이 가능해야 한다  
-		* 데이터베이스에서 지연되고 있는 트랜잭션을 복구(처리?)가 가능해야 한다  
-	- 
-
-### What is 2PC
+* eXtended Architecture  
+* 하나의 Global Transaction으로 여러개의 데이터베이스에 접근하기 위한 X/Open 그룹 표준  
+* [XA Spec](http://pubs.opengroup.org/onlinepubs/009680699/toc.pdf)  
+	* Atomikos와 같은 트랜잭션매니저는 어떤 작업이 어떤 트랜잭션의 한 부분으로 실행되고 있는지를 데이터베이스에 알릴 수 있어야 한다  
+	* 트랜잭션의 종료 시점에 2PC를 통하여 커밋이 가능해야 한다  
+	* 데이터베이스에서 지연되고 있는 트랜잭션을 복구(처리?)가 가능해야 한다  
+  
+  
+### What is 2PC  
 * 2 Pase Commit  
 				  
-				Coordinator                            Cohort  
+		Coordinator                                    Cohort  
                            
-                            ------Query to commit----->  
+                      ------Query to commit----->  
 
-                           <------Vote Yes or No------  
+                      <------Vote Yes or No------  
 
-                      commit/abort
+                 commit/abort
 
-                            ----Commit or Rollback---->
+                      ----Commit or Rollback---->
 
-                                                commit/abort
+                                         commit/abort
 
-                           <----------ack--------------
-                      end  
+                      <----------ack--------------
+                 end  
                            
 
 * 2PC로 구현된 OpenSource
@@ -83,19 +83,19 @@ tags: [Atomikos]
 * commit()  
 	* prepare() : commit을 진행해도 되는지 투표하는 과정  
   
-<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit1.png" alt="">  
+	<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit1.png" alt="">  
   
 	* waitForReplies() : 투표 응답(commit 가능/불가능) 대기  
   
-<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit2.png" alt="">  
+	<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit2.png" alt="">  
   
 	* commitWithAfterCompletionNotification()  
   
-<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit3.png" alt="">  
+	<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit3.png" alt="">  
   
 	* rollbackWithAfterCompletionNotification()  
   
-<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit4.png" alt="">  
+	<img src="/assets/themes/Snail/img/OpenSource/Atomikos/HowToCommit4.png" alt="">  
   
 
 # Reference
