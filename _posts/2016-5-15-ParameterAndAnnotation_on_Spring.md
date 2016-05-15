@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Spring
-title: 메소드 파라미터(parameter) 및 어노테이션(Annotation) 정리
+title: 메소드 파라미터 및 어노테이션  
 tagline: by Pigbrain
 tags: [Spring]
 ---
@@ -43,7 +43,7 @@ tags: [Spring]
 * **@RequestParam**  
 	* 스프링 내장 변환기가 다룰 수 있는 모든 타입을 지원한다  
 	* 해당 파라미터가 없다면 HTTP 400 - Bad Request 가 전달 된다  
-	* 파일의 경우는 <input type="file" name="file" /> 에 매핑 된다  
+	* 파일의 경우는 ＜input type="file" name="file" /＞ 에 매핑 된다  
 		
 			public String edit( @RequestParam("id") int id, 
 			                   @RequestParam("title") String title, 
