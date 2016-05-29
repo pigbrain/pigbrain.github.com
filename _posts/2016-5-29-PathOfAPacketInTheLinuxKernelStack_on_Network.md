@@ -36,11 +36,11 @@ TCP/IP를 OSI 모델과 비교했을때 - TCP/IP의 어플리케이션 레이어
   
 <br>  
   
-**소켓** 레이어는 어플리케이션 레이어와 전송(Transport)레이어와의 사이에서 인터페이스 역할을 한다. 이 레이어를 **전송계층인터페이스(Transport Layer Interface)**라고 부른다. 이 레이어에는 두가지 종류의 소켓이 있다고 언급할 가치가 있는데 그 중 하나는 연결 지향형 소켓(streaming socket)이고 다른 하나는 비연결형(datagram socket)이다.  
+**소켓** 레이어는 어플리케이션 레이어와 전송(Transport)레이어와의 사이에서 인터페이스 역할을 한다. 이 레이어를 **트랜스포트레이어인터페이스(Transport Layer Interface)**라고 부른다. 이 레이어에는 두가지 종류의 소켓이 있다고 언급할 가치가 있는데 그 중 하나는 연결 지향형 소켓(streaming socket)이고 다른 하나는 비연결형(datagram socket)이다.  
   
 <br>  
   
-다음 레이어는 TCP와 UDP를 기능적으로 포함하고 있는 전송(Transport) 레이어이다. 이 레이어는 커널에서 TCP/IP스택의 4번째 계층을 형성한다. TCP/IP의 네트워크(Network)레이어는 IP 레이어라고도 부른다. 이 계층은 네트워크 토폴리지에 대한 정보를 담고 있으며 TCP/IP스택의 3번째 계층을 형성하며 주소 체계 및 라우팅 프로토콜에 대한 정보를 알고있다.  
+다음 레이어는 TCP와 UDP를 기능적으로 포함하고 있는 트랜스포트(Transport)레이어이다. 이 레이어는 커널에서 TCP/IP스택의 4번째 계층을 형성한다. TCP/IP의 네트워크(Network)레이어는 IP 레이어라고도 부른다. 이 계층은 네트워크 토폴리지에 대한 정보를 담고 있으며 TCP/IP스택의 3번째 계층을 형성하며 주소 체계 및 라우팅 프로토콜에 대한 정보를 알고있다.  
   
 <br>  
   
@@ -74,13 +74,37 @@ send, write..등등 메세지 전송 호출이 발생하면 net/socket.c에 있�
   
 <br>  
   
-그 다음 어떠한 프로토콜에 맞는 sendmsg 함수를 호출할지 결정하는 **\_\_sock\_sendmsg**를 호출한다. **proto\_ops** 구조체의 sendmsg 필드에서 프로토콜 옵션을 볼 수 있으며 프로토콜에 맞는 함수가 호출된다. 만약 TCP 소켓이라면  **tcp\_sendmsg** 함수가 호출되고 만약 UDP 소켓이라면 **udp\_sendmsg**함수가 호출된다. 이러한 결정은 제어권이 Transport Layer Interface로 넘어간 이후에 정해지고 이 과정에서 프로토콜 별로 호출하기 위한 함수를 결정한다.  
+그 다음 어떠한 프로토콜에 맞는 sendmsg 함수를 호출할지 결정하는 **\_\_sock\_sendmsg**를 호출한다. **proto\_ops** 구조체의 sendmsg 필드에서 프로토콜 옵션을 볼 수 있으며 프로토콜에 맞는 함수가 호출된다. 만약 TCP 소켓이라면  **tcp\_sendmsg** 함수가 호출되고 만약 UDP 소켓이라면 **udp\_sendmsg**함수가 호출된다. 이러한 결정은 제어권이 트랜스포트 레이어 인터페이스(Transport Layer Interface)로 넘어간 이후에 정해지고 이 과정에서 프로토콜 별로 호출하기 위한 함수를 결정한다.  
   
 <br>  
   
 **tcp_sendmsg**함수는 linux/net/ipv4/tcp.c에 정의되어 있고 사용자 프로그램에서 SOCK_STREAM 타입의 소켓을 이용하여 메세지를 전송할 때마다 호출된다.  
   
+### 3.2 The Socket Interface  
+소켓 인터페이스 레이어는 종종 어플리케이션 레이어와 트랜스포트레이어 사이에서 동작하는 접착제와 같은 역할을 한다. 이것은 또한 트랜스포트 레이어 인터페이스(Transport Layer Interface)라고도 불리며 소켓의 구조체를 추출하고 기능적으로 확인해야하는 책임을 가지고 있다. 실제로 이 레이어는 연결 형태에 대한 적절한 프로토콜을 처리하며 net/ipv4/af_inet.c에 있는 **inet_sendmsg**에서 실행된다.  
   
+<br>  
+  
+이 계층에서는 다양한 소켓 생성과 관련하여 시스템콜을 변환하는 일도 한다. 소켓 생성에 대응하는 기능은 net/socket.c에서 실행된다. 이 곳은 bind, linsten, accept, connect, send, recv와 같은 소켓과 관련된 다양한 시스템 콜이 커널내에서 변환되는 지역이다. 
+  
+<br>
+  
+KURT가 활성화된 커널에서 우리는 언제, 어떻게 시스템콜이 호출되는지에 대한 설명을 제공하기 위한 몇가지 플래그가 활성화 되는 것을 볼 수 있다.  
+* EVENT-SOCKET -> 소켓이 생성 됬을때  
+* EVENT_BIND -> 소켓이 주소에 바인딩 되었을때  
+* EVENT_LISTEN -> listen 함수가 호출 되었을때  
+* EVENT_CONNECT -> 클라이언트로 부터 connect 함수가 호출 되었을때  
+* EVENT_ACCEPT -> 클라언트로부터 서버가 커넥션을 Aaccept 했을때  
+* EVENT_SOCK_SENDMSG -> 소켓으로 메세지가 전송되었을때  
+* EVENT_SOCK_RECVMSG -> 소켓으로부터 메세지가 수신되었을때  
+  
+이 계층에서는 더 많은 플래그가 존재한다. 자세한 내용은 kernel/scripts/dski/network.ns에 있는 **network.ns**를 참고하면된다.  
+  
+<br>  
+  
+소켓 레이어는 프로토콜의 종류를 구체화하고 프로토콜에 맞는 함수로 제어권을 넘기는 역할을 한다. 이 곳에서 프로토콜에 대한 구체화가 이루어지고 프로토콜에 맞는 트랜스포트레이어의 코드가 호출된다.  
+  
+
 # 원문  
 * http://www.hsnlab.hu/twiki/pub/Targyak/Mar11Cikkek/Network_stack.pdf   
   
