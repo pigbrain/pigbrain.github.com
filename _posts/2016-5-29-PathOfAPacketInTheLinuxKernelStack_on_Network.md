@@ -13,15 +13,15 @@ tags: [Network]
 이 문서는 2.6.11 버전의 리눅스 커널에 있는 TCP/IP 프로토콜 스택을 기반으로 하고 있다.  
 이 문서의 목표는 독자들이 커널내의 네트워크 패킷 흐름에 대해 익히도록 하는 것이다.(LXR을 통해 실제 커널내에서 기능을 수행하는 함수들을 살펴본다)  
   
-> Linux Cross-Reference (LXR)는 Hypertext Cross-referencing Tool로서 Function declarations, Data
+ * Linux Cross-Reference (LXR)는 Hypertext Cross-referencing Tool로서 Function declarations, Data
 (type) definitions 그리고 Preprocessor macros를 쉽게 찾아갈 수 있게 도와주므로 대규모 Source Code를 분석하는데 많은 도움을 준다  
   
 <br>  
   
 이 문서는 네트워크 스택을 이해하기 위한 색인을 제공한다. 그리고 이것은 KURT DSKI를 포함한다. KURT DSKI는 커널내에서 패킷을 모니터링하는데 매우 유용하다  
   
-> KURT : Kansas University Real-Time project  
-> DSKI : Data Stream Kernel Interface  
+* KURT : Kansas University Real-Time project  
+* DSKI : Data Stream Kernel Interface  
   
 <br>  
   
@@ -79,7 +79,7 @@ send, write..등등 메세지 전송 호출이 발생하면 net/socket.c에 있�
 <br>  
   
 **tcp_sendmsg**함수는 linux/net/ipv4/tcp.c에 정의되어 있고 사용자 프로그램에서 SOCK_STREAM 타입의 소켓을 이용하여 메세지를 전송할 때마다 호출된다.  
-   
+  
   
 # 원문  
 * http://www.hsnlab.hu/twiki/pub/Targyak/Mar11Cikkek/Network_stack.pdf   
