@@ -90,7 +90,8 @@ send, write..등등 메세지 전송 호출이 발생하면 net/socket.c에 있�
 <br>
   
 KURT가 활성화된 커널에서 우리는 언제, 어떻게 시스템콜이 호출되는지에 대한 설명을 제공하기 위한 몇가지 플래그가 활성화 되는 것을 볼 수 있다.  
-* EVENT-SOCKET -> 소켓이 생성 됬을때  
+  
+* EVENT-SOCKET -> 소켓이 생성 되었을때  
 * EVENT_BIND -> 소켓이 주소에 바인딩 되었을때  
 * EVENT_LISTEN -> listen 함수가 호출 되었을때  
 * EVENT_CONNECT -> 클라이언트로 부터 connect 함수가 호출 되었을때  
@@ -104,7 +105,78 @@ KURT가 활성화된 커널에서 우리는 언제, 어떻게 시스템콜이 �
   
 소켓 레이어는 프로토콜의 종류를 구체화하고 프로토콜에 맞는 함수로 제어권을 넘기는 역할을 한다. 이 곳에서 프로토콜에 대한 구체화가 이루어지고 프로토콜에 맞는 트랜스포트레이어의 코드가 호출된다.  
   
-
+### 3.3 Transport Layer  
+메세지를 전송하기위한 프로토콜과 어떠한 함수를 호출할지 정해지게 되면 그 다음 부터의 모든 동작은 트랜스포트레이어에서 처리한다.
+proto 구조체에 셋팅된 함수포인터는 상황에 따라 **tcp\_sendmsg** 혹은 **udp\_sendmsg**를 가리키게 된다.
+  
+<br>  
+  
+우리는 TCP를 다루고 있으니, **tcp\_sendmsg**에 대해 살펴보자. **tcp\_sendmsg**는 linux/net/ipv4/tcp.c에 정의되어 있고 패킷에 대해 TCP의 특정한 처리를 한다.
+TCP는 커넥션이 생성되지 않은 상태에서는 데이터를 전송할 수 없기 때문에 소켓 커넥션이 형성될때까지 대기하게 된다. 이와 관련된 코드는 아래에 있다.
+타임아웃이 발생하기 전에 커넥션이 생성되어 있는지 체크를 한다.
+  
+	/* Wait for a connection to finish. */  
+	if ((1 << sk->sk_state) & ~(TCPF_ESTABLISHED | TCPF_CLOSE_WAIT))  
+		if ((err = sk_stream_wait_connect(sk, &timeo)) != 0)  
+			goto out_err;  
+  
+커넥션에 대해 최대 세그먼트(Segment) 크기를 지정하는 일도 **tcp_sendmsg**에서 처리한다.  
+  
+<br>  
+  
+커넥션이 생성되게 되면, TCP와 관련된 동작들이 실행되고 실제 메세지 전송이 일어나게 된다.
+유저 영역에서 커널 영역으로 데이터를 이동 시키기 위한 메커니즘인 IO 벡터 구조를 통하여 실행된다.
+이 함수의 다른 부분에서는 **struct sk_buff \*skb**를 생성하고 데이터를 유저 영역에서 커널 영역으로 복사한다.
+  
+<br>  
+  
+**tcp_sendmsg**는 이미 할당된 버퍼에 충분히 사용 가능한 버퍼가 남아있는지 검사한다. 만약 충분히 남아있다면 데이터를 복사하고 그렇지 않다면 새로운 버퍼를 할당한다.
+기본적으로 이 구조에서는 데이터를 소켓 버퍼로 복사를 시도하고 버퍼가 여의치 않다면 새로 할당한다.
+  
+<br>  
+  
+소켓 버퍼가 데이터로 꽉 차게 되면 **tcp\_sendmsg**는 **skb\_copy\_to\_page**함수를 호출하여 데이터를 유저영역에서 커널 영역으로 복사한다.
+**skb\_copy\_to\_page**는 커널 영역으로 데이터를 복사하기 전에 내부적으로 체크섬(checksum)을 계산한다.
+이 외에도 **tcp\_sendmsg**에는 오류 처리를 위한 다른 기능도 포함되어있다. 
+마지막으로 **tcp\_push\_one**함수를 호출한다. 이 함수는 **tcp\_transmit\_skb**를 호출하기 함수들 중 하나인데, **tcp\_transmit\_skb**는 TCP 세그먼트를 실질적으로 전송하는 함수이다.
+**tcp\_transmit\_skb**를 호출할 수 있는 다른 함수들은 아래와 같다.
+  
+	extern int tcp_write_xmit(struct sock *, int nonagle);
+	extern int tcp_retransmit_skb(struct sock *, struct sk_buff *);
+	extern void tcp_xmit_retransmit_queue(struct sock *);
+	extern void tcp_simple_retransmit(struct sock *);
+	and so on ...
+  
+  
+**tcp\_transmit\_skb**는 패킷을 IP레이어로 전송한다. 이 함수는 TCP 헤더를 생성하고 패킷을 IP레이어로 보낸다.
+헤더를 만든다는 것은 출발지, 목적지의 IP주소와 TCP 시퀀스 번호를 셋팅하는 것을 의미한다.
+여기서 **tcphdr**라는 것이 상대적으로 중요한 요소인데, 이것은 헤더 정보를 담고 있는 **tcp\_skb\_cb**를 가지고 있다.
+**tcp\_skb\_cb**는 TCP 헤더의 여러가지 플래그들을 포함하고 있는 TCP 제어 구조체이다.
+  
+<br>  
+  
+**tcp\_transmit\_skb**는 위 역할 외에도 TCP 윈도우 스케일 옵션(TCP Window Scale option)을 지정한다.
+체크섬(checksum) 계산 값은 데이터 부분 혹은 헤더 부분에 추가된다. 
+마지막으로 **queue_xmit**함수가 호출되는데 이 것은 패킷을 목적지로 보내기 위해 큐에 쌓는다.
+목적지는 내부일 수도 있고 외부일 수도 있는데 정확한 것은 다음 레이어에서 결정한다.  
+  
+	err = tp->af_specific->queue_xmit(skb, 0);  
+	if (err <= 0)  
+		return err  
+	/* where tp is the tcp_sock structure */  
+  
+리턴 값이 0 이하인 것은 패킷이 버려진 것을 의미한다. KURT가 활성화 되어있으면 다음과 같은 플래그들을 확인 할 수 있다.
+  
+* EVENT_TCP_SENDMSG -> tcp\_send\_msg가 호출 되었을때  
+* EVENT_TCP_WRITEXMIT -> tcp\_write\_xmit가 호출 되었을때   
+* EVENT_TCP_TRANSKB -> tcp\_transmit\_skb가 호출 되었을때  
+* EVENT_TCP_RECVMSG -> tcp 메세지를 수신했을때 
+* EVENT_TCP_DATA_QUEUE -> tcp\_data\_queue가 호출 되었을떄  
+  
+이러한 모든 동작은 프로세스 컨텍스트 내에서 실행된다.  
+  
+### 3.4 Network layer (IP)  
+  
 # 원문  
 * http://www.hsnlab.hu/twiki/pub/Targyak/Mar11Cikkek/Network_stack.pdf   
   
