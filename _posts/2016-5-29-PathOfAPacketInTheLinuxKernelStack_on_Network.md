@@ -348,7 +348,68 @@ include/linux/netdevice.h에 선언되어있는 **net\_device** 구조체에는 
 <br>  
   
 ### 4.3 Transport Layer  
+TCP는 **inet\_protocol** 구조체의 인스턴스를 초기화함으로써 핸들러 함수와 연결된다. **tcp_v4_rcv**함수가 핸들러에 셋팅된다.
+**tcp_v4_rcv**함수는 linux/net/ipv4/tcp\_ipv4.c에 선언되어 있는데 이 함수는 IP헤더에 TCP 프로토콜 숫자(6)이 포함되어 있을때 호출된다.
+이 함수는 패킷이 유효한 TCP 헤더를 가지고 있는지 **pskb_may_pull**함수를 통하여 확인한 후 TCP 헤더에서 몇몇 필드를 추출하여 체크섬을 계산한다.
+내부적으로 소켓 버퍼에서 TCB(TCP Control Buffer)를 가져오기 위해 **TCP\_SKB\_CB**매크로를 이용한다.
+TCB에는 ack와 같은 상태를 가르키는 파라미터 그리고 TCP 시퀀스 번호 등이 있다.  
+이 함수의 다음 단계는 **\_\_tcp\_v4\_lookup**호출을 통하여 수신된 패킷에 할당된 소켓을 찾는다.
+  
+	sk = __tcp_v4_lookup(skb->nh.iph->saddr, th->source,  
+			skb->nh.iph->daddr, ntohs(th->dest),
+			tcp_v4_iif(skb));  
+  
+만약 할당된 TCP 소켓이 없는 경우 이 패킷은 버려진다. 유효한 TCP 소켓을 찾을 경우에만 패킷을 계속해서 처리한다.
+IP 보안과 관련된 파라미터들이 체크되고 연결이 **TCP\_TIME\_WAIT** 상태인지 체크한다. 만약 이 상태일 경우 늦게 도착한 TCP 세그먼트는 버려진다.
+  
+<br>  
+  
+top half 컨텍스트에서 소켓인 락 상태인지, 만약 패킷을 더 이상 수용할 수 없는지, 디바이스의 backlog에 수신한 다른 패킷들이 추가되었는지 확인한다.
+만약 락 상태가 아니라면 패킷은 **prequeue**구조체에 추가된다. 패킷이 **prequeue**구조체에 추가되면 패킷은 커널 컨텍스트가 아닌 프로세스 컨텍스트에서 처리될 수 있다.
+**tcp\_prequeue**함수에 의하여 커널에서 사용자 영역으로 제어권이 이동한다.
+**tcp\_prequeue**함수는 **tcp\_v4\_rcv**가 호출한다. 만약 **tcp\_prequeue**가 0을 리턴하면 더이상 이 소켓과는 연관된 작업이 없다는 것을 의미한다. 이렇게 되면 **tcp\_v4\_do\_rcv**를 호출한다.
+  
+<br>  
+  
+**tcp\_prequeue**는 include/net/tcp.h에 선언되어 있다. 그리고 이 함수는 대기중인 사용자 프로세스들을 위해 버퍼를 큐 처리하는 역할을 한다.
+소켓이 데이터를 읽을 준비가 되어있으면 **tcp\_prequeue**는 즉시 소켓의 **prequeue**를 처리한다.
+이 함수는 사용자의 테스크가 소켓을 통한 데이터를 기다리고 있는지, **prequeue** 버퍼 처리를 기다리고 있는지 확인한다.
+  
+	if (!sysctl_tcp_low_latency && tp->ucopy.task) {
+		__skb_queue_tail(&tp->ucopy.prequeue, skb);
+		tp->ucopy.memory += skb->truesize;
+  
+<br>  
+  
+**tcp\_v4\_do\_rcv** 함수가 호출되었을때 TCP연결이 연결된 상태인지 확인한다.(상태값이 **TCP\_ESTABLISHED**인지 확인)
+만약 연결이 정상적이라면 **tcp\_rcv\_established**함수가 호출된다.
+  
+<br>  
+  
+**tcp\_rcv\_established**함수는 패킷을 처리하기 시작한다. 패킷이 정상적으로 수신되면 ACK를 전송하고 **tcp\_data\_queue** 함수를 호출한다.
+이 함수는 소켓이 정상적으로 수신한 데이터 큐에서 데이터 세그먼트들을 큐에 담는다. 이 세그먼트들은 어플리케이션이 read 시스템 콜(**tcp\_recvmsg**)을 
+호출 했을때 처리된다.
+  
+<br>  
+  
+### 4.4 Application Layer  
+사용자 어플리케이션에서 read, recvfrom과 같은 API를 호출할 때 마다 그 API들은 /net/socket.c에 정의되어 있는 **sys\_recv** 시스템콜이 호출된다.
+이 시스템콜은 다시 **sys\_recvfrom**을 호출한다.
+  
+<br>  
+  
+**sys\_recvfrom**과 다른 recv 시스템 콜들은 /net/socket.c에 정의되어 있는 **sock\_recvmsg**를 호출한다.
+INET 소켓의 경우 **sock\_recvmsg**는 /net/ipv4/af\_inet.c에 정의되어 있다. 각 프로토콜에 맞는 수신 함수가 호출되는데 
+TCP의 경우 **tcp\_recvmsg**가 호출된다.
+  
+<br>  
+  
+모든 시스템 콜은 결국 linux/net/ipv4/tcp.c에 정의되어 있는 소켓 레이어의 **tcp_recvmsg** 함수로 오게 된다. 이 함수는 소켓 버퍼에서 유저 버퍼로 데이터를 복사한다.
+또한 SIGURG 시그널에 의한 우선권을 갖는 데이터들 또한 여기서 처리된다. 기본적인 동작은 소켓버퍼에서 유저 버퍼로 지정된 바이트 크기만큼만 복사된다.
+  
+  
 
+<img src="/assets/themes/Snail/img/Network/PathPacket/diagram.png" alt="">  
   
 <br>  
   
