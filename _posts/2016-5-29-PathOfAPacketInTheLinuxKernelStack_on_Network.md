@@ -321,7 +321,7 @@ include/linux/netdevice.h에 선언되어있는 **net\_device** 구조체에는 
   
 **process\_backlog**함수는 패킷을 **\_\_skb_dequeue**함수를 통하여 디바이스의 큐에서 꺼낸 후 **sk_buff**구조체로 옮긴다.
 그리고 추가적인 처리를 위해 **netif\_receive\_skb**함수를 호출한다.  
-..
+  
 <br>  
   
 **netif\_receive\_skb** 함수는 패킷의 타입에 따라 분류하고 적절한 패킷 핸들러 함수로 보내준다. 예를 들어 IP 패킷일 경우 **ip_rcv** 함수를 호출 한다.
@@ -329,6 +329,26 @@ include/linux/netdevice.h에 선언되어있는 **net\_device** 구조체에는 
 <br>  
   
 ### 4.2 Network Layer - IP  
+패킷을 수신하는 주 함수는 **ip_rcv**이다. 이 함수는 패킷의 오류를 체크하고 IP헤더를 지운다. 필요에 따라 분할된 패킷들은 다시 하나로 모은다.
+패킷은 몇 단계를 거쳐 net/ipv4/ip\_input.c에 정의되어 있는 **ip\_rcv\_finish**함수에 도착한다.  
+  
+<br>  
+  
+**ip\_rcv\_finish**은 패킷에 대해 라우팅 검색을 실시하여 이 패킷이 자신에게 온 것인지 혹은 포워딩해야 하는 것인지 결정한다. 
+그리고 만약 자신에게 온 것이라면 **dst\_input**함수가 호출되는데 이 함수는 다시 **ip\_local\_deliver**함수를 호출한다.
+**ip\_local\_deliver**함수는 /net/ipv4/ip\_input.c에 선언되어 있고 필요에 따라 나뉘어진 패킷을 다시 합친다. 그리고 **ip\_local\_deliver\_finish**를 호출한다.
+**ip\_local\_deliver\_finish**은 패킷을 처리하기위한 적절한 함수를 호출하게 된다.  
+  
+<br>  
+  
+**ip\_local\_deliver\_finish**함수는 IP헤더를 벗겨내고 프로토콜 숫자에 기반한 해쉬 함수를 이용하여 어떤 프로토콜인지 분별한다.
+프로토콜 종류에 따라 각 핸들러가 호출된다. 만약 TCP 프로토콜이라면 **tcp\_v4\_rcv**함수가 호출될 것이다.
+이 것은 트랜스포트 레이어로 패킷이 이동된 것을 의미한다.  
+  
+<br>  
+  
+### 4.3 Transport Layer  
+
   
 <br>  
   
