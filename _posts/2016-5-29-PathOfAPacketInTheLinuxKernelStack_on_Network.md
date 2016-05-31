@@ -276,6 +276,61 @@ neighbour-cache 구조체 중 output 포인터에 값을 설정하게 되면 패
   
 어플리케이션에서 시작하여 패킷을 어떻게 송신 매체로 보내는지 알아보았다. 다음은 매체로 부터 패킷을 수신하였을때 프로세스가 어떻게 처리하는지 알아볼 것이다.
   
+<br>  
+  
+# 4 When data is received from the Medium  
+여기서는 물리적인 매체부터 어플리케이션 레이어까지 네트워크 패킷을 어떻게 다루는지 살펴본다.
+패킷을 수신하는 과정은 전송하는 것보다 훨씬 더 복잡하다.  
+  
+<br>  
+  
+### 4.1 Physical layer  
+패킷이 NIC(Network Interface Card)에 도착하게 되면 NIC는 그 패킷을 수신하고 DMA(Direct Memory Access)를 통해 **rx\_ring**으로 전달한다.
+**rx\_ring**은 수신된 패킷을 DMA를 통해 이동시키는 커널 메모리 영역내에 있는 링 구조체이다.
+데이터는 **rx\_ring**구조체에 저장되고 **sk\_buff**로 복사된다.
+  
+<br>  
+  
+패킷이 커널 메모리로 이동되면 NIC는 CPU에게 인터럽트를 걸어 새로운 패킷이 들어왔다고 알려준다. 
+인터럽트를 받은 CPU는 패킷 처리를 담당하는 ISR로 제어권을 넘긴다.
+인터럽트 컨텍스트내에서의 처리는 가능한 최소화해야하기 때문에 ISR은 패킷 처리를 위한 **NET\_RX\_SOFTIRQ**를 발생시킨다. 
+인터럽트 핸들러는 include/linux/netdevice.h에 선언되어 있는 **\_\_netif\_rx\_schedule**를 호출하고 이 함수는 다시 **\_\_netif\_rx\_schedule** 함수를 호출한다.
+  
+<br>  
+  
+**\_\_netif\_rx\_schedule** 함수는 디바이스에대한 참조를 **soft-net\_data** 폴링 리스트에 넣고 **NET\_RX\_SOFTIRQ**를 스케쥴링한다.
+여기부터 패킷 처리에 대한 제어권은 soft irq 컨텍스트가 가지게된다.
+  
+<br>  
+  
+**NET\_RX\_SOFTIRQ**를 처리할때 마다 **net\_rx\_action** 함수를 호출한다. 이 함수는 net/core/dev.c에 선언되어 있다.
+**net\_rx\_action** 함수는 각 디바이스의 **rx\_ring**에 있는 모든 패킷을 처리 할때까지 인터럽트를 비활성화 시킨다.
+이 함수는 각 디바이스를 폴링하고 각 디바이스의 **rx\_ring**을 처리한다.
+include/linux/netdevice.h에 선언되어있는 **net\_device** 구조체에는 폴링하기 위해 /net/core/dev.c에 정의되어 있는 **process_backlog**를 가르키는 함수 포인터를 가지고 있다.
+  
+<br>  
+  
+**backlog\_dev**는 임시 디바이스 정보이다. 디바이스 드라이버가 **netif\_rx**함수를 호출하였는데 폴링 리스트에 **backlog\_dev**가 없을 경우 리스트에 추가된다.
+이것은 **input\_pkt\_queue**에 들어온 패킷을 제거하기위한 동작이다. **process\_backlog**를 가리키고 있는 **backlog_device**의 폴링 함수는 큐에서 패킷을 제거하고 처리하기 위해 호출된다.
+  
+<br>  
+  
+그러므로 **net\_rx\_action**함수가 각 디바이스를 폴링 할때마다 결국은 패킷을 처리하기 위한 **process\_backlog**함수가 호출된다.
+  
+<br>  
+  
+**process\_backlog**함수는 패킷을 **\_\_skb_dequeue**함수를 통하여 디바이스의 큐에서 꺼낸 후 **sk_buff**구조체로 옮긴다.
+그리고 추가적인 처리를 위해 **netif\_receive\_skb**함수를 호출한다.  
+..
+<br>  
+  
+**netif\_receive\_skb** 함수는 패킷의 타입에 따라 분류하고 적절한 패킷 핸들러 함수로 보내준다. 예를 들어 IP 패킷일 경우 **ip_rcv** 함수를 호출 한다.
+  
+<br>  
+  
+### 4.2 Network Layer - IP  
+  
+<br>  
   
 # 원문  
 * http://www.hsnlab.hu/twiki/pub/Targyak/Mar11Cikkek/Network_stack.pdf   
