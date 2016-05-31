@@ -408,7 +408,7 @@ TCP의 경우 **tcp\_recvmsg**가 호출된다.
 또한 SIGURG 시그널에 의한 우선권을 갖는 데이터들 또한 여기서 처리된다. 기본적인 동작은 소켓버퍼에서 유저 버퍼로 지정된 바이트 크기만큼만 복사된다.
   
   
-
+  
 <img src="/assets/themes/Snail/img/Network/PathPacket/diagram.png" alt="">  
   
 <br>  
