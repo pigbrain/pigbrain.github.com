@@ -3,7 +3,7 @@ layout: post
 category: OpenSource
 title: Install Thrift IDL on CentOS 6.5
 tagline: by Pigbrain
-tags: [RabbitMQ]
+tags: [Thrift]
 ---
 
 <!--more-->
