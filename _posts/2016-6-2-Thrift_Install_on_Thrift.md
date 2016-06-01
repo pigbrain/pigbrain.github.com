@@ -7,7 +7,7 @@ tags: [Thrift]
 ---
 
 <!--more-->
-
+  
 # Building Apache Thrift on CentOS 6.5
 아래 단계들은 Centos 6.5에서 빌드하기 위해 필요한 최소 설치이다.  
 여기서는 master 브랜치에 있는 소스를 빌드하여 설치한다.
@@ -73,9 +73,9 @@ make는 컴파일러를 /usr/local/bin/thrift 경로에 설치한다.
 <br>  
   
   
-# Test - Java
+# Test - Java  
   
-##### hello.thrift
+##### hello.thrift  
   
 	namespace java co.kr.jaso.hello.thrift.generated
 	
