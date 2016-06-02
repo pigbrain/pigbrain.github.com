@@ -1,7 +1,7 @@
 ---
 layout: post
 category: OpenSource
-title: Install Thrift IDL on CentOS 6.5
+title: Install Thrift IDL on CentOS
 tagline: by Pigbrain
 tags: [Thrift]
 ---
