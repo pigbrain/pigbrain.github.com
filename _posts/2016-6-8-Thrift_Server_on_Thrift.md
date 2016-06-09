@@ -170,6 +170,38 @@ tags: [Thrift]
 	server.serve();
     
 ## THsHaServer  
+  
+	// 기본적인 구현은 TNonblockingServer과 동일하다
+	// 데이터 수신이 완료 되었을때 다른 쓰레드를 통하여 처리한다 
+	protected void handleRead(SelectionKey key) {
+		FrameBuffer buffer = (FrameBuffer) key.attachment();
+		if (!buffer.read()) {
+			cleanupSelectionKey(key);
+			return;
+		}	
+
+		// if the buffer's frame read is complete, invoke the method.
+		if (buffer.isFrameFullyRead()) {
+			if (!requestInvoke(buffer)) {
+				cleanupSelectionKey(key);
+			}
+		}
+	}
+	...
+	@Override
+	protected boolean requestInvoke(FrameBuffer frameBuffer) {
+		// invoker는 ExecutorService 인스턴스다 
+		try {
+			Runnable invocation = getRunnable(frameBuffer);
+			invoker.execute(invocation);
+			return true;
+		} catch (RejectedExecutionException rx) {
+			LOGGER.warn("ExecutorService rejected execution!", rx);
+			return false;
+		}
+	}
+  
+
 * TNonblockingServer를 상속받아 구현  
 * Half-Sync/Half-Async 방식으로 쓰레드 관리  
   
