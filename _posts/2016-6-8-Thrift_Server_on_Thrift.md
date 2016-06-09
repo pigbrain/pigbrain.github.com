@@ -58,6 +58,11 @@ tags: [Thrift]
   
 ### Example  
   
+	int port = 7911;
+	TServerSocket serverTransport = new TServerSocket(port);
+	TServer server = new TSimpleServer(new TSimpleServer.Args(serverTransport).processor(processor));
+	server.serve();
+  
 ## TThreadPoolServer  
 	
 	try {
@@ -91,6 +96,11 @@ tags: [Thrift]
 * 클라이언트 당 하나의 쓰레드를 할당한다. 별다른 설정이 없다면 ExecutorService 객체를 생성할때 쓰레드의 최소 개수는 5개, 최대 개수는 Integer.MAX_VALUE 값으로 설정된다.
   
 ### Example  
+  
+	int port = 7911;
+	TServerSocket serverTransport = new TServerSocket(port);
+	TServer server = new TThreadPoolServer(new TThreadPoolServer.Args(serverTransport).processor(processor));
+	server.serve();
   
 ## TNonblockingServer  
 	
@@ -153,12 +163,22 @@ tags: [Thrift]
 * Accept, Read, Write 처리를 하기 위한 쓰레드를 생성하고 Selector를 이용하여 IO를 관리한다  
   
 ### Example  
+  
+	int port = 7911;
+	TNonblockingServerSocket serverSocket = new TNonblockingServerSocket(port);
+	TServer server = new TNonblockingServer(new TNonblockingServer.Args(serverSocket).processor(processor));
+	server.serve();
     
 ## THsHaServer  
 * TNonblockingServer를 상속받아 구현  
 * Half-Sync/Half-Async 방식으로 쓰레드 관리  
   
 ### Example  
+  
+	int port = 7911;
+	TNonblockingServerSocket serverSocket = new TNonblockingServerSocket(port);
+	TServer server = new THsHaServer(new THsHaServer.Args(serverSocket).processor(processor));
+	server.serve();
     
 ## TThreadedSelectorServer  
   
