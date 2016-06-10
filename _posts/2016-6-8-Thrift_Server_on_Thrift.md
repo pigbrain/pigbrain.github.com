@@ -214,8 +214,117 @@ tags: [Thrift]
     
 ## TThreadedSelectorServer  
   
+	// AcceptThread
+	public void run() {
+		...
+		while (!stopped_) {
+			select();
+		}
+	}
+	
+	private void select() {
+		try {
+			// wait for connect events.
+			acceptSelector.select();
+		
+			// process the io events we received
+			Iterator<SelectionKey> selectedKeys = acceptSelector.selectedKeys().iterator();
+			while (!stopped_ && selectedKeys.hasNext()) {
+				SelectionKey key = selectedKeys.next();
+				selectedKeys.remove();
+				...	
+				
+				if (key.isAcceptable()) {
+					handleAccept();
+				} else {
+					...
+				}
+			}
+		} catch (...) {
+			...
+		}
+	}
+	
+	private void handleAccept() {
+		final TNonblockingTransport client = doAccept();
+		if (client != null) {
+			// Pass this connection to a selector thread
+			final SelectorThread targetThread = threadChooser.nextThread();
+			...
+			doAddAccept(targetThread, client);
+			...
+		}
+	}
+	
+	private void doAddAccept(SelectorThread thread, TNonblockingTransport client) {
+		if (!thread.addAcceptedConnection(client)) {
+			client.close();
+		}
+	}
+  
+<br>  
+  
+	// SelectorThread
+	public void run() {
+		...
+		while (!stopped_) {
+			select();
+			processAcceptedConnections();
+			processInterestChanges();
+		}
+	}
+	
+	private void processAcceptedConnections() {
+		// Register accepted connections
+		while (!stopped_) {
+			TNonblockingTransport accepted = acceptedQueue.poll();
+			if (accepted == null) {
+				break;
+			}
+			registerAccepted(accepted);
+		}
+	}
+	
+	private void select() {
+		try {
+			selector.select();
+			Iterator<SelectionKey> selectedKeys = selector.selectedKeys().iterator();
+			while (!stopped_ && selectedKeys.hasNext()) {
+				SelectionKey key = selectedKeys.next();
+				selectedKeys.remove();
+				
+				...
+				
+				if (key.isReadable()) {
+					// deal with reads
+					handleRead(key);
+				} else if (key.isWritable()) {
+					// deal with writes
+					handleWrite(key);
+				} else {
+					LOGGER.warn("Unexpected state in select! " + key.interestOps());
+				}
+			}
+		} catch (...) {
+			...
+		}
+	}
+
+* 논블록킹(Non-Blocking)  
+* 멀티 쓰레드  
+* Accept를 처리하기 위한 AcceptThread와 Read/Write 처리를 위한 SelectorThread로 구성  
+	* AcceptThread에서 클라이언트의 연결을 생성하여 SelectorThread의 BlockingQueue를 통하여 소켓 정보를 전달  
+	* AcceptThread는 SelectorThreadLoadBalancer라는 인스턴스를 가지고 있는데 단순히 SelectorThread들을 순서대로 돌아가면서 BlockingQueue에 accept된 소켓 정보를 넣는다  
+	* SelectorThread는 BlockingQueue로 전달된 소켓 정보를 자신의 Selector에 등록하고 Read/Write IO 처리를 한다  
+
 ### Example  
-    
+  
+	int port = 7911;
+	TNonblockingServerSocket serverSocket = new TNonblockingServerSocket(port);
+	TServer server = new TThreadedSelectorServer(new TThreadedSelectorServer.Args(serverSocket).processor(processor));
+	server.serve();
+	
+  
 # Thrift Source Code
 * https://github.com/apache/thrift 
 
