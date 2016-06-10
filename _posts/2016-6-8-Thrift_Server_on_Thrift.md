@@ -1,14 +1,13 @@
 ---
 layout: post
 category: OpenSource  
-title: Thrift Server Architecture 
+title: Thrift Server Structure 
 tagline: by Pigbrain  
 tags: [Thrift]
 ---
 
 <!--more-->
   
-# Thrift Server Architecture
   
 <img src="/assets/themes/Snail/img/OpenSource/Thrift/Server/server.png" alt="">  
   
