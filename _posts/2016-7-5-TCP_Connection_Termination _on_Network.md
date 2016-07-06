@@ -14,5 +14,13 @@ tags: [Network]
 그래서 종료 과정은 연결 과정과 다르게 **3-way-handshake**가 아닌 **2-way-handshake**이다. 
   
   
+# TCP Connection Termination Procedure  
+  
+<img src="/assets/themes/Snail/img/Network/TCPConnectionTermination/termination_table.png" alt="">  
+  
+  
+<img src="/assets/themes/Snail/img/Network/TCPConnectionTermination/termination_flow.png" alt="">  
+  
+  
 # 원문   
 * http://www.tcpipguide.com/free/t_TCPConnectionTermination-2.htm  
