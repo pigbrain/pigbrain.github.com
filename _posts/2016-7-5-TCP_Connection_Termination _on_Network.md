@@ -21,6 +21,12 @@ tags: [Network]
   
 <img src="/assets/themes/Snail/img/Network/TCPConnectionTermination/termination_flow.png" alt="">  
   
+# The TIME-WAIT State  
+최초 FIN을 수신한 측은 어플리케이션의 종료 처리를 기다려야하기 때문에 **CLOSE-WAIT**상태에서 꽤 많은 시간을 기다려야한다.
+TCP는 이 과정(어플리케이션이 종료 처리를 준비하는 과정)이 얼마나 오래걸릴지 예측 할 수 없다. 이 과정에서 최초 FIN을 수신한 측이 서버라고 가정하면 서버는 데이터를 송신할 수 있고 클라이언트는 수신할 것이다. 그러나 클라이언트는 데이터를 송신 할 수 없다.
+  
+
+
   
 # 원문   
 * http://www.tcpipguide.com/free/t_TCPConnectionTermination-2.htm  
