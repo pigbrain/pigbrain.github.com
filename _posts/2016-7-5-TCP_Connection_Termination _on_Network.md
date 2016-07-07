@@ -21,6 +21,7 @@ tags: [Network]
   
 <img src="/assets/themes/Snail/img/Network/TCPConnectionTermination/termination_flow.png" alt="">  
   
+  
 # The TIME-WAIT State  
 최초 FIN을 수신한 측은 어플리케이션의 종료 처리를 기다려야하기 때문에 **CLOSE-WAIT**상태에서 꽤 많은 시간을 기다려야한다.
 TCP는 이 과정(어플리케이션이 종료 처리를 준비하는 과정)이 얼마나 오래걸릴지 예측 할 수 없다. 이 과정에서 최초 FIN을 수신한 측이 서버라고 가정하면 서버는 데이터를 송신할 수 있고 클라이언트는 수신할 것이다. 그러나 클라이언트는 데이터를 송신 할 수 없다.
@@ -37,6 +38,14 @@ TCP는 이 과정(어플리케이션이 종료 처리를 준비하는 과정)이
 TCP 표준은 MSL은 120초(2분)으로 지정하고 있다.  
 현대 네트워크에서는 120초라는 시간이 매우 길다고 생각하고있다. 그래서 더 나은 성능을 위해 이 시간을 줄이는 것을 허가하고 있다.
   
+# Simultaneous Connection Termination  
+두 개의 디바이스(서버, 클라이언트)는 상황에따라 동시에 서로 연결을 요청할 수도 있고 때로는 동시에 연결 종료 요청을 할 수도 있다. 동시에 연결 종료라는 의미는 같은 시간에 정확하게 연결 종료 요청을 하는 것을 의미하지 않는다. 네트워크 환경에서 동시라는 것은 발생하기 매우 어렵다. 
+  
+예를들어 클라이언트가 연결을 종료하기 위해 FIN을 전송했는데 서버 역시 연결을 종료하기 위해 FIN을 전송한다. 이때 서버는 클라이언트가 보냈던 FIN을 수신하기 전에 자신의 FIN을 전송한 것이다. 이 상황에서는 연결을 종료하기 위해 조금 다르게 처리된다.  
+  
+서버와 클라이언트에서 연결 종료를 위한 상태 변화는 대칭적으로 이루어진다. 
   
 # 원문   
 * http://www.tcpipguide.com/free/t_TCPConnectionTermination-2.htm  
+* http://www.tcpipguide.com/free/t_TCPConnectionTermination-3.htm  
+* http://www.tcpipguide.com/free/t_TCPConnectionTermination-4.htm
