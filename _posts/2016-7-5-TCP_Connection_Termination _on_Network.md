@@ -45,6 +45,9 @@ TCP 표준은 MSL은 120초(2분)으로 지정하고 있다.
   
 서버와 클라이언트에서 연결 종료를 위한 상태 변화는 대칭적으로 이루어진다. 
   
+<img src="/assets/themes/Snail/img/Network/TCPConnectionTermination/termination_table2.png" alt="">  
+  
+  
 # 원문   
 * http://www.tcpipguide.com/free/t_TCPConnectionTermination-2.htm  
 * http://www.tcpipguide.com/free/t_TCPConnectionTermination-3.htm  
