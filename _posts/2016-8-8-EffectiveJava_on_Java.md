@@ -9,6 +9,7 @@ tags: [Java]
 <!--more-->
 
 # 객체의 생성과 삭제  
+  
 ### 규칙1 생성자 대신 정적 팩터리 메서드를 사용할 수 없는지 생각해 보라  
 	public static Boolean valueOf(boolean b) {
 		return b ? Boolean.TRUE : Boolean:FALSE;
