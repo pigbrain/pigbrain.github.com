@@ -258,6 +258,19 @@ tags: [Java]
   
 <img src="/assets/themes/Snail/img/Java/EffectiveJava/rule28_3.png" alt="">  
   
+<br>  
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule28_4.png" alt="">  
+  
+* 이 메서드는 컴파일 뿐 아니라 인자로 주어진 컬렉의 원소 자료형이 스택의 원소 자료형과 일치할 때는 완벽히 동작한다  
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule28_5.png" alt="">  
+  
+* 위 코드는 Collection<Object\>가 Collection<Number\>의 하위 자료형이 아니라는 오류가 발생한다  
+* popAll의 인자 자료형을 "E의 컬렉션"이 아니라 "E의 상위 자료형의 컬렉션"이라고 명시하면 오류를 해결 가능하다  
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule28_6.png" alt="">  
+  
 * 반환값에는 와일드카드 자료형을 쓰면 안 된다  
 	* 클라이언트 코드 안에도 와일드카드 자료형을 명시해야 하기 때문이다  
   
