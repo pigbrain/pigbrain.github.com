@@ -223,12 +223,43 @@ tags: [Java]
 * @SuppressWarnings("unchecked") 어노테이션을 사용할 때마다 왜 형 안정성을 위반하지 않는지 밝히는 주석을 반드시 붙여라  
   
 ### 규칙25 배열 대신 리스트를 써라  
+* 배열은 공변 자료형(covariant)이지만 제네릭은 불변 자료형(invariant)이다  
+	* 공변 자료형이란 Sub가 Super의 하위 자료형이라면 Sub[]도 Super[]의 하위 자료형이라는 것이다  
+	* 불변 자료형이란 Type1과 Type2가 있을 때, List<Type1\>은 List<Type2\>의 상위 자료형이나 하위 자료형이 될 수 없다는 것이다  
+	* 리스트를 사용하면 컴파일 시점에 오류를 알 수 있다  
   
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule25_1.png" alt="">  
+  
+* 배열은 실체화 되는 자료형이지만 제네릭은 컴파일 시점에만 자료형이 적용되고 실행될 때는 자료형이 삭제된다  
+	* 제네릭의 자료형이 실행될 때는 삭제되기 때문에 제네릭을 사용하지 않고 작성된 코드와도 연동된다  
+	* 배열의 각 원소의 자료형은 실행시간에 결정된다  
+* 제네릭 자료형이나 형인자 자료형, 또는 형인자의 배열을 생성하는 것은 문법적으로 허용되지 않는다  
+	* new List<E\>[], new List<String\>[], new E[]는 컴파일되지 않는 코드다  
+	* 형 안정성이 보장되지 않기때문에 위 구문들이 허용되지 않는다  
+* 제네릭 자료형을 varargs 메서드와 함께 사용하면 복잡한 경고 메세지들을 보게 된다  
+	* varargs 메서드를 호출할 때마다 varargs 인자들을 담을 배열이 생성되기 때문이다  
+
+
 ### 규칙26 가능하면 제네릭 자료형으로 만들 것  
   
 ### 규칙27 가능하면 제네릭 메서드로 만들 것  
   
 ### 규칙28 한정적 와일드카드를 써서 API 유연성을 높여라  
+* **PECS** (Produce - Extends, Consumer - Super)  
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule28_1.png" alt="">  
+  
+* 이 Stack 클래스는 Interable src가 가리키는 원소의 자료형이 스택 원소의 자료형과 일치하면 제대로 동작한다  
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule28_2.png" alt="">  
+  
+* Integer는 Number의 하위 자료형이지만 제네릭은 불변(invariant)이기 때문에 위 코드는 오류가 발생한다  
+* pushAll의 인자 자료형을 "E의 Iterable"이 아니라 "E의 하위 자료형의 Iterable"이라고 명시하면 위 오류를 해결 가능하다  
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule28_3.png" alt="">  
+  
+* 반환값에는 와일드카드 자료형을 쓰면 안 된다  
+	* 클라이언트 코드 안에도 와일드카드 자료형을 명시해야 하기 때문이다  
   
 ### 규칙29 형 안전 다형성 컨테이너를 쓰면 어떨지 따져보라  
   
