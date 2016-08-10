@@ -275,7 +275,16 @@ tags: [Java]
 	* 클라이언트 코드 안에도 와일드카드 자료형을 명시해야 하기 때문이다  
   
 ### 규칙29 형 안전 다형성 컨테이너를 쓰면 어떨지 따져보라  
+* 자바 1.5부터 Class가 제네릭 클래스가 되었다  
+	* String.class의 자료형은 Class<String\>이다  
+	* Integer.class의 자료형은 Class<Integer\>이다  
+* 아래 Favorite과 같은 클래스를 형 안전 다형성 컨테이너(typesafe heterogeneous container)라 부른다  
+	* Favorite 클래스는 형 안정성을 보장한다  
+		* String을 요청했는데 Integer를 반환하거나 하지 않는다  
+	* Favorite 클래스는 다형성을 갖고 있다  
+		* 일반적인 맵과 달리 모든 키의 자료형이 서로 다르다
   
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule29_1.png" alt="">  
   
 <br>  
   
