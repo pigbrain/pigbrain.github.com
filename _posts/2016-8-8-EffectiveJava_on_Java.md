@@ -196,8 +196,31 @@ tags: [Java]
 # 제네릭  
   
 ### 규칙23 새 코드에는 무인자 제네릭 자료형을 사용하지 마라  
+* 무인자 자료형을 쓰면 형 안전성이 사라지고 제네릭의 장점 중 하나인 표현력 측면에서 손해를 보게 된다  
+* List와 같은 무인자 자료형을 사용하면 형 안정성을 잃게 되지만 List<Object\>와 같은 형인자 자료형을 쓰면 그렇지 않다  
+	* List를 인자로 받는 메서드에는 List<String\>을 인자로 전달 할 수 있지만 List<Object\>를 받는 메서드에 List<String\>을 인자로 넘길 수는 없다  
+	* 제네릭에 대한 하위 자료형 정의 규칙을 따르면 List<String\>은 List의 하위 자료형이지만 List<Object\>의 하위 자료형은 아니기 때문이
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule23_1.png" alt="">  
+  
+* Collection<?\>에는 null 이외의 어떤 원소도 넣을 수 없다  
+	* null 이외의 어떤 원소도 넣을 수 없을 뿐 아니라 어떤 자료형의 객체를 꺼낼 수 있는지도 알 수 없다  
+* 제네릭 자료형 정보는 프로그램이 실행될 때는 지워지기때문에 다음 경우에는 무인자 자료형을 써야한다  
+	* 클래스 리터럴에는 반드시 무인자 자료형을 사용해야 한다  
+		* List.class, String[].class, int.class 는 가능  
+		* List<String\>.class, List<?\>.class는 불가능  
+	* 제네릭 자료형에 instanceof 연산자를 적용할 때는 무인자 자료형을 쓰는 것이 좋다  
+		* instanceof 연산자는 비한정적 와일드카드 자료형 이외의 형인자 자료형에 적용할 수 없다  
+		* 비한정적 와일드카드 자료형을 쓴다고해서 instanceof 연산자가 다르게 동작하는게 아니다. 따라서 <?\>를 붙여봐야 코드만 지저분해질 뿐이다  
+  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule23_2.png" alt="">  
+  
   
 ### 규칙24 무점검 경고(unchecked warning)를 제거하라  
+* 제거할 수 없는 경고메세지는 형 안정성이 확식할 때만 @SuppressWarnings("unchecked") 어노테이션을 사용해라  
+* SupressWarning 어노테이션은 가능한 한 작은 범위에 적용하라  
+	* 변수 선언, 아주 짧은 메서드 또는 생성자에 붙인다  
+* @SuppressWarnings("unchecked") 어노테이션을 사용할 때마다 왜 형 안정성을 위반하지 않는지 밝히는 주석을 반드시 붙여라  
   
 ### 규칙25 배열 대신 리스트를 써라  
   
