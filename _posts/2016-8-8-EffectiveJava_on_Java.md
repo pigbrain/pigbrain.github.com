@@ -619,13 +619,13 @@ tags: [Java]
   
 * 최신 VM은 클래스를 초기화하기 위한 필드 접근은 동기화한다  
 * 성능 문제 때문에 객체 필드 초기화를 지연시키고 싶다면 이중 검사를 사용하라  
-	* 이미 초기화된 필드에는 락을 걸지 않으므로 필드는 반드시 VOLATILE로 선언해야 한다  
+	* 이미 초기화된 필드에는 락을 걸지 않으므로 필드는 반드시 volatile로 선언해야 한다  
   
-<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule72_2.png" alt="">  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule71_2.png" alt="">  
   
 * 만약 여러번 초기화되어도 상관없는 객체 필드의 초기화를 지연시키고 싶을 때 두 번째 검사는 없애버려도 된다  
   
-<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule72_3.png" alt="">  
+<img src="/assets/themes/Snail/img/Java/EffectiveJava/rule71_3.png" alt="">  
   
   
 ### 규칙72 쓰레드 스케줄러에 의존하지 마라  
