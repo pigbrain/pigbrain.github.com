@@ -41,6 +41,47 @@ long myMethod (int n, String s, int[] arr);
   
 * JDK에 포함되어 있는 javap라는 유틸리티는 JNI에서 signature를 보기위해 매우 유용하다  
 
+{% highlight java %}  
+X:\>javap -s java.awt.Label
+Compiled from Label.java  
+
+public class java.awt.Label extends java.awt.Component {  
+    public static final int LEFT;
+        /*   I   */
+    public static final int CENTER;
+        /*   I   */
+    public static final int RIGHT;
+        /*   I   */
+    java.lang.String text;
+        /*   Ljava/lang/String;   */
+    int alignment;
+        /*   I   */
+    static {};
+        /*   ()V   */
+    public java.awt.Label();
+        /*   ()V   */
+    public java.awt.Label(java.lang.String);
+        /*   (Ljava/lang/String;)V   */
+    public java.awt.Label(java.lang.String,int);
+        /*   (Ljava/lang/String;I)V   */
+    public void addNotify();
+        /*   ()V   */
+    java.lang.String constructComponentName();
+        /*   ()Ljava/lang/String;   */
+    public int getAlignment();
+        /*   ()I   */
+    public java.lang.String getText();
+        /*   ()Ljava/lang/String;   */
+    protected java.lang.String paramString();
+        /*   ()Ljava/lang/String;   */
+    public synchronized void setAlignment(int);
+        /*   (I)V   */
+    public void setText(java.lang.String);
+        /*   (Ljava/lang/String;)V   */
+{% endhighlight %}  
+  
+  
+  
 # 원문  
 * http://www.rgagnon.com/javadetails/java-0286.html  
   
