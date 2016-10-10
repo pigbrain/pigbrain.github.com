@@ -37,7 +37,9 @@ long myMethod (int n, String s, int[] arr);
   
 * 오브젝트임을 명시하기 위해 **L** 다음에 오브젝트의 클래스명이 나오고 세미콜론**(;)** 으로 끝난다  
   
+<br>  
   
+* JDK에 포함되어 있는 javap라는 유틸리티는 JNI에서 signature를 보기위해 매우 유용하다  
 
 # 원문  
 * http://www.rgagnon.com/javadetails/java-0286.html  
