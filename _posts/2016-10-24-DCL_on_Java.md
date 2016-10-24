@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Java
-title: Double checked locking: Clever, but broken  
+title: Double checked locking Clever, but broken  
 tagline: by Pigbrain
 tags: [Java]
 ---
