@@ -29,14 +29,14 @@ class SomeClass {
 }
 {% endhighlight %}  
   
-왜 initialization을 늦추려 하는건가? 아마도 `Resource`를 생성하는 것이 비용이 많이드는 동작일 것이고  `SomeClass`의 사용자들이 `getResource()`를 호출하지 않기 때문일 것이다. `SomeClass`는 객체가 생성되는 시점에 `Resource`를 생성하지 않는다면 더 빠르게 생성될 것이다. 실제 사용자가 필요할때까지 initializatoin 동작을 미루는 것은 프로그램을 더욱 빠르게 실행시키는데 많은 도움을 준다.  
+왜 initialization을 늦추려 하는건가? 아마도 `Resource`를 생성하는 것이 비용이 많이드는 동작이거나  `SomeClass`의 사용자들이 `getResource()`를 호출하지 않기 때문일 것이다. `SomeClass`는 객체가 생성되는 시점에 `Resource`를 생성하지 않는다면 더 빠르게 생성될 것이다. 실제 사용자가 필요할때까지 initializatoin 동작을 미루는 것은 프로그램을 더욱 빠르게 실행시키는데 많은 도움을 준다.  
   
 <br>  
   
 만약 `SomeClass`를 멀티쓰레드 어플리케이션에서 사용하려한다면 어떻게 될까?  
 경쟁 조건(race condition)을 야기시킬 것이다. 두 쓰레드는 동시에 `resource`가 null인지 체크할 수 있고 그 결과 `resource`를 2번 initialization할 것이다. 멀티 쓰레드 환경에서는 `getResource()`에 `synchronized`가 추가되어야 한다.  
   
-불행히도 `syncrhonized`가 설정된 메소드는 `synchronized`가 붙지 않은 메소드보다 100배 이상 느려진다.Lazy Initialization을 택하는 이유는 효율성이다. 프로그램이 빠르게 시작될 수 있지만 실행시점에 느려질 수 있다. 이것은 결코 좋은 trade-off가 아니다.  
+불행히도 `syncrhonized`가 설정된 메소드는 `synchronized`가 붙지 않은 메소드보다 100배 이상 느려진다. Lazy Initialization을 택하는 이유는 효율성이다. 프로그램이 빠르게 시작될 수 있지만 실행시점에 느려질 수 있다. 이것은 결코 좋은 trade-off가 아니다.  
   
 <br>  
   
@@ -101,7 +101,9 @@ DCL은 `resource`필드를 사용하기 위해 동기화되지 않은채로 접�
 <br>  
   
 ## Volatile doesn't mean what you think, either  
-### (과거 얘기인 듯...)
+
+### (과거 얘기인 듯...)  
+  
 A commonly suggested nonfix is to declare the resource field of SomeClass as volatile. However, while the JMM prevents writes to volatile variables from being reordered with respect to one another and ensures that they are flushed to main memory immediately, it still permits reads and writes of volatile variables to be reordered with respect to nonvolatile reads and writes. That means -- unless all Resource fields are volatile as well -- thread B can still perceive the constructor's effect as happening after resource is set to reference the newly created Resource.  
   
 ## Alternatives to DCL  
