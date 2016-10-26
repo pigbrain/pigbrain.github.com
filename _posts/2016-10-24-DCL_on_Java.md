@@ -29,14 +29,14 @@ class SomeClass {
 }
 {% endhighlight %}  
   
-왜 initialization을 늦추려 하는건가? 아마도 `Resource`를 생성하는 것이 비용이 많이드는 동작일 것이고  `SomeClass`의 사용자들이 `getResource()`를 호출하지 않기 때문일 것이다. `SomeClass`는 객체가 생성되는 시점에 `Resource`를 생성하지 않는다면 더 빠르게 생성될 것이다. 실제 사용자가 필요할때까지 initializatoin 동작을 미루는 것은 프로그램을 더욱 빠르게 실행시키는데 많은 도움을 준다.  
+왜 initialization을 늦추려 하는건가? 아마도 `Resource`를 생성하는 것이 비용이 많이드는 동작이거나  `SomeClass`의 사용자들이 `getResource()`를 호출하지 않기 때문일 것이다. `SomeClass`는 객체가 생성되는 시점에 `Resource`를 생성하지 않는다면 더 빠르게 생성될 것이다. 실제 사용자가 필요할때까지 initializatoin 동작을 미루는 것은 프로그램을 더욱 빠르게 실행시키는데 많은 도움을 준다.  
   
 <br>  
   
 만약 `SomeClass`를 멀티쓰레드 어플리케이션에서 사용하려한다면 어떻게 될까?  
 경쟁 조건(race condition)을 야기시킬 것이다. 두 쓰레드는 동시에 `resource`가 null인지 체크할 수 있고 그 결과 `resource`를 2번 initialization할 것이다. 멀티 쓰레드 환경에서는 `getResource()`에 `synchronized`가 추가되어야 한다.  
   
-불행히도 `syncrhonized`가 설정된 메소드는 `synchronized`가 붙지 않은 메소드보다 100배 이상 느려진다.Lazy Initialization을 택하는 이유는 효율성이다. 프로그램이 빠르게 시작될 수 있지만 실행시점에 느려질 수 있다. 이것은 결코 좋은 trade-off가 아니다.  
+불행히도 `syncrhonized`가 설정된 메소드는 `synchronized`가 붙지 않은 메소드보다 100배 이상 느려진다. Lazy Initialization을 택하는 이유는 효율성이다. 프로그램이 빠르게 시작될 수 있지만 실행시점에 느려질 수 있다. 이것은 결코 좋은 trade-off가 아니다.  
   
 <br>  
   
@@ -98,8 +98,32 @@ DCL은 `resource`필드를 사용하기 위해 동기화되지 않은채로 접�
   
 <img src="/assets/themes/Snail/img/Java/DCL/broken.png" alt="">  
   
-  
 <br>  
   
+## Volatile doesn't mean what you think, either  
+
+### (과거 얘기인 듯...)  
+  
+A commonly suggested nonfix is to declare the resource field of SomeClass as volatile. However, while the JMM prevents writes to volatile variables from being reordered with respect to one another and ensures that they are flushed to main memory immediately, it still permits reads and writes of volatile variables to be reordered with respect to nonvolatile reads and writes. That means -- unless all Resource fields are volatile as well -- thread B can still perceive the constructor's effect as happening after resource is set to reference the newly created Resource.  
+  
+## Alternatives to DCL  
+DCL 문제를 해결하기 위한 가장 좋은 방법은 그것을 사용하지 않는 것이다. 가장 간단히 문제를 해결하는 방법은 동기화를 통하여 사용하는 것이다. 한 쓰레드에서 쓰여지는 변수를 다른 쓰레드가 읽을때마다 항상 변경 된 값을 참조할 수 있도록 동기화를 해줘야한다.  
+  
+DCL 문제를 피하는 다른 방법은 Lazy Initialization을 하지 않고 Eager Initialization을 하는 것이다. `resource`가 사용될때까지 초기화를 늦추는 대신 객체가 생성되는 시점에 초기화를 하는 것이다.  
+클래스 로더는 클래스의 `Class`오브젝트를 동기화하여 클래스 초기화 시점에 static initalizeration 블럭을 실행한다.  
+즉 static initializer는 자동적으로 클래스 로딩 시점에 동기화되어 실행된다는 것을 의미한다.  
+  
+static singleton은 동기화 없이 실행되는 Lazy Initialization의 특별한 경우이다. 초기화되는 오브젝트가 다른 메소드나 필드에서 사용되지 않는 클래스의 static 필드일때 JVM은 자동적으로 Lazy Initialization을 수행한다.
+아래 예에서 `resource`필드가 다른 클래스에 의하여 처음 참조될때까지 `Resource`객체를 생성하지 않을 것이다. 그리고 `resource` 초기화 과정에서 메모리에 씌여진 정보들은 모든 쓰레드에 동기화 되어 보이게된다.
+  
+{% highlight java %}  
+class MySingleton {
+	public static Resource resource = new Resource();
+}
+{% endhighlight %}  
+  
+JVM이 이 클래스를 초기화 할때 `MySingleton`은 어떤 필드나 메소드를 가지고 있지 않기 때문에 처음 `resource`가 참조될때 클래스 초기화를 진행한다.
+  
+
 # 원문  
 * http://www.javaworld.com/article/2074979/java-concurrency/double-checked-locking--clever--but-broken.html  
