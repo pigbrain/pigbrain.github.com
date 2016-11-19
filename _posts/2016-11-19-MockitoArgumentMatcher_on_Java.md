@@ -32,7 +32,7 @@ verify(mockedList).add(argThat(someString -> someString.length() > 5));
 # Interface ArgumentMatcher<T>  
   
 * `ArgumentMatcher` 인터페이스의 `matches` 메소드를 통하여 argument를 비교한다  
-* 
+
   
 {% highlight java %}  
 class ListOfTwoElements implements ArgumentMatcher<List> {
