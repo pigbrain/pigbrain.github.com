@@ -85,5 +85,20 @@ public class Remove {
 }
 {% endhighlight %}  
   
+  
+## Input/Output Class Hierarchy  
+* `java.io`패키지는 입력(input)과 출력(output)을 위한 많은 클래스들을 포함하고 있다  
+	* 4개의 추상클래스(InputStream, OutputStream, Reader, Writer)가 대부분의 주요한 기능을 제공하고 있다  
+		* **Byte**(8bit) 형태의 데이터 처리를 위한 `InputStream` 그리고 `OutputStream`  
+		* **Character**(16bit) 형태의 데이터 처리를 위한 `Reader` 그리고 `Writer`  
+	* 데이터를 읽기위한 InputStream과 Reader의 메서드들은 매우 유사하고 데이터를 쓰기 위한 OutputStream 그리고 Writer의 메서드들 또한 매우 유사하다  
+	* 많은 I/O 클래스들은 클래스에 동적으로 추가적인 역할을 부여하기 위하여 **Decorator Pattern** 형태로 디자인 되었다  
+		* 대부분의 I/O 클래스들은 Reader, Writer 혹은 InputStream, OutputStream을 파라미터로 받는 생성자를 가지고 있다  
+		* 각각의 클래스들은 buffering, compression.. 등과 같은 추가적인 기능들을 제공한다  
+		* I/O 클래스 계층에서 Decorator Pattern의 중요한 점은 다형성(polymorphism)이다  
+			* FileReader **is-a** Reader  
+			* BufferedReader **is-a** Reader  
+			* LineNumberReader **is-a** Reader  
+  
 # 참고   
 * https://newcircle.com/bookshelf/java_fundamentals_tutorial/input_output  
