@@ -100,5 +100,55 @@ public class Remove {
 			* BufferedReader **is-a** Reader  
 			* LineNumberReader **is-a** Reader  
   
+  
+## Byte Streams  
+* InputStream - byte를 읽기 위한 추상 클래스  
+	* read()  
+		* 1바이트를 읽거나 바이트 배열로 복사한다  
+	* skip()  
+	* mark(), reset()  
+	* close() 
+		* finally 블럭 내에서 처리 해야 한다  
+* OutputStream - byte를 쓰기 위한 추상 클래스  
+	* write()  
+		* 1바이트를 출력하거나 바이트 배열을 출력한다  
+	* flush()  
+	* close()  
+* 아무 파라미터가 없는 `InputStream.read()` 메서드는 int 값(읽은 바이트의 수)을 리턴한다. 만약 스트림의 끝에 다다르면 -1을 리턴한다  
+* 한번에 한 바이트씩 읽고 쓰려면 다음과 형태로 작성해야 한다 
+  
+{% highlight java %}  
+int b = 0;
+while ((b == fis.read()) != -1) {
+	System.out.write(b);
+}
+{% endhighlight %}  
+  
+* 위와는 다르게 바이트 배열을 이용하여 버퍼 형태로 사용하는 것이 훨씬 효율적이다  
+  
+{% highlight java %}  
+private static void read(File file) {
+	try {
+		FileInputStream fis = new FileInputStream(file);
+		try {
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) > 0) {
+				System.out.write(buffer, 0, len);
+			}
+		} finally {
+			fis.close();
+		}
+	} catch (FileNotFoundException e) {
+		System.err.println("No such file exists: " + file.getAbsolutePath());
+	} catch (IOException e) {
+		System.err.println("Cannot read file: " + file.getAbsolutePath() + ": " + e.getMessage());
+	}
+}
+{% endhighlight %}  
+  
+## Character Streams
+  
+  
 # 참고   
 * https://newcircle.com/bookshelf/java_fundamentals_tutorial/input_output  
