@@ -104,18 +104,18 @@ public class Remove {
 ## Byte Streams  
 * InputStream - byte를 읽기 위한 추상 클래스  
 	* read()  
-		* 1바이트를 읽거나 바이트 배열로 복사한다  
+		* 1byte를 읽거나 바이트 배열로 복사한다  
 	* skip()  
 	* mark(), reset()  
 	* close() 
 		* finally 블럭 내에서 처리 해야 한다  
 * OutputStream - byte를 쓰기 위한 추상 클래스  
 	* write()  
-		* 1바이트를 출력하거나 바이트 배열을 출력한다  
+		* 1byte를 출력하거나 바이트 배열을 출력한다  
 	* flush()  
 	* close()  
-* 아무 파라미터가 없는 `InputStream.read()` 메서드는 int 값(읽은 바이트의 수)을 리턴한다. 만약 스트림의 끝에 다다르면 -1을 리턴한다  
-* 한번에 한 바이트씩 읽고 쓰려면 다음과 형태로 작성해야 한다 
+* 아무 파라미터가 없는 `InputStream.read()` 메서드는 int 값(읽은 byte의 수)을 리턴한다. 만약 스트림의 끝에 다다르면 -1을 리턴한다  
+* 한번에 한 byte씩 읽고 쓰려면 다음과 형태로 작성해야 한다 
   
 {% highlight java %}  
 int b = 0;
@@ -124,7 +124,7 @@ while ((b == fis.read()) != -1) {
 }
 {% endhighlight %}  
   
-* 위와는 다르게 바이트 배열을 이용하여 버퍼 형태로 사용하는 것이 훨씬 효율적이다  
+* 위와는 다르게 byte 배열을 이용하여 버퍼 형태로 사용하는 것이 훨씬 효율적이다  
   
 {% highlight java %}  
 private static void read(File file) {
@@ -147,8 +147,94 @@ private static void read(File file) {
 }
 {% endhighlight %}  
   
-## Character Streams
+## Character Streams  
+* Reader - character를 읽기 위한 추상 클래스  
+	* read()  
+		* 1 char(2 bytes)를 읽거나 char 배열로 복사한다  
+	* skip()  
+	* mark(), reset()  
+	* close() 
+		* finally 블럭 내에서 처리 해야 한다  
+* Writer - character를 쓰기 위한 추상 클래스  
+	* write()  
+		* 1 char(2 bytes)를 출력하거나 char 배열을 출력한다  
+	* flush()  
+	* close()  
+* 아무 파라미터가 없는 `ReaderReader.read()` 메서드는 int 값(읽은 char의 수)을 리턴한다. 만약 스트림의 끝에 다다르면 -1을 리턴한다  
+* 한번에 한 byte씩 읽고 쓰려면 다음과 형태로 작성해야 한다 
   
+  
+{% highlight java %}  
+private static void readDefault(File file) {
+	try {
+		FileReader reader = new FileReader(file);
+		try {
+			int ch;
+			while ((ch = reader.read()) != -1) {
+				System.out.print((char) ch);
+			}
+			System.out.flush();
+		} finally {
+			reader.close();
+		}
+	} catch (FileNotFoundException e) {
+		System.err.println("No such file exists: " + file.getAbsolutePath());
+	} catch (IOException e) {
+		System.err.println("Cannot read file: " + file.getAbsolutePath() + ": " + e.getMessage());
+	}
+}
+{% endhighlight %}  
+  
+  
+## Exception Handling in Java I/O  
+* 대부분의 I/O 클래스 생성자와 메서드들은 checked exception을 던질 수 있다  
+* I/O exception들의 기본이 되는 클래스는 `java.io.IOException`이다  
+	* 몇몇 메소드들은 IOException의 자식 클래스를 던진다  
+	* 예를들어 FileInputStream, FileOutputStream, FileReader의 생성자들은 FileNotFoundException을 던질 수 있다  
+* close() 메서드가 Exception이 발생 하였을때도 호출되는 것을 보장하기 위해서는 반드시 finally 블럭내에서 호출해야 한다 
+  
+  
+## Java File I/O Classes  
+* `java.io` 패키지에는 파일 I/O 처리를 위해 구현된 클래스들이 포함되어 있다  
+	* FileInputStream, FileOutputStream, FileReader, FileWriter  
+* 오버로드된 다양한 생성자들은 파일 path, File 객체와 같은 것들을 이용하여 객체를 생성 할 수 있도록 해준다   
+	* 만약 생성자에서 file을 열 수 없을 경우 FileWriter를 제외한 다른 클래스들은  FileNotFoundException을 던진다  
+	* FileWriter는 IOException을 던진다  
+* FileOutputStream과 FileWriter의 생성자는 만약 파일이 존재하지 않을 경우 OS에서 파일 생성을 금지하지 않는다면 파일을 생성한다  
+* 기본적으로 파일을 쓸때는 파일의 첫 부분부터 쓰게 된다. 즉 파일에 데이터가 있을 경우 덮어쓰게 된다  
+	* append 속성이 있는 생성자를 이용하여 `true`로 지정하면 파일 데이터의 끝에 이어서 쓰게 된다  
+* FileWriter와 FileReader는 character변환을 위하여 기본으로 시스템의 인코딩 방식을 사용한다. 만약 이 인코딩을 바꾸고 싶다면 파일을 FileInputStream이나 FileOutputStream을 이용하여 열어야 한다. 그리고 InputStreamReader이나 OutputStreamWriter를 adapter로 이용하면서 인코딩 타입을 지정할 수 있다  
+  
+{% highlight java %}  
+private static void readUTF8(File file) {
+	try {
+		FileInputStream fis = new FileInputStream(file);
+		InputStreamReader reader = new InputStreamReader(fis, "UTF-8");
+
+		try {
+			OutputStreamWriter writer = new OutputStreamWriter(System.out, "UTF-8");
+			
+			int ch;
+			while ((ch = reader.read()) != -1) {
+				writer.write(ch);
+			}
+			writer.flush();
+		} finally {
+			reader.close();
+		}
+	} catch (FileNotFoundException e) {
+		System.err.println("No such file exists: " +  file.getAbsolutePath());
+	} catch (IOException e) {
+		System.err.println("Cannot read file: " + file.getAbsolutePath() + ": " + e.getMessage());
+	}
+}
+{% endhighlight %}  
+  
+## Easy Text Output: PrintWriter/PrintStream  
+  
+## Reading from the Terminal
+  
+## Filtered Streams
   
 # 참고   
 * https://newcircle.com/bookshelf/java_fundamentals_tutorial/input_output  
