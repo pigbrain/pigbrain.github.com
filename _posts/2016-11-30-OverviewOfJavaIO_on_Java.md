@@ -231,10 +231,20 @@ private static void readUTF8(File file) {
 {% endhighlight %}  
   
 ## Easy Text Output: PrintWriter/PrintStream  
+* PrintWriter와 PrintStream은 일반적인 텍스트 출력 작업을 단순화하도록 설계되었다  
+	* print() 메서드는 모든 자바의 primitive 타입들에 대해 String 형태로 출력가능 하도록 오버로드되어 있고 모든 오브젝트들에 대해서는 toString() 메서드를 자동적으로 호출하여 출력한다  
+	* println() 메서는 print()와 동일하지만 플랫폼에 따른 줄바꿈 문자가 추가된다  
+	* format() 메서드와 printf() 메서드는 다양한 형태로 출력을 하기위한 메서드이다  
+		* printf()메서드는 C언어의 근간하여 디자인 되었다  
+	* 이 클래스의 메서드들은 IOException을 던지지 않는다. 대신 checkError()메서드를 통하여 예외 상황에서 내부적으로 셋팅된 플래그의 값을 검사할 수 있다  
+* System.out과 System.err는 PrintStream의 인스턴스이다  
   
 ## Reading from the Terminal
   
 ## Filtered Streams
   
-# 참고   
+## Object Serialization 
+  
+  
+# 원문   
 * https://newcircle.com/bookshelf/java_fundamentals_tutorial/input_output  
