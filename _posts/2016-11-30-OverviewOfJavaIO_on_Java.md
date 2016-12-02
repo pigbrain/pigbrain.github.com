@@ -240,10 +240,42 @@ private static void readUTF8(File file) {
 * System.out과 System.err는 PrintStream의 인스턴스이다  
   
 ## Reading from the Terminal
+* 어떤 역사적인(?) 이유로 System.in 오브젝트는 Writer가 아닌 InputStream의 인스턴스이다  
+	* read() 메서드는 character가 아닌 1byte를 읽는다  
+* java.io.InputStreamReader를 adapter로 사용할 수 있다  
+	* 기본적으로 byte들을 읽고 시스템 인코딩 타입에 맞는 character 형태로 변환해준다  
+	* InputStreamReader에는 다양한 생성자가 오버로드 되어 있어서 시스템 인코딩 타입 외에 다른 타입을 지정할 수 있다  
+	* read()메서드는 한번에 1 character를 읽기 위해 사용 할 수 있다  
+* java.io.BufferedReader 클래스는 character 스트림에서 조금 더 효율적인 처리를 위하여 character들을 버퍼로 관리한다  
+	* BufferedReader 클래스가 가지고 잇는 readLine()메서드는 줄바꿈 문자를 제거하고 줄 단위로 입력된 텍스트를 String 객체 형태로 리턴해준다  
+* InputStreamReader와 BufferedReader를 혼합하여 터미널에서 입력한 데이터를 편리하게 처리할 수 있다  
   
-## Filtered Streams
+{% highlight java %}  
+BufferedReader input = new BufferedReader(new InputStreamReader(System.in) );
+String line = input.readLine();
+{% endhighlight %}  
   
-## Object Serialization 
+* 터미널에서 줄 단위로 입력을 받기위해서는 아래와 같이 할 수 있다  
+{% highlight java %}  
+package com.marakana.demo;
+
+import java.io.*;
+
+public class HelloYou {
+	public static void main(String[] args) {
+		System.out.print("What's your name? ");
+		
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in) );
+		
+		try {
+			String name = input.readLine();
+			System.out.println("Hello, " + name + "!");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+{% endhighlight %}  
   
   
 # 원문   
