@@ -12,7 +12,9 @@ tags: [Spring]
 <br>  
 
 # Getting Ready  
+  
 ### Application Setup  
+  
 * `pom.xml`에 디펜던시를 추가한다  
 
 {% highlight xml %}  
@@ -60,7 +62,6 @@ public class IndexController {
     @Autowired
     SampleService sampleService;
  
- 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView index() {
         return new ModelAndView(PAGE_INDEX, "signupForm", new SignupForm());
@@ -81,15 +82,50 @@ public class IndexController {
         }
         return returnPage;
     }
- 
-    @RequestMapping(value = "/security-error", method = RequestMethod.GET)
-    public String securityError(RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("page_error", "You do have have permission to do that!");
-        return "redirect:/";
-    }
 }
 {% endhighlight %}  
   
+# Create The Spring MVC Test Class  
+* Mockito를 사용하여 Service객체를 Mock처리 한다  
+  
+{% highlight java %}  
+public class IndexControllerTest {
+ 
+    @Mock
+    private SampleService sampleService;
+ 
+    @InjectMocks
+    private IndexController indexController;
+ 
+    private MockMvc mockMvc;
+ 
+    @Before
+    public void setup() {
+ 
+        // Process mock annotations
+        MockitoAnnotations.initMocks(this);
+ 
+        // Setup Spring test in standalone mode
+        this.mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
+ 
+    }
+
+    @Test
+    public void testCreateSignupFormInvalidUser() throws Exception {
+ 
+        when(sampleService.saveFrom(any(SignupForm.class)))
+                .thenThrow(new InvalidUserException("For Testing"));
+ 
+        this.mockMvc.perform(post("/create")
+                .param("email", "mvcemail@test.com")
+                .param("firstName", "mvcfirst")
+                .param("lastName", "mvclastname"))
+                .andExpect(status().isOk())
+                .andExpect(forwardedUrl(IndexController.PAGE_INDEX))
+                .andExpect(model().attributeExists("page_error"));
+    }
+}
+{% endhighlight %}  
   
 # 원문  
 * https://www.luckyryan.com/2013/08/24/unit-test-controllers-spring-mvc-test/  
