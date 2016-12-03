@@ -8,13 +8,10 @@ tags: [Spring]
   
 <!--more-->  
   
-* 스프링 MVC Test 프로젝트는 컨트롤러를 테스트 할 수 있는 기능을 제공한다  
-<br>  
-
-### 질문  
+### 문제  
 몇 개의 컨트롤러 클래스와 `@ControllerAdvice`로 표시된 클래스가 있다. `Spring MVC 3.2`을 사용하고 있다. 톰캣을 실행시키고 브라우저를 통하여 리퀘스트를 보내면 @ControllerAdvice가 정상적으로 동작하지만 유닛테스트에서는 동작하지 않는다.  
   
-### 답변
+### 해결  
 `@ControllerAdvice`가 표시된 클래스가 `MyControllerAdvice`라고 가정하자. 그리고 MockMvc에 아래와 같이 ExceptionResolver를 등록하면 된다.  
   
   
