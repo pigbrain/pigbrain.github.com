@@ -52,6 +52,7 @@ tags: [Math]
 	* `λx.xy`에서 x는 bound 변수이고 y는 free 변수이다  
 	* `(λx.x)(λy.yx)`의 첫번째 expression에서 x는 bound되었고 두번째 expression에서 y도 bound 되었지만 x는 free 변수 이다  
 * 다음의 경우 name(variable)은 free변수라고 판단한다  
+  
 ```
  - <name>은 <name> expression에서 free 변수이다  
  - 만약 <name> ≠ <name1>이면 λ<name1>에서 <name>은 free 변수이다  
@@ -59,6 +60,7 @@ tags: [Math]
 ```
   
 * 다음의 경우 name(variable)은 bound변수라고 판단한다  
+  
 ```
  - 만약 <name> = <name1>이면 λ<name1>에서 <name>은 bound 변수이다  
  - 만약 A나 B에서 <name>이 bound라면 <name>은 A.B에서 bound이다  
