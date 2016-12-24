@@ -68,7 +68,40 @@ tags: [Math]
   
 * `(λx.xy)(λy.y)`의 첫번째 expression에서 y는 free변수이고 두번째 expression에서 y는 bound 변수이다  
   
+## Substitution  
   
+* (λx.x)는 항등 함수이며 I로 표현할 수 있다
+```
+I ≡ (λx.x)  
+II ≡ (λx.x)(λz.z)    
+[λz.z/x]x = λz.z ≡ I  
+```
+
+* name이 동일할 때 free변수와 bound 변수의 혼동을 막기 위해 다른 name을 사용할 수 있다  
+  
+```
+(λx.(λy.xy))y  
+= (λx.(λt.xt))y  
+= (λt.yt)  
+```  
+  
+# Arithmetic  
+  
+## Addition  
+
+## Multiplication  
+
+# Conditionals  
+  
+## Logical operations  
+  
+## A conditional test  
+  
+## The predecessor function  
+  
+## Equality and inequalities  
+  
+# Recursion    
   
 # 참고
 * http://www.inf.fu-berlin.de/lehre/WS03/alpi/lambda.pdf  
