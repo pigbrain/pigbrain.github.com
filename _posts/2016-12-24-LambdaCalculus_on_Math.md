@@ -86,11 +86,67 @@ II ≡ (λx.x)(λz.z)
 ```  
   
 # Arithmetic  
+* λ-calculus에서 숫자는 0부터 시작하고 다음 수를 가르키는 s(succesor) 함수를 이용하여 다음과 같이 표시된다  
+  
+```
+0 = zero ≡ λs.(λz.z) = λsz.z
+1 = suc(zero) ≡ λsz.s(z)
+2 = suc(suc(zero)) ≡ λsz.s(s(z))
+```
+  
+* succesor(S) 함수는 아래와 같이 정의한다  
+  
+```
+S ≡ λwyx.y(wyx)
+```
+  
+* S0 즉 1을 구하기 위해서 S함수에 zero를 적용한다  
+  
+```
+S0 ≡ (λwyx.y(wyx))(λsz.z)       // w에 λsz.z 대입  
+   = λyx.y((λsz.z)yx)           // s, z에 y, x를 대입 
+   = λyx.y(x)  
+   ≡ 1
+```
+  
+  
   
 ## Addition  
+  
+* 2 + 3을 계산하고자 한다면 3에 successor 함수를 2번 적용하면 된다  
+
+``` 
+2S3 ≡ (λsz.s(sz))(λwyx.y(wyx))(λuv.u(u(uv)))
+    = (λwyx.y(wyx))((λwyx.y(wyx))(λuv.u(u(uv))))
+	= (λwyx.y(wyx))(λyx.y((λuv.u(u(uv)))yx))
+    = (λwyx.y(wyx))(λyx.y(y(y(yx))))
+    = λyx.y((λyx.y(y(y(yx))))(yx))
+    = λyx.y(y(y(yy(yx))))
+    ≡ 5
+    
+```  
 
 ## Multiplication  
+  
+* x와 y를 곱하는 것은 다음 함수를 이용한다  
+  
+```
+λxyz.x(yz)
 
+2 * 2 ≡ (λxyz.x(yz))22
+      = λz.2(2z)
+      = λz.2(2z)
+      = λz.(λuv.u(uv))(λuv.u(uv))z
+      = λz.(λuv.u(uv))(λv.z(zv))
+      = λz.(λv.(λv.z(zv))((λv.z(zv))v)
+      = λz.(λv.(λv.z(zv))(z(zv))
+      = λz.(λv.z(z(z(zv))))
+      = λzv.z(z(z(zv))))
+      ≡ 4
+```  
+  
+
+  
 # Conditionals  
   
 ## Logical operations  
