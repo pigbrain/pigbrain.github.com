@@ -70,13 +70,14 @@ tags: [Math]
   
 ## Substitution  
   
-* (λx.x)는 항등 함수이며 I로 표현할 수 있다
+* (λx.x)는 항등 함수이며 I로 표현할 수 있다  
+* 
 ```
 I ≡ (λx.x)  
 II ≡ (λx.x)(λz.z)    
 [λz.z/x]x = λz.z ≡ I  
 ```
-
+  
 * name이 동일할 때 free변수와 bound 변수의 혼동을 막기 위해 다른 name을 사용할 수 있다  
   
 ```
