@@ -86,7 +86,7 @@ II ≡ (λx.x)(λz.z)
 ```  
   
 # Arithmetic  
-* λ-calculus에서 숫자는 0부터 시작하고 다음 수를 가르키는 s(succesor) 함수를 이용하여 다음과 같이 표시된다  
+* λ-calculus에서 숫자는 0부터 시작하고 다음 수를 가르키는 **s**(succesor) 함수를 이용하여 다음과 같이 표시된다  
   
 ```
 0 = zero ≡ λs.(λz.z) = λsz.z
@@ -94,13 +94,13 @@ II ≡ (λx.x)(λz.z)
 2 = suc(suc(zero)) ≡ λsz.s(s(z))
 ```
   
-* succesor(S) 함수는 아래와 같이 정의한다  
+* succesor(**S**) 함수는 아래와 같이 정의한다  
   
 ```
 S ≡ λwyx.y(wyx)
 ```
   
-* S0 즉 1을 구하기 위해서 S함수에 zero를 적용한다  
+* S0 즉 1을 구하기 위해서 **S**함수에 zero를 적용한다  
   
 ```
 S0 ≡ (λwyx.y(wyx))(λsz.z)       // w에 λsz.z 대입  
@@ -118,7 +118,7 @@ S0 ≡ (λwyx.y(wyx))(λsz.z)       // w에 λsz.z 대입
 ``` 
 2S3 ≡ (λsz.s(sz))(λwyx.y(wyx))(λuv.u(u(uv)))
     = (λwyx.y(wyx))((λwyx.y(wyx))(λuv.u(u(uv))))
-	= (λwyx.y(wyx))(λyx.y((λuv.u(u(uv)))yx))
+    = (λwyx.y(wyx))(λyx.y((λuv.u(u(uv)))yx))
     = (λwyx.y(wyx))(λyx.y(y(y(yx))))
     = λyx.y((λyx.y(y(y(yx))))(yx))
     = λyx.y(y(y(yy(yx))))
@@ -145,11 +145,38 @@ S0 ≡ (λwyx.y(wyx))(λsz.z)       // w에 λsz.z 대입
       ≡ 4
 ```  
   
-
-  
 # Conditionals  
+* true를 나타내는 **T** 그리고 false를 나타내는 **F**는 다음과 같이 정의한다  
+
+```
+T ≡ λxy.x 
+F ≡ λxy.y 
+```
+  
   
 ## Logical operations  
+* **AND(∧)**
+  
+```
+∧ ≡ λxy.xy(λuv.v) ≡ λxy.x(F)
+```  
+  
+* **OR(∨)**
+  
+```
+∨ ≡ λxy.xy(λuv.u)y ≡ λxy.xTy
+```  
+  
+* **NOT(ㄱ)**
+  
+```
+ㄱ ≡ λx.x(λuv.v)(λab.a) ≡ λx.xFT
+
+ㄱT ≡ λx.x(λuv.v)(λab.a)(λcd.c)
+    = (λcd.c)(λuv.v)(λab.a)
+    = λuv.v
+    ≡ F
+```    
   
 ## A conditional test  
   
