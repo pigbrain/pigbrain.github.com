@@ -71,7 +71,7 @@ tags: [Math]
 ## Substitution  
   
 * (λx.x)는 항등 함수이며 I로 표현할 수 있다  
-* 
+  
 ```
 I ≡ (λx.x)  
 II ≡ (λx.x)(λz.z)    
