@@ -180,12 +180,67 @@ F ≡ λxy.y
 ```    
   
 ## A conditional test  
+* 숫자가 0(zero)일때 true이고 0 외에는 false를 나타내는 함수 **Z**는 다음과 같이 정의한다  
+  
+```
+Z ≡ λx.xFㄱF
+
+cf )
+    0fa ≡ (λsz.z)fa = a        // a에 함수 f를 0번 적용하면 자기자신 a가 결과값이 된다  
+    Fa ≡ (λxy.y)a = λy.y ≡ I   // F(false)에는 어떠한 값을 적용하더라도 I(항등함수)가 된다  
+```
+  
+* **Z**에 0을 적용하면 true가 되어야 한다  
+  
+```
+Z0 ≡ (λx.xFㄱF)0 = 0FㄱF = ㄱF = T
+```
   
 ## The predecessor function  
+* λ-calculus에서 쌍(pair) (a, b)는 다음과 같이 정의한다  
   
-## Equality and inequalities  
+```
+(λz.zab)
+```
+  
+* n의 predecessor n-1을 찾기 위한 일반적인 방법은 쌍(n, n-1)을 만들고 두번째 요소를 결과로 선택하는 것이다  
+* pair 에서 첫번째와 두번째 요소를 각각 택하는 방법은 다음과 같다  
+  
+```
+(λz.zab)T = Tab = a      // 첫번째 요소를 선택, pair에 T(true)함수를 적용한다  
+(λz.zab)F = Fab = b      // 두번째 요소를 선택, pair에 F(false)함수를 적용한다  
+```
+  
+* 다음 함수는 (n, n-1)에서 (n+1, n)을 생성한다  
+  
+```
+∮ ≡ (λpz.z(S(pT)(pT))
+
+∮(n, n-1) ≡ (λpz.z(S(pT)(pT))(n, n-1)
+          = λz.z(S((n, n-1)T)((n, n-1)T))
+          = λz.z(n+1, n)
+          = (n+1, n)
+```
+  
+* 어떤 수 n의 predecessor를 찾기 위해서는 λ.z00 (0, 0)에서 ∮함수를 n번 적용 후 두번째 요소를 택하면 된다  
+  
+```
+P ≡ (λn.n∮(λz.z00))F
+```
   
 # Recursion    
+* λ-calculus에서 재귀(recursion) 함수는 어떤 함수를 호출하였을때 자기 자신을 다시 생성하는 것을 의미한다 * 재귀 함수는 아래와 같이 정의한다  
+   
+```
+Y ≡ (λy.(λx.y(xx))(λx.y(xx))) 
+
+YR ≡ (λy.(λx.y(xx))(λx.y(xx)))R   
+   = (λx.R(xx))(λx.R(xx))
+   = R((λx.R(xx))(λx.R(xx)))
+   = R(YR)
+```
+  
+  
   
 # 참고
 * http://www.inf.fu-berlin.de/lehre/WS03/alpi/lambda.pdf  
