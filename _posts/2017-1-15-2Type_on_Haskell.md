@@ -1,5 +1,3 @@
-ghci>:t minBound
-minBound :: Bounded a => a
 ---
 layout: post
 category: Haskell
