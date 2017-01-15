@@ -3,7 +3,7 @@ layout: post
 category: Math
 title: Haskell에 대한 소개와 설치 
 tagline: by Pigbrain
-tags: [Math]
+tags: [Haskell]
 ---
 
 <!--more-->
