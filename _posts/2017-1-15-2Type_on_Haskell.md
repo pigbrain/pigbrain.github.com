@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Haskell
-title: Haskell 시작하기  
+title: Haskell 타입  
 tagline: by Pigbrain
 tags: [Haskell]
 ---
