@@ -1,6 +1,6 @@
 ---
 layout: post
-category: Math
+category: Haskell
 title: Haskell에 대한 소개와 설치 
 tagline: by Pigbrain
 tags: [Haskell]

@@ -1,6 +1,6 @@
 ---
 layout: post
-category: Math
+category: Haskell
 title: Haskell 시작하기  
 tagline: by Pigbrain
 tags: [Haskell]
@@ -151,7 +151,20 @@ ghci>reverse [5, 4, 3, 2, 1]
   
 # 범위  
  
- 
+```
+ghci>[1..10]
+[1,2,3,4,5,6,7,8,9,10]
+ghci>[2,4..20]
+[2,4,6,8,10,12,14,16,18,20]
+ghci>take 10 (cycle [1,2,3])
+[1,2,3,1,2,3,1,2,3,1]
+```
+* *..*를 이용하여 범위의 값을 열거할 수 있다  
+* 첫 번쨰, 두 번째 값을 지정하면 이 두 값의 차이(간격)에 따라 값을 열거한다  
+* **cycle**은 리스트를 받아서 무한 리스트를 만들기 위해서 항목들을 무한히 복제한다  
+	* **take** 없이 실행할 경우 출력이 멈추지 않는다  
+
+# 리스트 Comprehension   
  
  
   
