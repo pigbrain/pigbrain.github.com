@@ -21,7 +21,7 @@ tags: [Haskell]
 * 하스켈은 Lazy하게 동작한다  
 	* 함수의 결과를 표시할 필요가 있을 떄까지 함수를 실행하지 않는다   	
   
-# Haskell 설치 
+# Haskell 설치  
 * Mac (https://www.haskell.org/platform/#osx-homebrewcask)  
 
 ```
@@ -33,13 +33,14 @@ $ brew cask install haskell-platform
 	* GHC는 하스켈 스크립트(*.hs)를 컴파일 할 수 있다   
 	* GHC는 하스켈을 interactive모드로 실행 할 수 있다     
 * 하스켈 플램폼은 Cabal이라는 빌드, 패키지 관리 시스템을 포함하고 있다  
-
-# IntelliJ에 Haskell 설정  
+  
+  
+# IntelliJ에 Haskell 설정       
 ## Haskell 플러그인 설치  
  * Configure > Plugins > Browse Repositories 에서 `haskell` 검색
  * JetBrains에서 개발한 `Haskell` 플러그인 설치 
   
-## Haskell SDK 설정 
+## Haskell SDK 설정  
 * Project Structure > Add New SDK > `GHC`
 * GHC home path 입력 
 	* /Library/Frameworks/GHC.framework/Versions/...
