@@ -35,7 +35,8 @@ $ brew cask install haskell-platform
 * 하스켈 플램폼은 Cabal이라는 빌드, 패키지 관리 시스템을 포함하고 있다  
   
   
-# IntelliJ에 Haskell 설정       
+# IntelliJ에 Haskell 설정   
+      
 ## Haskell 플러그인 설치  
  * Configure > Plugins > Browse Repositories 에서 `haskell` 검색
  * JetBrains에서 개발한 `Haskell` 플러그인 설치 
