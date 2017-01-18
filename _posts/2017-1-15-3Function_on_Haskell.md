@@ -143,6 +143,16 @@ calcBmis xs = [bmi w h | (w, h) <- xs]
 ```  
 * where 블럭 속에 함수를 정의할 수 있다  
   
+```  
+# calcBmis.hs  
+calcBmis :: [(Double, Double)] -> [Double]
+calcBmis xs = [bmi w h | (w, h) <- xs]
+    where bmi weight height = weight / height ^ 2  
+  
+ghci> calcBmis [(4, 2)]
+[1.0]
+```  
+  
 # let  
 * let 표현식은 where와 매우 비슷하다   
 * let 표현식은 적용 범위가 매우 작아서 가드에서는 보이지 않는다  
@@ -160,7 +170,56 @@ ghci>cylinder 4 5
 226.1946710584651  
 ```    
   
+* let 표현식은 로컬 영역의 함수를 실행하기 위하여 사용될 수 있다  
   
+```  
+ghci> [let square x = x * x in (square 5, square 3, square 2)]  
+[(25,9,4)]
+```  
+  
+* let 표현식은 세미콜론으로 구분될 수 있다. 
+	* 여러 가지 변수들을 바인딩하고자 할 때 유용하다 
+	* 줄을 바꿔서 열에 맞춰 정렬하면 안 된다 
+```  
+ghci> (let a = 100; b = 200; c = 300 in a * b * c, let foo = "Hey "; bar = "there!" in foo ++ bar)  
+(6000000,"Hey there!")  
+```  
+  
+* let 표현식으로 다음과 같이 튜플의 요소들을 해체하고 바인딩하기 위한 패턴 매칭을 할 수 있다  
+```  
+ghci> (let (a, b, c) = (1, 2, 3) in a + b + c) * 100
+600  
+```  
+  
+* let 표현식은 리스트 Comprehension에서도 사용할 수 있다  
+```
+# calcBmis.hs
+calcBmis :: [(Double, Double)] -> [Double]
+calcBmis xs = [bmi | (w, h) <- xs, let bmi = w / h ^2]  
+```  
+  
+# case  
+* case 표현식은 특정 변수의 특정 값에 대한 코드 블록을 실행할 수 있게 해준다  
+  
+```  
+# head.hs  
+head' :: [a] -> a
+head' xs = case xs of [] -> error "No head for empty list!"
+                      (x:_) -> x
+
+ghci> head' "Hello World"
+'H'
+```  
+  
+* 함수 정의부에서의 패턴 매칭은 case 표현식을 사용하는 것과 동일하다  
+```
+describeList :: [a] -> String
+describeList ls = "The list is " ++ what ls
+    where what [] = "empty."
+          what [x] = "a singleton list."
+          what xs = "a longer list."
+```  
+
     
 # 참고 
 * http://www.yes24.com/24/Goods/12155304?Acode=101  
