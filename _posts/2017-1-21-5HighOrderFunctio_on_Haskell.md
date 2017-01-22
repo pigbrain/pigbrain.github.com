@@ -90,6 +90,7 @@ ghc> applyTwice (3:) [1]
 ```
 # zipWith.hs
 zipWith' :: (a -> b -> c) -> [a] -> [b] -> [c]
+-- zipWith' :: (a -> a -> a) -> [a] -> [a] -> [a] 
 zipWith' _ [] _ = []
 zipWith' _ _ [] = []
 zipWith' f (x:xs) (y:ys) = f x y : zipWith' f xs ys
@@ -106,6 +107,109 @@ ghc> zipWith' (zipWith' (*)) [[1,2,3], [3,5,6], [2,3,4]] [[3,2,2], [3,4,5], [5,4
   
   
 ## flip  
+* flip함수는 함수를 받아서 인자들을 뒤바꾼 원본 함수와 같은 함수를 반환한다   
+
+```
+# flip.hs  
+flip' :: (a -> b -> c) -> (b -> a -> c)
+flip' f x y = f y x
+{-
+flip' f = g
+    where g x y = f y x
+-}  
+
+ghc> flip' zip [1, 2, 3, 4, 5] "Hello"
+[('H',1),('e',2),('l',3),('l',4),('o',5)]  
+ghc> zipWith (flip' div) [2, 2..] [10, 8, 6, 4, 2]
+[5,4,3,2,1]
+```  
+  
+## map  
+* map함수는 함수와 리스틀 받아서 새로운 리스틀 생성하기 위해 리스트에 있는 모든 요소에 그 함수를 적용한다  
+  
+```
+# map.hs  
+map' :: (a -> b) -> [a] -> [b]
+map' _ [] = []
+map' f (x:xs) = f x : map' f xs
+
+ghc> map' (+3) [1, 5, 3, 1, 6]
+[4,8,6,4,9]
+ghc> map' (++ "!") ["BIFF", "BANG", "POW"]
+["BIFF!","BANG!","POW!"]
+```
+  
+## filter  
+* filter함수는 조건과 리스트를 받아서 그 조건에 만족하는 요소들의 리스트를 반환한다  
+* 조건(predicate)은 참인지, 거짓인지(Boolean)를 알려주는 함수다  
+  
+```
+# filter.hs  
+filter' :: (a -> Bool) -> [a] -> [a]
+filter' _ [] = []
+filter' f (x:xs)
+        | f x = x : filter' f xs
+        | otherwise = filter' f xs
+  
+ghc> filter (> 3) [1, 5, 3, 2, 1, 6, 4, 3, 2, 1]
+[5,6,4]
+ghc> filter (== 3) [1, 5, 3, 2, 1, 6, 4, 3, 2, 1]
+[3,3]
+```  
+  
+## map & filter  
+  
+```
+ghc> sum (takeWhile (< 10000) (filter odd (map (^2) [1..])))
+166650
+
+ghc> let listOfFuns = map (*) [0..]
+ghc> (listOfFuns !! 4) 5   -- 리스트에서 4번쨰 요소를 꺼낸다 
+20
+```
+
+# 람다 (Lambda)  
+* 람다는 함수가 단 한 번만 필요할 떄 사용하는 익명 함수다    
+* 람다를 선언하기 위해 \를 사용한다    
+	* 그리스 문자 (λ)와 빗스해 보이기 떄문에 \를 사용한다   
+  
+```
+ghc> map (+3) [1, 6, 3, 2]
+[4,9,6,5]
+ghc> map (\x -> x + 3) [1, 6, 3, 2]
+[4,9,6,5]
+ghc> map (\(a,b) -> a + b) [(1,2), (6,3)]
+[3,9]
+```
+  
+* 람다에서 패턴 매칭이 실패하면 런타임 에러가 발생한다   
+
+```
+# addThree.hs
+addThree :: Int -> Int -> Int -> Int
+addThree x y z = x + y + z
+
+addThree' :: Int -> Int -> Int -> Int
+addThree' = \x -> \y -> \z -> x + y + z
+
+ghc> addThree 2 3 5
+10
+ghc> addThree' 2 3 5
+10
+```  
+* 함수들은 기본적으로 커리되기 때문에 위 두 함수는 동일하다  
+  
+```  
+# flip.hs 
+flip' :: (a -> b -> c) -> (b -> a-> c)
+flip' f = \x y -> f y x
+
+ghc> map (flip' subtract 20) [1, 2, 3, 4]
+[19,18,17,16]
+```   
+  
+
+ 
   
 
   
