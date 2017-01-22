@@ -313,10 +313,84 @@ ghc> map ($ 3) [(4+), (10*), (^2), sqrt]
 ```  
   
 # 합성 함수 (function composition)  
+* 수학에서 합성 함수는  `(f ◦ g)(x) = f(g(x))` 와 같이 정의된다  
+* 두 개의 함수를 합성하는 것은 어떤 값을 가지고 하나의 함수를 호출한 다음, 그 결과로 다른 함수를 호출하는 것과 동일하다는 의미다  
+* 하스켈의 합성함수 **.**도 수학적 정의와 매우 유사하다  
+* 합성함수는 right-associative이다  
+	* `f (g (z x))`는 `(f . g. z) x`와 같다 
+   
+    
+```
+ghc> :t (.)
+(.) :: (b -> c) -> (a -> b) -> a -> c
+
+f . g = \x -> f (g x)
+``` 
+* 타입 선언에서 f는 g의 반환 값과 같은 타입을 갖는 값을 매개변수로 받아야 한다  
+* 결과 함수는 g가 받는 것과 동일한 타입의 매개변수를 받아 f가 반환하는 것과 동일한 타입의 값을 반환한다   
+
+```
+ghc> map (\x -> negate (abs x)) [-5, -3, 6, -3, 2, 24]
+[-5,-3,-6,-3,-2,-24]
+
+ghc> map (negate . abs) [-5, -3, 6, -3, 2, 24]
+[-5,-3,-6,-3,-2,-24]
+
+```  
+* negate 함수는 양수면 음수로, 음수면 양수로 만드는 함수이다  
   
+```
+ghc> map (\xs -> negate (sum (tail xs))) [[1..5], [3..6], [1..7]][-14,-15,-27]
+ghc> map (negate . sum . tail) [[1..5], [3..6], [1..7]]
+[-14,-15,-27]
+
+ghc> sum (replicate 5 (max 6.7 8.9))
+44.5
+ghc> (sum . replicate 5) (max 6.7 8.9)
+44.5
+ghc> sum . replicate 5 $ max 6.7 8.9
+44.5
+
+ghc> replicate 2 (product (map (*3) (zipWith max [1,2] [4,5])))
+[180,180]
+ghc> replicate 2 . product . map (*3) $ zipWith max [1,2] [4,5]
+[180,180]
+```  
   
+* 합성함수를 일반적으로 사용하는 경우는 point-free 스타일로 함수를 정의하는 것이다   
+
+```
+ghc> fn x = ceiling (negate (tan (cos (max 50 x))))
+```
+* x가 괄호로 둘러싸여 있기 떄문에 양쪽의 오른쪽 편에 있는 두 개의 x를 삭제할 수 없다  
   
+```
+ghc> fn = ceiling . negate . tan . cos . max 50
+```  
   
+* 함수가 너무 복잡할 경우 point-free 스타일로 작성하는 것은 가독성을 더 떨어뜨릴 수 있다  
+* 합성 합수를 길게 연결하는 것을 권장하지는 않는다  
+* 권장되는 스타일은 중간 결과에 표식을 주기 위해 let 바인딩을 사용하는 방법이나 다른 사람이 코드를 쉽게 이해할 수 있도록 작은 문제로 분리하는 방법이다  
+ 
+```
+# oddSqureSum.hs
+oddSquareSum :: Integer
+oddSquareSum = sum (takeWhile (<10000) (filter odd (map (^2) [1..])))
+
+ghc> oddSquareSum
+166650
+
+# oddSqureSum.hs
+oddSquareSum' :: Integer
+oddSquareSum' = sum . takeWhile (<10000) . filter odd $ map (^2)
+[1..]
+
+ghc> oddSquareSum'
+166650
+
+```
+    
+     
     
 # 참고 
 * http://www.yes24.com/24/Goods/12155304?Acode=101  
