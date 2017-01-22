@@ -293,6 +293,26 @@ ghc> scanl (flip (:)) [] [3, 2, 1]
 [[],[3],[2,3],[1,2,3]] 
 ```  
 
+# \$ (function application operator)   
+* 일반적인 함수는 높은 우선순위를 갖는다   
+* \$ 함수는 가장 낮은 우선순위를 갖는다  
+* 일반적인 함수는 left-associative이다  
+	* `f a b c`는 ` (((f a) b) c)`와 같다  
+* \$를 가진 함수는 right-associative이다  
+	* `f $ g $ x`는  `f $ (g $ x)`와 같다  
+* \$는 공백을 사용하지 않도록 해준다  
+  
+```
+ghc> sum (filter (> 10) (map (*2) [2..10]))
+80
+ghc> sum $ filter (> 10) $ map (*2) [2..10]
+80
+
+ghc> map ($ 3) [(4+), (10*), (^2), sqrt]
+[7.0,30.0,9.0,1.7320508075688772]
+```  
+  
+# 합성 함수 (function composition)  
   
   
   
