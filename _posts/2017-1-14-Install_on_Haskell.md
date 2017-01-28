@@ -46,6 +46,10 @@ $ brew cask install haskell-platform
 * GHC home path 입력 
 	* /Library/Frameworks/GHC.framework/Versions/...
 
+# Hoogle  
+* 하스켈의 함수들을 검색하거나 함수들이 어디에 있는지 알아보려면 Hoogle을 이용하자  
+* [Hoogle](http://www.haskell.org/hoogle/)
+
 # 참고 
 * https://www.haskell.org/platform/#osx-homebrewcask  
 * https://www.haskell.org/cabal/  
