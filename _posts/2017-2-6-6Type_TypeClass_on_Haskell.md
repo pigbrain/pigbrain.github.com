@@ -139,8 +139,42 @@ ghc> Just 3 :: Maybe Int
 Just 3
 ```  
   
- 
+# 파생된 인스턴스  
+* 타입 클래스는 어떤 동작을 정의하는 인터페이스의 일종이다    
+* 타입 클래스의 동작을 지원한다면 그 타입은 타입 클래스의 인스턴스가 될 수 있다    
+  
+```
+data Person = Person { firstName :: String
+                     , lastName :: String
+                     , age :: Int
+                     , height :: Float
+                     } deriving (Eq)
 
+ghci> mikeD = Person {firstName = "Michael", lastName="Diamond", age = 43}
+
+ghci> adRock = Person {firstName = "Adam", lastName="Horovitz", age = 41}
+
+ghci> mikeD == adRock
+False
+
+ghci> mikeD == mikeD
+True
+```   
+  
+* 어떤 타입에 대한 Eq 인스턴스를 파생한 다음 == 또는 /=로 그 타입의 두 값들을 비교할 수 있다  
+* 하스켈은 값 생성자가 일치하는지 확인한 다음 ==로 필드들의 각 쌍을 비교한다  
+* 모든 필드의 타입이 Eq타입 클래스에 속해야 정상적으로 동작한다  
+	* 위 예에서 String과 Int는 모두 Eq타입 클래스에 속한다     
+  
+  	   
+# 타입 동의어   
+  
+ ```
+ type String = [Char]  
+ ```  
+   
+  * `type`은 새로운 타입이 생성되는 것이 아닌 긱존의 타입에 대한 동의어를 지정한다  
+  * 새로운 타입이 생성되는 것은 data 키워드로 행해진다  
   
   
        
