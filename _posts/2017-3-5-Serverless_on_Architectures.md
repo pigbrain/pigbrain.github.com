@@ -53,11 +53,18 @@ tags: [Architectures]
 <img src="/assets/themes/Snail/img/Architectures/serverless/serverless_4.png" alt="">    
   
 ## Unpacking ‘Function as a Service’  
-ㅁㅁㅁ
-   
   
-      
-
+* FaaS는 자체 서버 시스템이나 어플리케이션을 관리하지 않고 백엔드 코드를 실행하는 것에 관한 것이다
+	* 이것은 Paas나 Container와 같은 기술과의 주요한 차이점이다  
+* FaaS는 특정한 프레임워크나 라이브러리에 코딩을 할 필요가 없다
+	* FaaS에서 특별하게 필요한 코드는 **main method**와 **startup**코드가  전부이며 나머지는 기존 어플리케이션들과 동일하다  
+* 배포 해야하는 서버 어플리케이션이 없다  
+	* FaaS Provider에 코드를 업로드하는 것이 전부이다  
+* 수평적인 *scaling*은 아무런 설정 없이 Provider에 의하여 자동으로 적용된다  
+* FaaS에 정의된 함수는 이벤트가 발생할때 호출된다  
+* 대부분의 Provider들은 일종의 API Gateway에서 HTTP request로 함수를  호출할 수 있는 기능을 제공한다  
+	* AWS API Gateway  
+	* Webtask  
 
 
 
