@@ -41,6 +41,11 @@ tags: [Architectures]
       
 ### Message-driven applications  
   
+
+<img src="/assets/themes/Snail/img/Architectures/serverless/serverless_3.png" alt="">  
+
+
+<img src="/assets/themes/Snail/img/Architectures/serverless/serverless_4.png" alt="">    
   
   
       
