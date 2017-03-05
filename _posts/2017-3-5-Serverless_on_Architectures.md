@@ -66,7 +66,26 @@ tags: [Architectures]
 	* AWS API Gateway  
 	* Webtask  
 
+### state  
+* FaaS는 **statelss**하게 만들어야 한다  
+  
+### Execution Duration  
+* FaaS는 실행시간이 긴 어플리케이션을 제한한다  
+	* AWS Lambda는 5분 이상 실행되는 어플리케이션은 강제로 종료시킨다  
+  
+### Startup Latency  
+* FaaS 함수가 request부터  response까지 걸리는 시간은 많은 요인에 따라 달라지지만 10ms부터 2분 정도까지 소요될 수 있다  
+  
+* 함수가 JVM에서 구현되었다면 JVM이 실행되는 시간이 포함되어 response까지 10초 이상이 걸릴 수 있다    
+	* 이것은 다음과 같은 상황에서 두드러지게 발생한다   
+		* 10분 이상의 간격으로 드물게 함수가 호출되는 경우  
+		* 갑자기 트래픽이 증가하는 경우   		 		
+	
+### API Gateway  
+* API Gateway는 FaaS 함수와 연관된 라우팅 정보가 있는 HTTP 서버이다  
 
+<img src="/assets/themes/Snail/img/Architectures/serverless/serverless_5.png" alt=""> 
+  
 
 
   
