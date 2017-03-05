@@ -22,16 +22,23 @@ tags: [Architectures]
 <br>  
   
 ## A couple of examples
-### UI-driven applications
+### UI-driven applications (ecommerce app)
 * 전통적인 아키텍처  
 	* 서버는 Java로 구현되었고 클라이언트는 HTML, JS로 구현되었다고 가정한다   
 	* 이 아키텍처에서는 인증, 페이징, 검색 등이 모두 서버에서 구현되어야 한다  
   
-<img src="/assets/themes/Snail/img/Architectures/gfs/serverless_1.png" alt="">  
+<img src="/assets/themes/Snail/img/Architectures/serverless/serverless_1.png" alt="">  
   
 * Serverless 아키텍쳐  
+	1. 인증 관련 코드를 서버에서 제거하고 BaaS로 대체한다  
+	2. 클라이언트가 데이터베이스의 일부 데이터(상품리스트..)에 직접 접근하는 것을 허용한다   
+		* AWS Dynamo  
+	3. 서버에 있던 페이징과 같은 일부 기능들을 클라이언트로 옮겨옴으로써 클라이언트는 [SPA](https://en.wikipedia.org/wiki/Single-page_application)가 된다  
+	4. 검색 관련 기능은 서버에 FaaS로 구현하고 **API Gateway**를 통한 HTTP request로 해당 기능을 사용할 수 있다  
+	5. 구매 기능도 서버에 FaaS로 구현하고 HTTP request로 해당 기능을 사용할 수 있다  
   
-<img src="/assets/themes/Snail/img/Architectures/gfs/serverless_2.png" alt="">  
+<img src="/assets/themes/Snail/img/Architectures/serverless/serverless_2.png" alt="">  
+    
     
   
       
