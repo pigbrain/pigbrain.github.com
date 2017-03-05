@@ -38,8 +38,10 @@ tags: [Architectures]
 	5. 구매 기능도 서버에 FaaS로 구현하고 HTTP request로 해당 기능을 사용할 수 있다  
   
 <img src="/assets/themes/Snail/img/Architectures/serverless/serverless_2.png" alt="">  
-    
-    
+      
+### Message-driven applications  
+  
+  
   
       
 
