@@ -39,14 +39,22 @@ tags: [Architectures]
   
 <img src="/assets/themes/Snail/img/Architectures/serverless/serverless_2.png" alt="">  
       
-### Message-driven applications  
+### Message-driven applications (ad server)
   
-
+* 전통적인 아키텍처  
+	* Ad 서버는 사용자가 광고를 클릭할 경우 리다이렉트를 위한 응답을 보내준다  
+	* Ad 서버는 사용자의 클릭 정보를 channel을 통하여 전송하여 Click Processor가 데이터를 처리할 수 있도록 한다   
+  
 <img src="/assets/themes/Snail/img/Architectures/serverless/serverless_3.png" alt="">  
-
-
+  
+* Serverless 아키텍쳐 
+	* 항상 실행되고 있어야 하는 어플리케이션(Click Processor)를 **event**가 발생했을떄 실행되는 FaaS형태의 어플리케이션으로 대체한다  
+	
 <img src="/assets/themes/Snail/img/Architectures/serverless/serverless_4.png" alt="">    
   
+## Unpacking ‘Function as a Service’  
+ㅁㅁㅁ
+   
   
       
 
