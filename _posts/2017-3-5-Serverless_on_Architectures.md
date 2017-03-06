@@ -131,6 +131,20 @@ tags: [Architectures]
 
 ## ‘Greener’ computing?  
   
+# Drawbacks  
+## Vendor control  
+  
+## Multitenancy Problems  
+  
+## Vendor lock-in  
+  
+## Security concerns  
+  
+## Repetition of logic across client platforms  
+  
+## Loss of Server optimizations  
+  
+## No in-server state for Serverless FaaS
   
 # 원문   
 * https://martinfowler.com/articles/serverless.html  
