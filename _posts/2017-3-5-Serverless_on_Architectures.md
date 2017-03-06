@@ -121,26 +121,15 @@ tags: [Architectures]
 	* 배포하는 것은 단순한 코드이기 때문에 유닛 테스트등을 통하여 테스트가 쉽다  
   
 # Benefits  
-## Reduced operational cost  
-* servelss는 매우 단순한 아웃소싱 솔루션이다  
-* 서버, 데이터베이스, 어플리케이션 로직을 직접 관리하지 않아도 된다  
+* 운영비용을 줄일 수 있다  
+* 빠르게 개발이 가능하다  
+	* IaaS, PaaS는 서버, 운영체제 위에서 개발해야 하는 반면 serverless는 어플리케이션의 일부 컴포넌트만 개발하면 된다  
+* 효율적인 scaling이 가능하다  
+	* 트래픽 수치로 scaling을 하는 것이 아닌 request 단위로 scaling이 가능하여 비용 절감이 가능하다  
+* Greener computing
+	* 서비스 및 엔터프라이즈 데이터 센터의 일반적인 서버는 최대 컴퓨팅 용량의  5 ~ 15%만을 사용한다 (Forbes)  
+	* serverless는 실시간으로 request량에 맞는 컴퓨팅 용량을 제공할 수 있다  
   
-## BaaS - reduced development cost  
-* IaaS, PaaS는 상품화된 서버, 운영체제에  기반을 두고 있다  
-* serverless는 상품화된 어플리케이션의 컴포넌트 정도로 인식된다  
-  
-## FaaS - scaling costs  
-* `horizontal scaling is completely automatic, elastic, and managed by the provider`  
-* 개별 request 수준에서의 scaling이 가능한 만큼 사용된 트래픽만큼만 비용을 지불하면 되기 때문에 매우 절약적이다     
-
-## ‘Greener’ computing?  
-  
-> 서비스 및 엔터프라이즈 데이터 센터의 일반적인 서버는 컴퓨터의 최대 능력치의  5 ~ 15%만을 사용한다 
-  
-> -- Forbes
-  
-* serverless는 실시간으로 request량에 맞는 컴퓨팅 용량을 제공할 수 있다  
-
   
 # Drawbacks  
 ## Vendor control  
