@@ -86,8 +86,51 @@ tags: [Architectures]
 
 <img src="/assets/themes/Snail/img/Architectures/serverless/serverless_5.png" alt=""> 
   
+# What isn’t Serverless?  
+  
+## Comparison with PaaS  
+* 만약 PaaS가 0.5초 동안 실행되는 어플리케이션을 효율적으로 20ms초 이내로 실행할 수 있다면 그것은 serverless라고 할 수 있다  
+	* https://twitter.com/adrianco/status/736553530689998848?ref_src=twsrc%5Etfw  
+	* 대부분의 PaaS 어플리케이션들은 매 request에 대해 어플리케이션을 시작, 종료하지 않는다  
+* FaaS와 PaaS는 **scaling** 관점에서도 차이가 있다  
+	* PaaS에서 autu-scale을 설정하더라도 각각의 request 수준까지는 scaling이 고려되지 않는다  
+* FaaS가 많은 장점이 있지만 PaaS를 사용하는 이유는 다음과 같을 것이다  
+	* 다양한 툴  
+	* API Gateway의 완성도  
+  
+## Comparison with containers  
+* PaaS는 container(Docker..등)를 내장하고 있고 FaaS 만큼 **scaling**을 세밀하게 지원하지 못한다  
+* FaaS는 어플리케이션 별로 event 타입이 많지 않은 **event-driven** 스타일에 적합하다  
+* container는 event 타입이 많은 **synchronous-request driven**스타일에 적합하다  
+  
+  
+## NoOps  
+* serverless는 No Ops를 의미하지 않는다  
+* 모니터링, 배포, 보안, 네트워킹, 디버깅, 시스템 확장등 이러한 문제들은 serverless에도 존재한다  
+* 시스템 관리자는 serverless에도 필요하다  
+   
+## Stored Procedures as a Service  
+* FaaS를 Stored Procedures as a Service라고 부르는 것을 잘못된 것이다  
+	* 대부분의 FaaS 예제가 코드를 저장해놓고 호출하여 실행하는 것만 보여주기 때문에 이와 같이 생각되는 것 같다  
+* stored procedures는 다음과 같은 문제가 있다  
+	* Vendor에 종속되어 있다 (Vendor에서 제공하는 프레임워크 혹은 언어)  
+	* 데이터베이스에서 실행되기 때문에 테스트해보는 것이 어렵다  
+	* 버전 관리가 어렵다  
+* FaaS에서는 stored procedures와 같은 문제가 없다  
+	* Vendor에 종속되지 않은 다양한 언어를 이용하여 개발할 수 있다  
+	* 배포하는 것은 단순한 코드이기 때문에 유닛 테스트등을 통하여 테스트가 쉽다  
+  
+# Benefits  
+## Reduced operational cost  
+  
+## BaaS - reduced development cost  
+  
+## FaaS - scaling costs  
+  
+## Optimization is the root of some cost savings
 
-
+## ‘Greener’ computing?  
+  
   
 # 원문   
 * https://martinfowler.com/articles/serverless.html  
