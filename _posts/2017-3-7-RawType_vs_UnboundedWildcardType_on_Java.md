@@ -1,14 +1,19 @@
 ---
 layout: post
 category: Java
-title: Set vs. Set<?>  
+title: Set vs Set\<?\>  
 tagline: by Pigbrain
 tags: [Java]
 ---
 
 <!--more-->
 
+* Set<?>은 다양한 타입의 값을 가리킬 수 있다.
+* Set역시 다양한 타입의 값을 가리킬 수 있다.  
 
+# Two facts about Set<?> 
+* `?`은 다양한 타입을 의미한다. 즉 Set<?>은 다양한 타입의 값을 가리킬 수 있다  
+* `?`가 어떠한 타입을 나타내는 것인지 알 수 없기 때문에 Set<?>에는 값을 넣을 수 없다  
   
 {% highlight java %}  
 
