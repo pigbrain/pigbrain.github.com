@@ -132,19 +132,15 @@ tags: [Architectures]
   
   
 # Drawbacks  
-## Vendor control  
+* serverless를 제공하는 vendor에 대한 의존성을 갖기 때문에 시스템 다운, 비용 변경, 강제 API 업그레이드 등이 발생할 수 있다  
+* vendor가 제공하는 서버 환경에서만 어플리케이션 구동이 가능하기 때문에 일부 최적화가 불가능하다  
+* multitenancy 문제  
+	* multitenancy란 서로 다른 사용자의 여러 인스턴스가 동일한 머신에서 실행되는 환경을 말한다  
+	* multitenancy는 scaling 비용을 절약 하기 위한 전략이다  
+	* multitenancy는 serverless 뿐만 아니라 여러 아키텍처에도 존재한다  
+	* multitenancy로 인하여 보안 문제가 발생할 수 있다  
+* 클라이언트에서 일부 기능을 구현하다 보니 서버에서 구현했을 때와 다르게 재활용이 불가능하다  
   
-## Multitenancy Problems  
-  
-## Vendor lock-in  
-  
-## Security concerns  
-  
-## Repetition of logic across client platforms  
-  
-## Loss of Server optimizations  
-  
-## No in-server state for Serverless FaaS
   
 # 원문   
 * https://martinfowler.com/articles/serverless.html  
