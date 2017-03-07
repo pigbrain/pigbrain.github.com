@@ -1,9 +1,9 @@
 ---
 layout: post
-category: Thesis
+category: Architectures
 title: The Google File System
 tagline: by Pigbrain
-tags: [Thesis]
+tags: [Architectures]
 ---
 
 <!--more-->
@@ -80,7 +80,7 @@ tags: [Thesis]
 		* read 요청에는 chunk handle과 읽어들일 byte 범위가 포함되어 있다  
 	* 클라이언트에서 동일한 chunk에 대한 요청은 캐싱 시간이 만료되기 전까지 또는 파일을 다시 열기 전까지는 마스터에게 청크에 대한 정보를 묻지 않고 직접 요청한다  
 
-  <img src="/assets/themes/Snail/img/Thesis/gfs/architecture.png" alt="">  
+  <img src="/assets/themes/Snail/img/Architectures/gfs/architecture.png" alt="">  
   
 ### 2.5 Cunk Size  
 * chunk size는 중요한 파라미터이다  
@@ -161,7 +161,7 @@ tags: [Thesis]
 		* 변경에 실패한 상태 
 			* 각각의 클라이언트는 서로 다른 데이터를 보게 된다  
   
-  <img src="/assets/themes/Snail/img/Thesis/gfs/fileRegion.png" alt="">  
+  <img src="/assets/themes/Snail/img/Architectures/gfs/fileRegion.png" alt="">  
   
 * 파일 변경 작업이 chunk replica에 정상적으로 적용되었는지는 chunk version number를 가지고 판단한다  
 * 파일 변경 작업이 제대로 이루어지지 않은 chunk 서버에 대해서는 garbage collect 과정에서 수거된다  
@@ -195,7 +195,7 @@ tags: [Thesis]
 	* primary가 마스터에게 lease 시간에 대해 요청하는 패킷은 하트비트 패킷 뒤에 붙어서 보내진다(piggyback)  
 * 마스터와 primary의 통신이 끊기더라도 마스터는 이전 lease가 만료된 이후에 새로운 lease를 생성하여 다른 replica에게 요청 할 수 있다  
   
-  <img src="/assets/themes/Snail/img/Thesis/gfs/writeControl.png" alt="">  
+  <img src="/assets/themes/Snail/img/Architectures/gfs/writeControl.png" alt="">  
   
 * 클라이언트는 마스터에게 어떤 chunk서버가 lease를 소유하고 있는지 물어본다  
 	* 만약 lease를 소유하고있는 chunk서버가 없을 경우 마스터는 chunk서버를 하나 지정하여 lease를 할당한다  
