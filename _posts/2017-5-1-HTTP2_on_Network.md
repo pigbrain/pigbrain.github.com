@@ -181,8 +181,11 @@ tags: [Network]
 ### 4.3 Header Compression and Decompression  
 * Just as in HTTP/1, a header field in HTTP/2 is a name with one or more associated values  
 * Header fields are used within HTTP request and response messages as well as in server push operations  
-* 
-
+* When transmitted over a connection, a header list is serialized into a header block using HTTP header compression  
+* The serialized header block is divided into one or more octet sequences, called header block fragments, and transmitted within the payload of `HEADERS`, `PUSH_PROMISE`, or `CONTINUATION` frames  
+	* These frames carry data that can modify the compression context maintained by a receiver    
+* A receiving endpoint reassembles the header block by concatenating its fragments and then decompresses the block to reconstruct the header list  
+* A decoding error in a header block MUST be treated as a connection error of type `COMPRESSION_ERROR`
   
 # 원문   
 * http://httpwg.org/specs/rfc7540.html#Overview
