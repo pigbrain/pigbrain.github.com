@@ -135,6 +135,53 @@ tags: [Network]
 * To avoid unnecessary latency, clients are permitted to send additional frames to the server immediately after sending the client connection preface, without waiting to receive the server connection preface  
 * Clients and servers treat an invalid connection preface as a connection error of type `PROTOCOL_ERROR`  
 	* A `GOAWAY` frame may be omitted in this case since an invalid preface indicates that the peer is not using HTTP/2  
+  
+## HTTP Frames  
+* Once the HTTP/2 connection is established, endpoints can begin exchanging frames  
+  
+### 4.1 Frame Format  
+* frame =  header(72 bytes) + variable-length payload  
+
+	```
+	 +-----------------------------------------------+
+	 |                 Length (24)                   |
+	 +---------------+---------------+---------------+
+	 |   Type (8)    |   Flags (8)   |
+	 +-+-------------+---------------+-------------------------------+
+	 |R|                 Stream Identifier (31)                      |
+	 +=+=============================================================+
+	 |                   Frame Payload (0...)                      ...
+	 +---------------------------------------------------------------+
+	```
+  
+* Length 
+	* **The length of the frame payload** expressed as an unsigned 24-bit integer
+	* Values greater than 2^14 (16,384) must not be sent unless the receiver has set a larger value for `SETTINGS_MAX_FRAME_SIZE`  
+* Type  
+	* The frame type determines the format and semantics of the frame  
+	* Implementations must ignore and discard any frame that has a type that is unknown  
+	* The structure and content of the frame payload is dependent entirely on the frame type
+* Flags  
+	* Flags are assigned semantics specific to the indicated frame type  
+	* Flags that have no defined semantics for a particular frame type must be ignored  
+* R
+	* reserved 1-bit field  
+	* undefined	  
+		* Bit must remain unset (0x0) when sending and must be ignored when receiving  
+* Stream Identifier  
+	* The value 0x0 is reserved for frames that are associated with the connection as a whole as opposed to an individual stream  
+  
+### 4.2 Frame Size  
+* The size of a frame payload is limited by the maximum size that a receiver advertises in the `SETTINGS_MAX_FRAME_SIZE` setting  
+* `SETTINGS_MAX_FRAME_SIZE` setting can have any value between 2^14 (16,384) and 2^24-1 (16,777,215)  
+* All implementations must be capable of receiving and minimally processing frames up to 2^14 in length, plus the frame header(72 bytes)  
+	* The size of the frame header is not included when describing frame sizes  
+	* Certain frame types, such as `PING`, impose additional limits on the amount of payload data allowed  
+  
+### 4.3 Header Compression and Decompression  
+* Just as in HTTP/1, a header field in HTTP/2 is a name with one or more associated values  
+* Header fields are used within HTTP request and response messages as well as in server push operations  
+* 
 
   
 # 원문   
