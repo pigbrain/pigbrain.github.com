@@ -61,14 +61,19 @@ tags: [Network]
   
   
 ### 3.1 HTTP/2 Version Identification  
-* The string `h2` identifies the protocol where HTTP/2 uses **Transport Layer Security** (TLS)  
+* The string `
+* ` identifies the protocol where HTTP/2 uses **Transport Layer Security** (TLS)  
 * The string `h2c` identifies the protocol where HTTP/2 is run over cleartext TCP  
   
   
 ### 3.2 Starting HTTP/2 for "http" URIs  
 * A client that makes a request for an `http` URI without prior knowledge about support for HTTP/2  
 * The client does so by making an HTTP/1.1 request that includes an Upgrade header field with the `h2c` token  
-
+* A request that upgrades from HTTP/1.1 to HTTP/2 include exactly one HTTP2-Settings header field  
+	* A server not upgrade the connection to HTTP/2 if this header field is not present or if more than one is present  
+	
+  
+  
 	```
 	GET / HTTP/1.1
 	Host: server.example.com
@@ -88,6 +93,8 @@ tags: [Network]
 	```
 
 * A server that supports HTTP/2 accepts the upgrade with a 101 (Switching Protocols) response  
+	* After the empty line that terminates the 101 response, the server can begin sending HTTP/2 frames  
+	* These frames include a response to the request that initiated the upgrade  
 
 	```
 	HTTP/1.1 101 Switching Protocols
@@ -97,17 +104,37 @@ tags: [Network]
 	[ HTTP/2 connection ...
 
 	```
+	* The first HTTP/2 frame sent by the server be a server connection preface consisting of a SETTINGS frame   
 	* The HTTP/1.1 request that is sent prior to upgrade is assigned a stream identifier of 1 with default priority values  
-	* Stream 1 is implicitly `half-closed` from the client toward the server since the request is completed as an HTTP/1.1 request
+		* Stream 1 is implicitly `half-closed` from the client toward the server since the request is completed as an HTTP/1.1 request
 	* After commencing the HTTP/2 connection, stream 1 is used for the response  
 
 	
-
+### 3.3 Starting HTTP/2 for "https" URIs  
+* A client that makes a request to an "https" URI uses TLS with the application-layer protocol negotiation (ALPN) extension [TLS-ALPN]  	
+* HTTP/2 over TLS uses the `h2` protocol identifier  
+* **The `h2c` protocol identifier must not be sent by a client. It is selected by a server**  
+  
+### 3.4 Starting HTTP/2 with Prior Knowledge  
+* A client can learn that a particular server supports HTTP/2  
+	*  [ALT-SVC](https://tools.ietf.org/html/draft-ietf-httpbis-alt-svc-06) describes a mechanism for advertising this capability.
+* A client send the connection preface and immediately send HTTP/2 frames to such a server. Likewise, the server MUST send a connection preface  
+	* This only affects the establishment of HTTP/2 connections over cleartext TCP  
+	* Implementations that support HTTP/2 over TLS must use protocol negotiation in TLS [TLS-ALPN]  
+  
+### 3.5 HTTP/2 Connection Preface 	 
+* Each endpoint is required to send a connection preface as a final confirmation of the protocol in use and to establish the initial settings for the HTTP/2 connection  
+	* The client and server each send a different connection preface
+* The client connection preface starts with a sequence of 24 octets  
 	
-
- 	 
-
-
+	```
+	0x505249202a20485454502f322e300d0a0d0a534d0d0a0d0a  
+	```
+* The client sends the client connection preface immediately upon receipt of a 101 (Switching Protocols) response (indicating a successful upgrade) or as the first application data octets of a TLS connection  
+* If starting an HTTP/2 connection with prior knowledge of server support for the protocol, the client connection preface is sent upon connection establishment   
+* To avoid unnecessary latency, clients are permitted to send additional frames to the server immediately after sending the client connection preface, without waiting to receive the server connection preface  
+* Clients and servers treat an invalid connection preface as a connection error of type `PROTOCOL_ERROR`  
+	* A `GOAWAY` frame may be omitted in this case since an invalid preface indicates that the peer is not using HTTP/2  
 
   
 # 원문   
