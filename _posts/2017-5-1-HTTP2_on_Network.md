@@ -136,7 +136,7 @@ tags: [Network]
 * Clients and servers treat an invalid connection preface as a connection error of type `PROTOCOL_ERROR`  
 	* A `GOAWAY` frame may be omitted in this case since an invalid preface indicates that the peer is not using HTTP/2  
   
-## HTTP Frames  
+## 4. HTTP Frames  
 * Once the HTTP/2 connection is established, endpoints can begin exchanging frames  
   
 ### 4.1 Frame Format  
@@ -186,6 +186,82 @@ tags: [Network]
 	* These frames carry data that can modify the compression context maintained by a receiver    
 * A receiving endpoint reassembles the header block by concatenating its fragments and then decompresses the block to reconstruct the header list  
 * A decoding error in a header block MUST be treated as a connection error of type `COMPRESSION_ERROR`
+   
+## 5. Streams and Multiplexing
+* A `stream` is an independent, bidirectional sequence of frames exchanged between the client and server within an HTTP/2 connection  
+	* A single HTTP/2 connection can contain multiple concurrently open streams   
+	* Streams can be established and used unilaterally or shared by either the client or server  
+	* Streams can be closed by either endpoint  
+	* The order in which frames are sent on a stream is significant  
+		* Recipients process frames in the order they are received   
+	* Streams are identified by an integer. Stream identifiers are assigned to streams by the endpoint initiating the stream   
+   
+### 5.1 Stream States
+
+```
+                             +--------+
+                     send PP |        | recv PP
+                    ,--------|  idle  |--------.
+                   /         |        |         \
+                  v          +--------+          v
+           +----------+          |           +----------+
+           |          |          | send H /  |          |
+    ,------| reserved |          | recv H    | reserved |------.
+    |      | (local)  |          |           | (remote) |      |
+    |      +----------+          v           +----------+      |
+    |          |             +--------+             |          |
+    |          |     recv ES |        | send ES     |          |
+    |   send H |     ,-------|  open  |-------.     | recv H   |
+    |          |    /        |        |        \    |          |
+    |          v   v         +--------+         v   v          |
+    |      +----------+          |           +----------+      |
+    |      |   half   |          |           |   half   |      |
+    |      |  closed  |          | send R /  |  closed  |      |
+    |      | (remote) |          | recv R    | (local)  |      |
+    |      +----------+          |           +----------+      |
+    |           |                |                 |           |
+    |           | send ES /      |       recv ES / |           |
+    |           | send R /       v        send R / |           |
+    |           | recv R     +--------+   recv R   |           |
+    | send R /  `----------->|        |<-----------'  send R / |
+    | recv R                 | closed |               recv R   |
+    `----------------------->|        |<----------------------'
+                             +--------+
+                             
+send:   endpoint sends this frame
+recv:   endpoint receives this frame
+
+H : HEADERS frame (with implied CONTINUATIONs)
+PP: PUSH_PROMISE frame (with implied CONTINUATIONs)
+ES: END_STREAM flag
+R : RST_STREAM frame
+```
+
+* This diagram shows stream state transitions and the frames and flags that affect those transitions only
+* `CONTINUATION` frames do not result in state transitions  
+	* They are part of the `HEADERS` or `PUSH_PROMISE` that they follow 	
+* **idle**  
+	* All streams start in the **idle** state   
+	* Sending or receiving a `HEADERS` frame causes the stream to become **open**  
+	* Sending a `PUSH_PROMISE` frame on another stream reserves the idle stream that is identified for later use  
+	* Receiving a `PUSH_PROMISE` frame on another stream reserves an idle stream that is identified for later use
+	* Receiving any frame other than `HEADERS` or `PRIORITY` on a stream in this state must be treated as a connection error  
+* **reserved (local)**  
+	* This state is one that has been promised by sending a `PUSH_PROMISE` frame  
+	* The endpoint can send a `HEADERS` frame. This causes the stream to open in a **half-closed (remote)** state.
+	* Either endpoint can send a RST_STREAM frame to cause the stream to become **closed**. This releases the stream reservation 	 	
+* **reserved (remote)**
+	* This state has been reserved by a remote peer  
+	* Receiving a `HEADERS` frame causes the stream to transition to **half-closed (local)**  
+	* Either endpoint can send a `RST_STREAM` frame to cause the stream to become **closed**. This releases the stream reservation  
+* **open**  
+	* This state may be used by both peers to send frames of any type  
+	* stream-level flow-control limits 
+	* Either endpoint can send a frame with an `END_STREAM` flag set, which causes the stream to transition into one of the **half-closed** states.
+  		* An endpoint sending an `END_STREAM` flag causes the stream state to become **half-closed (local)** 
+  		* An endpoint receiving an `END_STREAM` flag causes the stream state to become **half-closed (remote)**  
+	* Either endpoint can send a `RST_STREAM` frame from this state, causing it to transition immediately to **closed**   
+  
   
 # 원문   
 * http://httpwg.org/specs/rfc7540.html#Overview
