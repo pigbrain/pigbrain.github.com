@@ -205,9 +205,9 @@ tags: [Network]
                    /         ⎢        ⎢         \
                   v          +--------+          v
            +----------+          ⎢           +----------+
-           ⎢          ⎢         ⎢ send H /  ⎢          ⎢
-    ,------⎢ reserved ⎢         ⎢ recv H    ⎢ reserved ⎢------.
-    ⎢     ⎢ (local)  ⎢         ⎢           ⎢ (remote) ⎢      ⎢
+           ⎢          ⎢          ⎢ send H /  ⎢          ⎢
+    ,------⎢ reserved ⎢          ⎢ recv H    ⎢ reserved ⎢------.
+    ⎢      ⎢ (local)  ⎢          ⎢           ⎢ (remote) ⎢      ⎢
     ⎢      +----------+          v           +----------+      ⎢
     ⎢          ⎢             +--------+             ⎢          ⎢
     ⎢          ⎢     recv ES ⎢        ⎢ send ES     ⎢          ⎢
@@ -215,18 +215,18 @@ tags: [Network]
     ⎢          ⎢    /        ⎢        ⎢        \    ⎢          ⎢
     ⎢          v   v         +--------+         v   v          ⎢
     ⎢      +----------+          ⎢           +----------+      ⎢
-    ⎢      ⎢   half   ⎢         ⎢           ⎢   half   ⎢      ⎢
-    ⎢      ⎢  closed  ⎢         ⎢ send R /  ⎢  closed  ⎢      ⎢
-    ⎢      ⎢ (remote) ⎢         ⎢ recv R    ⎢ (local)  ⎢      ⎢
+    ⎢      ⎢   half   ⎢          ⎢           ⎢   half   ⎢      ⎢
+    ⎢      ⎢  closed  ⎢          ⎢ send R /  ⎢  closed  ⎢      ⎢
+    ⎢      ⎢ (remote) ⎢          ⎢ recv R    ⎢ (local)  ⎢      ⎢
     ⎢      +----------+          ⎢           +----------+      ⎢
-    ⎢           ⎢               ⎢                 ⎢           ⎢
-    ⎢           ⎢ send ES /     ⎢       recv ES / ⎢           ⎢
+    ⎢           ⎢                ⎢                 ⎢           ⎢
+    ⎢           ⎢ send ES /      ⎢       recv ES / ⎢           ⎢
     ⎢           ⎢ send R /       v        send R / ⎢           ⎢
     ⎢           ⎢ recv R     +--------+   recv R   ⎢           ⎢
     ⎢ send R /  `----------->⎢        ⎢<-----------'  send R / ⎢
     ⎢ recv R                 ⎢ closed ⎢               recv R   ⎢
-    `-----------------------> ⎢        ⎢<----------------------'
-                              +--------+
+    `----------------------->⎢        ⎢<----------------------'
+                             +--------+
                              
 send:   endpoint sends this frame
 recv:   endpoint receives this frame
