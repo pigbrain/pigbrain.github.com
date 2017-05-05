@@ -257,10 +257,36 @@ R : RST_STREAM frame
 * **open**  
 	* This state may be used by both peers to send frames of any type  
 	* stream-level flow-control limits 
-	* Either endpoint can send a frame with an `END_STREAM` flag set, which causes the stream to transition into one of the **half-closed** states.
-  		* An endpoint sending an `END_STREAM` flag causes the stream state to become **half-closed (local)** 
-  		* An endpoint receiving an `END_STREAM` flag causes the stream state to become **half-closed (remote)**  
+	* Either endpoint can send a frame with an `END_STREAM` flag set, which causes the stream to transition into one of the **half-closed** states   
+  		* An endpoint sending an `END_STREAM` flag causes the stream state to become **half-closed (local)**  
+  		* An endpoint receiving an `END_STREAM` flag causes the stream state to become **half-closed (remote)**    
 	* Either endpoint can send a `RST_STREAM` frame from this state, causing it to transition immediately to **closed**   
+* **half-closed (local)**  
+	* This state cannot be used for sending frames other than `WINDOW_UPDATE`, `PRIORITY`, and `RST_STREAM`  
+	* A stream transitions from this state to **closed** when a frame that contains an `END_STREAM` flag is received or when either peer sends a `RST_STREAM` frame  
+* **half-closed (remote)**  
+	* This is no longer being used by the peer to send frames   
+	* A stream can transition from this state to **closed** by sending a frame that contains an `END_STREAM` flag or when either peer sends a `RST_STREAM` frame   
+* **closed**  
+	* This is the terminal state    
+	* An endpoint must not send frames other than `PRIORITY` on a closed stream  
+		* `PRIORITY` frames can be sent on closed streams to prioritize streams that are dependent on the closed stream  
+
+* `PRIORITY` can be sent and received in any stream state  
+* Frames of unknown types are ignored  
+
+### 5.1.1 Stream Identifiers
+* Streams are identified with an unsigned 31-bit integer   
+* Streams initiated by a client must use odd-numbered stream identifiers  
+* Streams initiated by the server must use even-numbered stream identifiers  
+ * A stream identifier of zero (0x0) is used for connection control messages   
+ * HTTP/1.1 requests that are upgraded to HTTP/2 are responded to with a stream identifier of one (0x1)   
+ 	* After the upgrade completes, stream 0x1 is **half-closed (local)** to the client  
+* The identifier of a newly established stream must be numerically greater than all streams  
+* The first use of a new stream identifier implicitly closes all streams in the **idle** state that might have been initiated by that peer with a lower-valued stream identifier  
+* Stream identifiers cannot be reused  
+* A server that is unable to establish a new stream identifier can send a `GOAWAY` frame so that the client is forced to open a new connection for new streams  
+	* Long-lived connections can result in an endpoint exhausting the available range of stream identifiers   
   
   
 # 원문   
