@@ -275,18 +275,31 @@ R : RST_STREAM frame
 * `PRIORITY` can be sent and received in any stream state  
 * Frames of unknown types are ignored  
 
-### 5.1.1 Stream Identifiers
+#### 5.1.1 Stream Identifiers
 * Streams are identified with an unsigned 31-bit integer   
 * Streams initiated by a client must use odd-numbered stream identifiers  
 * Streams initiated by the server must use even-numbered stream identifiers  
  * A stream identifier of zero (0x0) is used for connection control messages   
  * HTTP/1.1 requests that are upgraded to HTTP/2 are responded to with a stream identifier of one (0x1)   
- 	* After the upgrade completes, stream 0x1 is **half-closed (local)** to the client  
+	* After the upgrade completes, stream 0x1 is **half-closed (local)** to the client  
 * The identifier of a newly established stream must be numerically greater than all streams  
 * The first use of a new stream identifier implicitly closes all streams in the **idle** state that might have been initiated by that peer with a lower-valued stream identifier  
 * Stream identifiers cannot be reused  
 * A server that is unable to establish a new stream identifier can send a `GOAWAY` frame so that the client is forced to open a new connection for new streams  
 	* Long-lived connections can result in an endpoint exhausting the available range of stream identifiers   
+ 
+#### 5.1.2 Stream Concurrency
+* A peer can limit the number of concurrently active streams using the `SETTINGS_MAX_CONCURRENT_STREAMS` parameter within a `SETTINGS` frame     
+* Streams that are in the **open** state or in either of the **half-closed** states count toward the maximum number of streams that an endpoint is permitted to open  
+* Streams in either of the **reserved** states do not count toward the stream limit  
+* 
+  
+ 
+ 
+ 
+ 
+ 
+ 
   
   
 # 원문   
