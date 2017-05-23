@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Network
-title: [HTTP/2] 1. Introduction
+title: HTTP/2 1. Introduction
 tagline: by Pigbrain
 tags: [Network]
 ---
