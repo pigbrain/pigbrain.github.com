@@ -275,7 +275,7 @@ R : RST_STREAM frame
 * `PRIORITY` can be sent and received in any stream state  
 * Frames of unknown types are ignored  
 
-#### 5.1.1 Stream Identifiers
+### 5.1.1 Stream Identifiers
 * Streams are identified with an unsigned 31-bit integer   
 * Streams initiated by a client must use odd-numbered stream identifiers  
 * Streams initiated by the server must use even-numbered stream identifiers  
@@ -288,11 +288,12 @@ R : RST_STREAM frame
 * A server that is unable to establish a new stream identifier can send a `GOAWAY` frame so that the client is forced to open a new connection for new streams  
 	* Long-lived connections can result in an endpoint exhausting the available range of stream identifiers   
  
-#### 5.1.2 Stream Concurrency
+### 5.1.2 Stream Concurrency
 * A peer can limit the number of concurrently active streams using the `SETTINGS_MAX_CONCURRENT_STREAMS` parameter within a `SETTINGS` frame     
 * Streams that are in the **open** state or in either of the **half-closed** states count toward the maximum number of streams that an endpoint is permitted to open  
 * Streams in either of the **reserved** states do not count toward the stream limit  
-* 
+  
+
   
  
  
