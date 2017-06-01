@@ -76,7 +76,7 @@ func Sqrt(x float64) float64 {
 
 # Compile packages 
 
-패키지 폴더에서 `go install` 명령어를 실행한다. (`go install mymath`에서 파일명을 제외하고 실행) 
+패키지 폴더에서 `go install` 명령어를 실행한다. (`go install mymath`)에서 파일명을 제외하고 실행) 
 컴파일 후에 cd $GOPATH/pkg/${GOOS}_${GOARCH}폴더에 mymath.a라는 파일이 생성되는 것을 확인할 수 있다. .a 파일은 패키지의 바이너리 파일이다. 이것을 이용하여 어플리케이션(mathapp)을 만들기 위해서는 mathapp 패키지를 생성하고 다음과 같이 main.go 코드를 작성한다. 
 
 ```
