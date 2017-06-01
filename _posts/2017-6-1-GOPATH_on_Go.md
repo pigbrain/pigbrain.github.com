@@ -1,6 +1,6 @@
 ---
 layout: post
-category: Network
+category: Go
 title: $GOPATH and workspace  
 tagline: by Pigbrain
 tags: [Go]
