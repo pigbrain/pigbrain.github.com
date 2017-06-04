@@ -6,5 +6,5 @@ group: navigation
 ---
  * **Name:** HyunDong Lee
  * **Company:** [NAVER](https://www.navercorp.com)
- * **Email:** [pigbrain.lee@gmail.com](pigbrain.lee@gmail.com)
+ * **Email:** pigbrain.lee@gmail.com
  * **Github:** [Pigbrain](https://github.com/pigbrain)
