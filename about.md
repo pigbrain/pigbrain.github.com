@@ -5,6 +5,6 @@ header: About Me
 group: navigation
 ---
  * **Name:** HyunDong Lee
- * **Company:** [NHN Entertainment](http://www.nhnent.com/ko/index.nhn)
- * **Email:** [hyundong.lee@nhnent.com](hyundong.lee@nhnent.com)
+ * **Company:** [NAVER](https://www.navercorp.com)
+ * **Email:** [pigbrain.lee@gmail.com](pigbrain.lee@gmail.com)
  * **Github:** [Pigbrain](https://github.com/pigbrain)
