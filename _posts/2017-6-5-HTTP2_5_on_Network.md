@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Network
-title: HTTP/2 5. Streams and Multiplexing. 
+title: HTTP/2 5. Streams and Multiplexing  
 tagline: by Pigbrain
 tags: [Network]
 ---
