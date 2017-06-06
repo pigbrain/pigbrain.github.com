@@ -56,10 +56,9 @@ R : RST_STREAM frame
 * `END_STREAM` 플래그를 포함하는 프레임에 대하여 별도의 처리를 하고자 스트림의 상태를 관리한다  
 	* `END_STREAM` 플래그를 포함하는 `HEADERS` 프레임은 2가지의 상태로 변화 시킬 수 있다   	 
 * 각 엔드포인트는 프레임이 전송되는 과정에서 서로 다른 스트림의 상태를 가질 수 있다 
+* 각 엔드포인트는 독립적으로 스트림을 생성한다  
+* 각 엔드포인트의 스트림의 상태가 일치하지 않는 경우 `RST_STREAM`을 전송하고 스트림의 상태를 `closed`로 변경할 수 있다 
 
-Both endpoints have a subjective view of the state of a stream that could be different when frames are in transit. 
-
-Endpoints do not coordinate the creation of streams; they are created unilaterally by either endpoint. The negative consequences of a mismatch in states are limited to the "closed" state after sending RST_STREAM, where frames might be received for some time after closing.
 
 
 
