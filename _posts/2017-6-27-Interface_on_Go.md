@@ -1,13 +1,14 @@
 ---
 layout: post
 category: Go
-title: Go Data Structures\: Interfaces  
+title: Interfaces  
 tagline: by Pigbrain
 tags: [Go]
 ---
   
 <!--more-->
   
+# Go Data Structures: Interfaces    
 Go언어의 인터페이스는 정적(static)이고 컴파일 시점에 오류에 대한 체크가 되지만 인터페이스를 호출하는 시점에는 동적(dynamic)으로 이루어진다.  
 
 # Usage 
