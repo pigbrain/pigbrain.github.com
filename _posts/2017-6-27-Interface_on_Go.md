@@ -90,13 +90,13 @@ Go언어는 이 두 가지 특징들을 조금씩 가지고 있다. 메서드 �
   
 `Binary`는 2개의 32비트 워드로 이루어진 62비트 정수이다. 
   
-<img src="/assets/themes/Snail/img/Go/Interface/binary_value.PNG" alt="">  
+<img src="/assets/themes/Snail/img/Go/Interface/binary_value.png" alt="">  
   
 
 인터페이스는 각각 한 워드를 차지하는 타입에 대한 정보를 가리키는 포인터와 값을 가리키는 포인터로 구성된다.  
 `b`를 `Stringer` 인터페이스 타입에 셋팅하면 인터페이스 값은 두 워드가 설정된 곳을 가리킨다.
 
-<img src="/assets/themes/Snail/img/Go/Interface/binary_interface.PNG" alt="">  
+<img src="/assets/themes/Snail/img/Go/Interface/binary_interface.png" alt="">  
   
   
 인터페이스에서 첫번쨰 워드는 인터페이스 테이블 혹은 I 테이블(itable)이라고 칭하는 테이블을 가리킨다. (C 구현체에서 Itab이라고 네이밍 되어 있다)
