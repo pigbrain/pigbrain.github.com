@@ -1,9 +1,9 @@
 ---
 layout: post
-category: OpenSource  
-title: Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing  
+category: OpenSource    
+title: Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing    
 tagline: by Pigbrain  
-tags: [OpenSource]
+tags: [OpenSource]  
 ---
 
 <!--more-->
