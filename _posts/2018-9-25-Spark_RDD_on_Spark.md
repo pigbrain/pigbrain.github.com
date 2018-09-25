@@ -45,9 +45,24 @@ tolerance by logging the transformations` used to build a dataset (its lineage) 
 <br>  
   
 # 2. Resilient Distributed Datasets (RDDs)
+* define RDDs  
+* introduce their programming interface in Spark  
+* compare RDDs with fine-grained shared memory abstractions  
+* discuss limitations of the RDD model  
   
-	
-	
+## 2.1 RDD Abstraction
+* RDD is a read-only, partitioned collection of records
+* RDDs can only be created through deterministic operations on either data in stable storage or other RDDs  
+* We call these operations transformations  
+	* transformations include map, filter, and join  
+* RDDs do not need to be materialized at all times  
+* RDD has enough information about how it was derived from other datasets (its lineage) to compute its
+partitions from data in stable storage  
+	* program cannot reference an RDD that it cannot reconstruct after a failure 
+* users can control two other aspects of RDDs: `persistence` and `partitioning`  
+	* Users can indicate which RDDs they will reuse and choose a storage strategy for them    
+	* They can also ask that an RDD’s elements be partitioned across machines based on a key in each record  
+	* This is useful for placement optimizations, such as ensuring that two datasets that will be joined together are hash-partitioned in the same way  
 	 
   
 # 참고  
