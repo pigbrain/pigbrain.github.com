@@ -51,9 +51,9 @@ tolerance by logging the transformations` used to build a dataset (its lineage) 
 * discuss limitations of the RDD model  
   
 ## 2.1 RDD Abstraction
-* RDD is a read-only, partitioned collection of records
-* RDDs can only be created through deterministic operations on either data in stable storage or other RDDs  
-* We call these operations transformations  
+* RDD is a `read-only`, `partitioned collection of records`  
+* RDDs can `only be created` through deterministic operations on either data in stable storage or other RDDs  
+* We call these operations `transformations`  
 	* transformations include map, filter, and join  
 * RDDs do not need to be materialized at all times  
 * RDD has enough information about how it was derived from other datasets (its lineage) to compute its
@@ -64,6 +64,24 @@ partitions from data in stable storage
 	* They can also ask that an RDD’s elements be partitioned across machines based on a key in each record  
 	* This is useful for placement optimizations, such as ensuring that two datasets that will be joined together are hash-partitioned in the same way  
 	 
+## 2.2 Spark Programming Interface  
+* Programmers start by defining one or more RDDs through transformations on data in stable storage  
+* Programmers can then use these RDDs in `actions`, which are operations that return a value to the application or export data to a storage system  
+* Programmers can call a `persist` method to indicate which RDDs they want to reuse in future operations  
+	* Spark keeps persistent RDDs in memory by default,
+but `it can spill them to disk if there is not enough
+RAM`  
+	* Users can also request other persistence strategies, such as storing the RDD only on disk or replicating it across machines, through flags to persist  
+	* Users can set a persistence priority on each RDD to specify which in-memory data should spill to disk first 
+  
+## 2.3 Advantages of the RDD Model  
+
+| Aspect | RDDs | Distr. Shared Mem. |  
+|---|---|---|  
+| Reads | Coarse- or fine-grained  |  Fine-grained |    
+
+ 
+
   
 # 참고  
 * https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf  
