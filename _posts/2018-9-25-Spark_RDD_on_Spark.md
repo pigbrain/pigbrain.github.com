@@ -117,8 +117,44 @@ being used in scan-based operations
 * `transformations are lazy operations` that define a new RDD, while `actions launch a computation to return a value` to the program or write data to external storage  
 * some operations, such as join, are only available on RDDs of key-value pairs  
   
-<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/interface.png" alt="">      
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/api.png" alt="">      
   
     
+## 4. Representing RDDs
+* A system implementing RDDs should provide as rich
+a set of transformation operators as possible  
+* let users compose them(operators) in arbitrary ways  
+* We propose a `simple graph-based representation` for RDDs that facilitates these goals   
+	* used this representation to support a wide range of transformations without adding special logic to the scheduler for each one, which greatly simplified the system design  
+* representing each RDD through a common interface that exposes five pieces of information  
+	* a set of `partitions`  
+		* atomic pieces of the dataset  
+	* a set of `dependencies` on parent RDDs    
+		* a function for computing the dataset based on its parents  
+		* metadata about its partitioning scheme and data placement  
+    
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/interface.png" alt="">    
+  
+* how to represent dependencies between RDDs  
+	* `narrow dependencies`
+		* where each partition of the parent RDD is used by at most one partition of the child RDD
+		* `map` leads to a narrow dependency     
+	* `wide dependencies`  
+		* where multiple child partitions may depend on it  
+		* `join` leads to to wide dependencies  
+* This distinction(narrow, wide) is useful for two reasons  
+	* narrow dependencies allow for `pipelined execution on one cluster node`
+	* wide dependencies require data from all parent partitions to be available and to be shuffled across the nodes using a MapReducelike operation  
+	* recovery after a node failure is more efficient with a narrow dependency, as only the lost parent partitions need to be recomputed, and they can be recomputed in parallel on different nodes  
+	* in a lineage graph with wide dependencies, a single failed node might cause the loss of some partition from all the ancestors of an RDD, requiring a complete re-execution  
+	
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/dependencies.png" alt="">
+  
+
+  
+  
+  
+    
+
 # 참고  
 * https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf  
