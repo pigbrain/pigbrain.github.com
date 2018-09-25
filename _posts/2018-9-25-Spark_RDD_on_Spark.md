@@ -75,13 +75,39 @@ RAM`
 	* Users can set a persistence priority on each RDD to specify which in-memory data should spill to disk first 
   
 ## 2.3 Advantages of the RDD Model  
-
-| Aspect | RDDs | Distr. Shared Mem. |  
-|---|---|---|  
-| Reads | Coarse- or fine-grained  |  Fine-grained |    
-
- 
-
   
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/comparison_of_RDDs.png" alt="">    
+  
+* In DSM(distributed shared memory) systems, applications read and write to arbitrary locations in a global address space   
+* DSM is a very general abstraction, but this generality makes it harder to implement in an efficient and fault=tolerant manner on commodity clusters  
+* The main difference between RDDs and DSM 
+	* RDDs can only be created through coarse-grained transformations  
+	* DSM allows reads and writes to each memory location
+* This restricts RDDs to applications that perform bulk writes, but allows for more efficient fault tolerance  
+* RDDs do not need to incur the overhead of check pointing, as they can be recovered using lineage  
+* only the lost partitions of an RDD need to be recomputed upon failure, and they can be recomputed in parallel on different nodes, without having to roll back the whole program  
+* immutable nature lets a system mitigate slow nodes (stragglers) by running backup copies of slow tasks as in MapReduce  
+* in bulk operations on RDDs, a runtime can schedule tasks based on `data locality to improve performance`    
+* `RDDs degrade gracefully when there is not
+enough memory to store them`, as long as they are only
+being used in scan-based operations  
+* Partitions that do not fit in RAM can be stored on disk and will provide similar performance to current data-parallel systems  
+
+## 2.4 Applications Not Suitable for RDDs  
+* RDDs are best suited for batch applications that apply the same operation to all elements of a dataset 
+	* RDDs can efficiently remember each transformation as one step in a lineage graph and can recover lost partitions without having to log large amounts of data   
+* RDDs would be less suitable for applications that make asynchronous fine-grained updates to shared state, such as a storage system for a web application or an incremental web crawler  
+	* it is more efficient to use systems that perform traditional update logging and data checkpointing, such as databases  
+* Our goal is to provide an efficient programming model for batch analytics and leave these asynchronous applications to specialized systems  
+  
+<br>  
+      
+# 3. Spark Programming Interface  
+* We chose Scala due to its combination of conciseness (which is convenient for interactive use) and efficiency (due to static typing)  
+* nothing about the RDD abstraction requires a functional language
+* To use Spark, developers write a driver program that connects to a cluster of workers     
+  
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/driver.png" alt="">      
+    
 # 참고  
 * https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf  
