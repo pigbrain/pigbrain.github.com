@@ -105,9 +105,20 @@ being used in scan-based operations
 # 3. Spark Programming Interface  
 * We chose Scala due to its combination of conciseness (which is convenient for interactive use) and efficiency (due to static typing)  
 * nothing about the RDD abstraction requires a functional language
-* To use Spark, developers write a driver program that connects to a cluster of workers     
+* To use Spark, developers write a `driver` program that connects to a cluster of workers     
   
 <img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/driver.png" alt="">      
+  
+* The driver defines one or more RDDs and invokes actions on them. Spark code on the driver also tracks the RDDs' `lineage`  
+* The workers are long-lived processes that can store RDD partitions in RAM across operations  
+* Scala represents each closure as a Java object, and these objects can be `serialized` and `loaded on another node` to pass the closure `across the network`  
+  
+## 3.1 RDD Operations in Spark
+* `transformations are lazy operations` that define a new RDD, while `actions launch a computation to return a value` to the program or write data to external storage  
+* some operations, such as join, are only available on RDDs of key-value pairs  
+  
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/interface.png" alt="">      
+  
     
 # 참고  
 * https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf  
