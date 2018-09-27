@@ -207,7 +207,8 @@ to store it, we evict a partition from `the least recently accessed RDD`, `unles
 	* This is important because most operations will run tasks over an entire RDD, so it is quite likely that the partition already in memory will be needed in the future   
   
 ## 5.4 Support for Checkpointing 
-* Although lineage can always be used to recover RDDs after a failure, such recovery may be `time-consuming for RDDs with long lineage chains`    * It can be helpful to `checkpoint` some RDDs to stable storage.
+* Although lineage can always be used to recover RDDs after a failure, such recovery may be `time-consuming for RDDs with long lineage chains`   
+* It can be helpful to `checkpoint` some RDDs to stable storage.
 * `checkpointing` is useful for RDDs with long lineage graphs containing wide dependencies   
 * Spark currently provides an API for checkpointing (a `REPLICATE` flag to persist), but leaves the decision of which data to checkpoint to the user   
 
