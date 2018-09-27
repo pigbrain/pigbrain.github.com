@@ -191,8 +191,25 @@ compile to `println(Line1.getInstance().x)`
   
 <img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/interpret.png" alt="">
    
-   
-
+## 5.3 Memory Management  
+* Spark provides three options for storage of persistent RDDs   
+	* in-memory storage as deserialized Java objects   
+		* fastest performance   	
+		* The Java VM can access each RDD element natively  
+	* in-memory storage as serialized data  
+		* lets users choose a more memory-efficient representation than Java object graphs when space is limited, at the cost of lower performance   
+	* on-disk storage  
+		* useful for RDDs that are too large to keep in RAM but costly to recompute on each use  
+* To manage the limited memory available, we use an `LRU eviction policy` at the level of RDDs	 
+	* When a new RDD partition is computed but there is not enough space
+to store it, we evict a partition from `the least recently accessed RDD`, `unless this is the same RDD` as the one with the new partition    
+	* we keep the old partition in memory to prevent cycling partitions `from the same RDD` in and out  
+	* This is important because most operations will run tasks over an entire RDD, so it is quite likely that the partition already in memory will be needed in the future   
+  
+## 5.4 Support for Checkpointing 
+* Although lineage can always be used to recover RDDs after a failure, such recovery may be `time-consuming for RDDs with long lineage chains`    * It can be helpful to `checkpoint` some RDDs to stable storage.
+* `checkpointing` is useful for RDDs with long lineage graphs containing wide dependencies   
+* Spark currently provides an API for checkpointing (a `REPLICATE` flag to persist), but leaves the decision of which data to checkpoint to the user   
 
 # 참고  
 * https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf  
