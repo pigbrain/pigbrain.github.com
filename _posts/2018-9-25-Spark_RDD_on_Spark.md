@@ -120,7 +120,7 @@ being used in scan-based operations
 <img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/api.png" alt="">      
   
     
-## 4. Representing RDDs
+# 4. Representing RDDs
 * A system implementing RDDs should provide as rich
 a set of transformation operators as possible  
 * let users compose them(operators) in arbitrary ways  
@@ -150,11 +150,49 @@ a set of transformation operators as possible
 	
 <img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/dependencies.png" alt="">
   
+# 5. Implementation  
+* Spark in about 14,000 lines of Scala  
+* The system runs over the `Mesos` cluster manager allowing it to share resources with Hadoop 
+* sketch several of the technically interesting parts of the system  
+	* job scheduler 
+	* Spark interpreter allowing interactive use  
+	* memory management
+	* support for checkpointing  
+   
+## 5.1 Job Scheduling 
+* Spark’s scheduler uses representation of RDDs, described in Section 4  
+* Scheduler is similar to Dryad’s, but it additionally takes into account which partitions of persistent RDDs are available in memory
+* Whenever a user runs an action (count, save..) on an RDD, the scheduler examines that RDD’s lineage graph to build a DAG of stages to execute  
 
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/stage.png" alt="">
   
+* Each stage contains as many pipelined transformations with narrow dependencies as possible 
+* The boundaries of the stages are the shuffle operations required for wide dependencies, or any already computed partitions that can shortcircuit the computation of a parent RDD  
+* The scheduler then launches tasks to compute missing partitions from each stage until it has computed the target RDD 
+* Scheduler assigns tasks to machines based on data locality using delay scheduling 
+	* If a task needs to process a partition that is available in memory on a node, we send it to that node  
+	* If a task processes a partition for which the containing RDD provides preferred locations, we send it to those  
+* For wide dependencies(shuffle dependencies), we currently materialize intermediate records on the nodes holding parent partitions to simplify fault recovery, much like MapReduce materializes map outputs   
+* If a task fails, we re-run it on another node as long as its stage’s parents are still available   
+* If some stages have become unavailable, we resubmit tasks to compute the missing partitions in parallel   
   
+## 5.2 Interpreter Integration 
+* Scala includes an interactive shell similar  
+	* Scala interpreter normally operates by compiling a class for each line typed by the user, loading it into the JVM, and invoking a function on it  	
+	* If the user types `var x = 5` followed by println(x), the interpreter defines a class called Line1 containing x and causes the second line to
+compile to `println(Line1.getInstance().x)`   
+* Given the low latencies attained with in-memory data, we wanted to let users run Spark interactively from the interpreter to query big datasets  
+* two changes to the interpreter in Spark 
+	* `Class shipping`  
+		* To let the worker nodes fetch the bytecode for the classes created on each line, `we made the interpreter serve these classes over HTTP` 
+	* `Modified code generation` 
+		* we serialize a closure referencing a variable defined on a previous line, such as `Line1.x` in the example above, Java will not trace through the object graph to ship the Line1 instance wrapping around x. Therefore, the worker nodes will not receive `x`  
+		* We modified the code generation logic to reference the instance of each line object directly 	      
   
-    
+<img src="/assets/themes/Snail/img/OpenSource/Spark/RDD/interpret.png" alt="">
+   
+   
+
 
 # 참고  
 * https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf  
