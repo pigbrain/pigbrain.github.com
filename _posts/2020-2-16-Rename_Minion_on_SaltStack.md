@@ -34,9 +34,11 @@ salt-key -d {{old minion id}}
 ### Restart Salt minion service On Salt minion
 ```
 systemctl stop salt-minion
-``
+```
 
-## Accept the new salt minion On Salt master
+
+### Accept the new salt minion On Salt master 
+
 ```
 salt-key --accept={{new minion id}}
 ```
