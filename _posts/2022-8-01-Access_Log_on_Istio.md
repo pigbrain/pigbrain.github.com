@@ -110,7 +110,15 @@ public class IstioAccessLogService extends AccessLogServiceGrpc.AccessLogService
 <br>
 
 # Access Log가 n번 수집되는 현상 ?
-* 
+* Ingress Gateway 내에서 Envoy가 들어있고 배포되는 Pod들에도 Envoy가 붙어 있다 
+* Ingress Gateway로 트래픽이 들어올 경우 타겟이 되는 Pod까지 가기 위해 여러 Envoy를 거치게 된다 
+* Envoy를 거칠때마다 Access Log를 위에서 지정한 `endpoint`로 전송하게 된다 
+  * 각 Envoy가 전송하게 됨 
+* Grpc로 전달되는 message 내용 중 어떤 Envoy가 전송한 것인지 힌트가 될 수 있는 정보가 있다 
+```java
+StreamAccessLogsMessage.getIdentifier().getNode().getCluster();
+```
+* 위 정보를 이용하여 `istio-system` 네임스페이스에서 전달된 것만 수집해도 충분하지 않을까 싶다
 
 
 # 참고 
