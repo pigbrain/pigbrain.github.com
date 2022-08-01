@@ -1,6 +1,6 @@
 ---
 layout: post
-category: Spring
+category: Istio
 title: Access Log on Istio
 tagline: by Pigbrain
 tags: [Istio]
