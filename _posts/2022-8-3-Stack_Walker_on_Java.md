@@ -1,6 +1,6 @@
 ---
 layout: post
-category: Istio
+category: Java
 title: StackWalker
 tagline: by Pigbrain
 tags: [Java]
