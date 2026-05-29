@@ -1,0 +1,324 @@
+---
+layout: default
+title: 양털깎기
+group: navigation
+---
+{% include JB/setup %}
+{% raw %}
+<style>
+#sheep-app { max-width: 760px; min-height: 90vh; margin: 0 auto; padding: 10px 16px 120px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+#sheep-app * { box-sizing: border-box; }
+
+.sg-head { text-align: center; padding: 16px 0 6px; }
+.sg-head h1 { font-size: 30px; font-weight: 800; color: #2c3e34; margin: 0; }
+.sg-msg { display: inline-block; margin-top: 12px; font-size: 15px; font-weight: 700; color: #4b7a5e; background: #e9f7ef; border: 1px solid #cfeadd; border-radius: 999px; padding: 9px 18px; }
+
+/* 퇴근 카운트다운 */
+.sg-clock-card { background: #fff; border: 1px solid #eee; border-radius: 16px; padding: 22px; margin: 22px 0; box-shadow: 0 6px 18px rgba(0,0,0,0.05); text-align: center; }
+.sg-field { text-align: left; margin-bottom: 16px; }
+.sg-field > label { display: block; font-size: 14px; font-weight: 700; color: #555; margin-bottom: 8px; }
+.sg-days { display: flex; gap: 6px; flex-wrap: wrap; }
+.sg-day { flex: 1; min-width: 38px; text-align: center; }
+.sg-day input { display: none; }
+.sg-day span { display: block; padding: 9px 0; border: 1px solid #d8d8d8; border-radius: 9px; font-size: 14px; font-weight: 700; color: #888; cursor: pointer; user-select: none; transition: all .12s; }
+.sg-day input:checked + span { background: #2e9e6b; border-color: #2e9e6b; color: #fff; }
+.sg-times { display: flex; gap: 14px; }
+.sg-times .sg-field { flex: 1; }
+.sg-times input[type=time] { width: 100%; padding: 11px 12px; font-size: 16px; border: 1px solid #d5d5d5; border-radius: 9px; }
+
+.sg-btn { border: none; border-radius: 9px; padding: 12px 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .08s, filter .15s; }
+.sg-btn:active { transform: scale(.97); }
+.sg-btn-primary { background: linear-gradient(135deg, #34c47c, #1f9e63); color: #fff; width: 100%; }
+.sg-btn-ghost { background: #f3f3f3; color: #666; border: 1px solid #e2e2e2; margin-top: 14px; }
+
+.sg-clock-label { font-size: 14px; color: #9a9a9a; letter-spacing: .03em; }
+.sg-clock-time { font-size: 50px; font-weight: 800; color: #1f9e63; font-variant-numeric: tabular-nums; line-height: 1.1; margin: 6px 0 4px; }
+.sg-clock-time.off { color: #e0892a; font-size: 30px; }
+.sg-clock-meta { font-size: 13px; color: #aaa; }
+
+/* 점수판 */
+.sg-scoreboard { display: flex; gap: 14px; margin-bottom: 14px; }
+.sg-scoreboard > div { flex: 1; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px; text-align: center; font-size: 14px; color: #777; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+.sg-scoreboard b { font-size: 22px; color: #2c3e34; }
+
+/* 양 스테이지 */
+#sg-stage { position: relative; height: 380px; border-radius: 20px; background: linear-gradient(180deg, #bfe9c9 0%, #8fd3a3 60%, #74c48f 100%); overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; cursor: crosshair; }
+#sg-stage::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 60px; background: rgba(60,130,90,0.35); }
+#sg-sheep { position: absolute; left: 50%; top: 52%; width: 280px; height: 240px; transform: translate(-50%, -50%); }
+#sg-sheep.shake { animation: sg-shake .5s ease; }
+@keyframes sg-shake { 0%,100% { transform: translate(-50%,-50%) rotate(0); } 25% { transform: translate(-50%,-54%) rotate(-5deg); } 75% { transform: translate(-50%,-54%) rotate(5deg); } }
+.sg-face { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 150px; line-height: 1; filter: drop-shadow(0 6px 6px rgba(0,0,0,0.15)); }
+
+.sg-wool-puff { position: absolute; width: var(--s); height: var(--s); transform: translate(-50%, -50%); background: radial-gradient(circle at 35% 30%, #ffffff, #f1f1ef 70%); border-radius: 50%; box-shadow: 0 0 0 3px rgba(255,255,255,0.55), inset -3px -4px 0 rgba(0,0,0,0.04); pointer-events: auto; }
+.sg-wool-puff.fly { animation: sg-fly .7s ease-out forwards; pointer-events: none; }
+@keyframes sg-fly { to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot)); opacity: 0; } }
+
+#sg-pop { position: absolute; left: 50%; top: 30%; transform: translate(-50%,-50%) scale(.6); font-size: 30px; font-weight: 900; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.3); opacity: 0; pointer-events: none; white-space: nowrap; }
+#sg-pop.show { animation: sg-pop 1.1s ease forwards; }
+@keyframes sg-pop { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.6); } 20% { opacity: 1; transform: translate(-50%,-60%) scale(1.1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%,-90%) scale(1); } }
+
+.sg-tip { text-align: center; color: #9aa6a0; font-size: 13px; margin-top: 16px; line-height: 1.6; }
+</style>
+
+<div id="sheep-app">
+  <div class="sg-head">
+    <h1>🐑 양털 깎으며 시간 때우자</h1>
+    <div class="sg-msg">✂️ 양털 깎으면서 시간 때우자! 퇴근이 성큼 가까워집니다.</div>
+  </div>
+
+  <!-- 퇴근 카운트다운 -->
+  <div class="sg-clock-card">
+    <div id="sg-clock-setup">
+      <div class="sg-field">
+        <label>근무일</label>
+        <div class="sg-days" id="sg-days"></div>
+      </div>
+      <div class="sg-times">
+        <div class="sg-field">
+          <label for="sg-start">출근 시간</label>
+          <input id="sg-start" type="time" value="09:00">
+        </div>
+        <div class="sg-field">
+          <label for="sg-end">퇴근 시간</label>
+          <input id="sg-end" type="time" value="18:00">
+        </div>
+      </div>
+      <button id="sg-clock-save" class="sg-btn sg-btn-primary">퇴근 카운트다운 시작</button>
+    </div>
+    <div id="sg-clock-view" style="display:none;">
+      <div class="sg-clock-label" id="sg-clock-label">오늘 퇴근까지</div>
+      <div class="sg-clock-time" id="sg-clock-time">--:--:--</div>
+      <div class="sg-clock-meta" id="sg-clock-meta"></div>
+      <button id="sg-clock-edit" class="sg-btn sg-btn-ghost">근무시간 수정</button>
+    </div>
+  </div>
+
+  <!-- 점수판 -->
+  <div class="sg-scoreboard">
+    <div>오늘 깎은 양 <b id="sg-sheep-count">0</b>마리</div>
+    <div>잘라낸 털뭉치 <b id="sg-wool-count">0</b>개</div>
+  </div>
+
+  <!-- 양 스테이지 -->
+  <div id="sg-stage">
+    <div id="sg-sheep">
+      <div class="sg-face">🐑</div>
+      <div id="sg-wool"></div>
+    </div>
+    <div id="sg-pop"></div>
+  </div>
+  <p class="sg-tip">💡 마우스를 누른 채 양을 <b>문지르면</b> 털뭉치가 우수수 잘려 날아가요. 다 깎으면 새 양이 등장합니다. (모바일도 OK)</p>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ─────────── 퇴근 카운트다운 ─────────── */
+  var WORK_KEY = "pigbrain_work_v1";
+  var DAY_LABEL = ["일", "월", "화", "수", "목", "금", "토"];
+  // 화면 표시 순서: 월~일  (getDay 인덱스로 매핑)
+  var DAY_ORDER = [1, 2, 3, 4, 5, 6, 0];
+  var clockTimer = null;
+
+  function loadWork() {
+    try { return JSON.parse(localStorage.getItem(WORK_KEY)); } catch (e) { return null; }
+  }
+  function saveWork(d) { localStorage.setItem(WORK_KEY, JSON.stringify(d)); }
+
+  function buildDayPicker(selected) {
+    var box = $("sg-days");
+    box.innerHTML = "";
+    DAY_ORDER.forEach(function (idx) {
+      var checked = selected.indexOf(idx) !== -1 ? " checked" : "";
+      var label = document.createElement("label");
+      label.className = "sg-day";
+      label.innerHTML = '<input type="checkbox" value="' + idx + '"' + checked + '><span>' + DAY_LABEL[idx] + '</span>';
+      box.appendChild(label);
+    });
+  }
+  function getCheckedDays() {
+    var out = [];
+    var ins = $("sg-days").querySelectorAll("input:checked");
+    for (var i = 0; i < ins.length; i++) out.push(parseInt(ins[i].value, 10));
+    return out;
+  }
+  function parseHM(str) {
+    var p = (str || "").split(":");
+    return { h: parseInt(p[0], 10), m: parseInt(p[1], 10) };
+  }
+
+  // now 이후 가장 가까운 "퇴근 시각" Date 반환
+  function nextLeave(cfg, now) {
+    var e = parseHM(cfg.end);
+    for (var i = 0; i < 14; i++) {
+      var d = new Date(now.getFullYear(), now.getMonth(), now.getDate() + i, e.h, e.m, 0, 0);
+      if (cfg.days.indexOf(d.getDay()) !== -1 && d.getTime() > now.getTime()) return d;
+    }
+    return null;
+  }
+  function isWorkingNow(cfg, now) {
+    if (cfg.days.indexOf(now.getDay()) === -1) return false;
+    var s = parseHM(cfg.start), e = parseHM(cfg.end);
+    var cur = now.getHours() * 60 + now.getMinutes();
+    return cur >= (s.h * 60 + s.m) && cur < (e.h * 60 + e.m);
+  }
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+
+  function daysSummary(days) {
+    return DAY_ORDER.filter(function (d) { return days.indexOf(d) !== -1; })
+      .map(function (d) { return DAY_LABEL[d]; }).join("·");
+  }
+
+  function clockTick(cfg) {
+    var now = new Date();
+    var leave = nextLeave(cfg, now);
+    var timeEl = $("sg-clock-time"), labelEl = $("sg-clock-label"), metaEl = $("sg-clock-meta");
+
+    if (!leave) {
+      labelEl.textContent = "";
+      timeEl.classList.add("off");
+      timeEl.textContent = "근무일을 선택해 주세요";
+      metaEl.textContent = "";
+      return;
+    }
+
+    var sameDay = leave.getDate() === now.getDate() && leave.getMonth() === now.getMonth() && leave.getFullYear() === now.getFullYear();
+    var working = isWorkingNow(cfg, now);
+    labelEl.textContent = sameDay
+      ? (working ? "오늘 퇴근까지 (근무 중 💼)" : "오늘 퇴근까지")
+      : (DAY_LABEL[leave.getDay()] + "요일 퇴근까지");
+
+    var diff = Math.max(0, Math.floor((leave.getTime() - now.getTime()) / 1000));
+    var d = Math.floor(diff / 86400), h = Math.floor((diff % 86400) / 3600), m = Math.floor((diff % 3600) / 60), s = diff % 60;
+    timeEl.classList.remove("off");
+    timeEl.textContent = (d > 0 ? d + "일 " : "") + pad(h) + ":" + pad(m) + ":" + pad(s);
+    metaEl.textContent = "근무 " + daysSummary(cfg.days) + " · " + cfg.start + "~" + cfg.end +
+      " · 퇴근 " + (leave.getMonth() + 1) + "/" + leave.getDate() + " " + cfg.end;
+  }
+
+  function startClock(cfg) {
+    $("sg-clock-setup").style.display = "none";
+    $("sg-clock-view").style.display = "block";
+    if (clockTimer) clearInterval(clockTimer);
+    clockTick(cfg);
+    clockTimer = setInterval(function () { clockTick(cfg); }, 1000);
+  }
+  function showClockSetup(cfg) {
+    if (clockTimer) { clearInterval(clockTimer); clockTimer = null; }
+    $("sg-clock-view").style.display = "none";
+    $("sg-clock-setup").style.display = "block";
+    buildDayPicker(cfg ? cfg.days : [1, 2, 3, 4, 5]);
+    $("sg-start").value = cfg ? cfg.start : "09:00";
+    $("sg-end").value = cfg ? cfg.end : "18:00";
+  }
+
+  $("sg-clock-save").addEventListener("click", function () {
+    var days = getCheckedDays();
+    var start = $("sg-start").value, end = $("sg-end").value;
+    if (days.length === 0) { alert("근무일을 하나 이상 선택해 주세요."); return; }
+    if (!start || !end) { alert("출근/퇴근 시간을 입력해 주세요."); return; }
+    var s = parseHM(start), e = parseHM(end);
+    if (e.h * 60 + e.m <= s.h * 60 + s.m) { alert("퇴근 시간은 출근 시간보다 늦어야 해요."); return; }
+    var cfg = { days: days, start: start, end: end };
+    saveWork(cfg);
+    startClock(cfg);
+  });
+  $("sg-clock-edit").addEventListener("click", function () { showClockSetup(loadWork()); });
+
+  var work = loadWork();
+  if (work && work.days && work.days.length) startClock(work); else showClockSetup(null);
+
+  /* ─────────── 양털 깎기 게임 ─────────── */
+  var SHEEP_KEY = "pigbrain_sheep_v1";
+  var WOOL_PER_SHEEP = 64;
+  var stage = $("sg-stage"), sheep = $("sg-sheep"), woolBox = $("sg-wool"), pop = $("sg-pop");
+  var shearing = false, remaining = 0, busy = false;
+
+  var stats = (function () {
+    try { return JSON.parse(localStorage.getItem(SHEEP_KEY)) || {}; } catch (e) { return {}; }
+  })();
+  var todayKey = (function () { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); })();
+  var sheepCount = (stats.day === todayKey) ? (stats.sheep || 0) : 0;
+  var woolCount = (stats.day === todayKey) ? (stats.wool || 0) : 0;
+
+  function renderScore() {
+    $("sg-sheep-count").textContent = sheepCount;
+    $("sg-wool-count").textContent = woolCount;
+    localStorage.setItem(SHEEP_KEY, JSON.stringify({ day: todayKey, sheep: sheepCount, wool: woolCount }));
+  }
+  renderScore();
+
+  function growWool() {
+    woolBox.innerHTML = "";
+    remaining = WOOL_PER_SHEEP;
+    for (var i = 0; i < WOOL_PER_SHEEP; i++) {
+      // 타원 내부에 고르게 분포
+      var ang = Math.random() * Math.PI * 2;
+      var rad = Math.sqrt(Math.random());
+      var x = 50 + Math.cos(ang) * rad * 42;   // %
+      var y = 50 + Math.sin(ang) * rad * 38;   // %
+      var size = 28 + Math.random() * 20;
+      var p = document.createElement("div");
+      p.className = "sg-wool-puff";
+      p.style.left = x + "%";
+      p.style.top = y + "%";
+      p.style.setProperty("--s", size + "px");
+      woolBox.appendChild(p);
+    }
+    busy = false;
+  }
+
+  function cutPuff(p) {
+    if (!p || p.dataset.cut) return;
+    p.dataset.cut = "1";
+    var dx = (Math.random() * 2 - 1) * 220;
+    var dy = -120 - Math.random() * 220;
+    var rot = (Math.random() * 2 - 1) * 540 + "deg";
+    p.style.setProperty("--dx", dx.toFixed(0) + "px");
+    p.style.setProperty("--dy", dy.toFixed(0) + "px");
+    p.style.setProperty("--rot", rot);
+    p.classList.add("fly");
+    setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 720);
+
+    woolCount++; remaining--;
+    renderScore();
+    if (remaining <= 0) shearComplete();
+  }
+
+  function shearComplete() {
+    if (busy) return;
+    busy = true;
+    sheepCount++; renderScore();
+    sheep.classList.add("shake");
+    pop.textContent = "✂️ 깎았다! " + sheepCount + "마리째";
+    pop.classList.remove("show"); void pop.offsetWidth; pop.classList.add("show");
+    setTimeout(function () { sheep.classList.remove("shake"); growWool(); }, 1100);
+  }
+
+  function cutAt(clientX, clientY) {
+    var el = document.elementFromPoint(clientX, clientY);
+    if (el && el.classList && el.classList.contains("sg-wool-puff")) cutPuff(el);
+  }
+
+  stage.addEventListener("pointerdown", function (e) {
+    if (busy) return;
+    shearing = true;
+    try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+    cutAt(e.clientX, e.clientY);
+    e.preventDefault();
+  });
+  stage.addEventListener("pointermove", function (e) {
+    if (shearing && !busy) cutAt(e.clientX, e.clientY);
+  });
+  function stopShear(e) {
+    shearing = false;
+    if (e && e.pointerId != null) { try { stage.releasePointerCapture(e.pointerId); } catch (_) {} }
+  }
+  stage.addEventListener("pointerup", stopShear);
+  stage.addEventListener("pointercancel", stopShear);
+
+  growWool();
+})();
+</script>
+{% endraw %}
