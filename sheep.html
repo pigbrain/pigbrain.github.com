@@ -61,12 +61,53 @@ group: navigation
 @keyframes sg-pop { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.6); } 20% { opacity: 1; transform: translate(-50%,-60%) scale(1.1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%,-90%) scale(1); } }
 
 .sg-tip { text-align: center; color: #9aa6a0; font-size: 13px; margin-top: 16px; line-height: 1.6; }
+
+/* 공유 / 도전 */
+.sg-actions { text-align: center; margin-top: 24px; }
+.sg-actions .sg-btn-primary { max-width: 320px; margin: 0 auto; }
+.sg-actions .gap { height: 12px; }
+#sg-share-out { display: none; margin-top: 14px; }
+#sg-share-link { width: 100%; max-width: 460px; padding: 10px 12px; font-size: 13px; border: 1px solid #d5d5d5; border-radius: 8px; color: #555; text-align: center; }
+.sg-note { color: #aaa; font-size: 12px; margin-top: 12px; line-height: 1.6; text-align: center; }
+
+/* 도전장 배너 */
+#sg-challenge { display: none; margin: 16px 0; background: #fff7ec; border: 1px solid #ffe0b8; border-radius: 14px; padding: 16px 30px 16px 18px; text-align: center; position: relative; }
+#sg-challenge .ch-main { font-size: 16px; font-weight: 800; color: #b96a12; }
+#sg-challenge .ch-sub { font-size: 14px; color: #7a6a55; margin-top: 6px; }
+#sg-challenge .ch-close { position: absolute; top: 8px; right: 12px; color: #c8b89a; cursor: pointer; font-weight: 800; font-size: 16px; }
+
+/* 공유 카드 (캡처용) */
+#sg-capture-wrap { position: fixed; left: -10000px; top: 0; }
+#sg-capture { width: 540px; height: 675px; box-sizing: border-box; padding: 54px 46px; background: linear-gradient(165deg, #bfe9c9 0%, #74c48f 55%, #3f9e6a 100%); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; }
+#sg-capture .cap-badge { font-size: 24px; font-weight: 800; opacity: .95; }
+#sg-capture .cap-sheep { font-size: 150px; line-height: 1; margin-top: 26px; filter: drop-shadow(0 6px 6px rgba(0,0,0,.18)); }
+#sg-capture .cap-big { margin-top: 22px; font-size: 38px; font-weight: 800; }
+#sg-capture .cap-big b { font-size: 62px; font-weight: 900; }
+#sg-capture .cap-sub { margin-top: 16px; font-size: 26px; font-weight: 700; background: rgba(0,0,0,.12); border-radius: 14px; padding: 12px 22px; }
+#sg-capture .cap-witty { margin-top: 22px; font-size: 22px; font-weight: 700; opacity: .95; }
+#sg-capture .cap-foot { margin-top: auto; font-size: 18px; opacity: .9; font-weight: 700; }
+
+/* 모달 */
+#sg-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; }
+.sg-modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+.sg-modal-box { position: relative; z-index: 1; background: #fff; border-radius: 16px; padding: 22px; max-width: 92vw; max-height: 92vh; overflow: auto; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+#sg-modal-loading { padding: 40px 20px; font-size: 16px; color: #666; }
+#sg-modal-img { max-width: min(360px, 80vw); width: 100%; border-radius: 12px; display: block; margin: 0 auto; }
+.sg-modal-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.sg-modal-btns .sg-btn { width: auto; min-width: 120px; text-decoration: none; }
 </style>
 
 <div id="sheep-app">
   <div class="sg-head">
     <h1>🐑 양털 깎으며 시간 때우자</h1>
     <div class="sg-msg">✂️ 양털 깎으면서 시간 때우자! 퇴근이 성큼 가까워집니다.</div>
+  </div>
+
+  <!-- 친구 도전장 (?vs= 링크로 진입 시 표시) -->
+  <div id="sg-challenge">
+    <span class="ch-close" id="sg-ch-close">×</span>
+    <div class="ch-main" id="sg-ch-main"></div>
+    <div class="ch-sub" id="sg-ch-sub"></div>
   </div>
 
   <!-- 퇴근 카운트다운 -->
@@ -112,6 +153,43 @@ group: navigation
     <div id="sg-pop"></div>
   </div>
   <p class="sg-tip">💡 마우스를 누른 채 양을 <b>문지르면</b> 털뭉치가 우수수 잘려 날아가요. 하지만 털은 <b>시간이 지나면 계속 자라납니다</b> — 자라는 속도를 이기고 <b>복슬복슬 0%</b>로 만들면 한 마리 완료! (모바일도 OK)</p>
+
+  <div class="sg-actions">
+    <button id="sg-make-card" class="sg-btn sg-btn-primary">📸 자랑 카드 만들기</button>
+    <div class="gap"></div>
+    <button id="sg-share-vs" class="sg-btn sg-btn-primary">⚔️ 친구에게 양털깎기 도전장 보내기 (링크 복사)</button>
+    <div id="sg-share-out">
+      <input id="sg-share-link" readonly>
+      <p class="sg-note" id="sg-share-msg"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 공유 카드 캡처용 (화면 밖) -->
+<div id="sg-capture-wrap" aria-hidden="true">
+  <div id="sg-capture">
+    <div class="cap-badge">🐑 오늘의 양털깎기 기록</div>
+    <div class="cap-sheep">🐑✂️</div>
+    <div class="cap-big">오늘 깎은 양 <b id="cap-sheep">0</b>마리</div>
+    <div class="cap-sub">✂️ 잘라낸 털뭉치 <span id="cap-wool">0</span>개</div>
+    <div class="cap-witty">양털 깎으며 시간 순삭 중 😌</div>
+    <div class="cap-foot"><span id="cap-date"></span> · pigbrain.github.io</div>
+  </div>
+</div>
+
+<!-- 카드 미리보기 / 공유 모달 -->
+<div id="sg-modal" style="display:none;">
+  <div class="sg-modal-bg" id="sg-modal-bg"></div>
+  <div class="sg-modal-box">
+    <div id="sg-modal-loading">카드 만드는 중… 📸</div>
+    <img id="sg-modal-img" alt="양털깎기 자랑 카드" style="display:none;">
+    <div class="sg-modal-btns">
+      <button id="sg-card-share" class="sg-btn sg-btn-primary" style="display:none;">공유하기</button>
+      <a id="sg-card-download" class="sg-btn sg-btn-primary" style="display:none;" download="my-sheep-card.png">이미지 저장</a>
+      <button id="sg-modal-close" class="sg-btn sg-btn-ghost">닫기</button>
+    </div>
+    <p class="sg-note" id="sg-card-msg"></p>
+  </div>
 </div>
 
 <script>
@@ -254,6 +332,7 @@ group: navigation
     $("sg-sheep-count").textContent = sheepCount;
     $("sg-wool-count").textContent = woolCount;
     localStorage.setItem(SHEEP_KEY, JSON.stringify({ day: todayKey, sheep: sheepCount, wool: woolCount }));
+    updateChallenge();
   }
   function updateFluff() {
     fluffEl.textContent = "복슬복슬 " + Math.round(liveCount / MAX_WOOL * 100) + "%";
@@ -371,6 +450,123 @@ group: navigation
   started = true;
   updateFluff();
   growTimer = setInterval(growthTick, GROW_INTERVAL);
+
+  /* ─────────── 친구 도전장(링크 공유) ─────────── */
+  var challengeFriend = null;
+
+  function b64enc(s) { return btoa(unescape(encodeURIComponent(s))); }
+  function b64dec(s) { return decodeURIComponent(escape(atob(s))); }
+  function encodeChallenge(name) {
+    return b64enc(JSON.stringify({ s: sheepCount, w: woolCount, n: name || "" }));
+  }
+  function decodeChallenge(token) {
+    try {
+      var o = JSON.parse(b64dec(token));
+      return { s: o.s || 0, w: o.w || 0, name: String(o.n || "").slice(0, 20) };
+    } catch (e) { return null; }
+  }
+  function buildChallengeLink(name) {
+    return location.origin + location.pathname + "?vs=" + encodeURIComponent(encodeChallenge(name));
+  }
+
+  function updateChallenge() {
+    if (!challengeFriend) return;
+    var f = challengeFriend, who = f.name || "친구";
+    var diff = sheepCount - f.s;
+    var verdict;
+    if (diff > 0) verdict = "🏆 당신이 " + diff + "마리 더 깎았어요! 압승!";
+    else if (diff === 0) verdict = "🤝 " + f.s + "마리 동점! 한 마리만 더!";
+    else verdict = "😤 " + (-diff) + "마리 뒤졌어요 — 따라잡아요!";
+    $("sg-ch-main").textContent = "⚔️ " + who + "님의 도전: 양 " + f.s + "마리 · 털뭉치 " + f.w + "개";
+    $("sg-ch-sub").textContent = "내 기록: 양 " + sheepCount + "마리 · 털뭉치 " + woolCount + "개 · " + verdict;
+  }
+
+  $("sg-ch-close").addEventListener("click", function () { $("sg-challenge").style.display = "none"; });
+
+  $("sg-share-vs").addEventListener("click", function () {
+    var name = (prompt("도전장에 표시할 닉네임 (선택)", "") || "").slice(0, 20);
+    var link = buildChallengeLink(name);
+    var out = $("sg-share-out"), input = $("sg-share-link"), msg = $("sg-share-msg");
+    out.style.display = "block";
+    input.value = link;
+    input.focus(); input.select();
+    var done = function (ok) {
+      msg.textContent = (ok ? "✅ 도전장 링크를 복사했어요! " : "아래 링크를 길게 눌러 복사하세요. ") +
+        "받는 사람은 링크만 열면 내 기록과 자기 기록을 비교하며 도전할 수 있어요.";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); });
+    } else {
+      try { document.execCommand("copy"); done(true); } catch (e) { done(false); }
+    }
+  });
+
+  // 링크로 진입했으면 도전장 배너 표시
+  var vsParam = new URLSearchParams(location.search).get("vs");
+  if (vsParam) {
+    var friend = decodeChallenge(vsParam);
+    if (friend) { challengeFriend = friend; $("sg-challenge").style.display = "block"; updateChallenge(); }
+  }
+
+  /* ─────────── 자랑 카드 (html2canvas 지연 로딩) ─────────── */
+  var H2C_SRC = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+  var h2cPromise = null;
+  function loadHtml2canvas() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    if (h2cPromise) return h2cPromise;
+    h2cPromise = new Promise(function (resolve, reject) {
+      var sc = document.createElement("script");
+      sc.src = H2C_SRC;
+      sc.onload = function () { resolve(window.html2canvas); };
+      sc.onerror = function () { reject(new Error("load failed")); };
+      document.head.appendChild(sc);
+    });
+    return h2cPromise;
+  }
+  function fillCard() {
+    $("cap-sheep").textContent = sheepCount;
+    $("cap-wool").textContent = woolCount;
+    var d = new Date();
+    $("cap-date").textContent = d.getFullYear() + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + ("0" + d.getDate()).slice(-2);
+  }
+  function closeModal() { $("sg-modal").style.display = "none"; }
+
+  $("sg-make-card").addEventListener("click", function () {
+    fillCard();
+    var modal = $("sg-modal"), img = $("sg-modal-img"), loading = $("sg-modal-loading");
+    var shareBtn = $("sg-card-share"), dlBtn = $("sg-card-download"), msg = $("sg-card-msg");
+    img.style.display = "none"; shareBtn.style.display = "none"; dlBtn.style.display = "none";
+    loading.style.display = "block"; msg.textContent = "";
+    modal.style.display = "flex";
+
+    loadHtml2canvas().then(function (h2c) {
+      return h2c($("sg-capture"), { scale: 2, backgroundColor: null, useCORS: true });
+    }).then(function (canvas) {
+      loading.style.display = "none";
+      var dataURL = canvas.toDataURL("image/png");
+      img.src = dataURL; img.style.display = "block";
+      dlBtn.href = dataURL; dlBtn.style.display = "inline-block";
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+        var file = new File([blob], "my-sheep-card.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareBtn.style.display = "inline-block";
+          shareBtn.onclick = function () {
+            navigator.share({ files: [file], title: "양털깎기 기록", text: "오늘 양 " + sheepCount + "마리 깎았다 🐑✂️ (pigbrain.github.io)" }).catch(function () {});
+          };
+          msg.textContent = "공유하기로 SNS에 바로 올리거나, 이미지로 저장할 수 있어요.";
+        } else {
+          msg.textContent = "이 기기는 직접 공유를 지원하지 않아요. '이미지 저장' 후 SNS에 올려주세요.";
+        }
+      }, "image/png");
+    }).catch(function () {
+      loading.style.display = "none";
+      msg.textContent = "카드를 만들지 못했어요. 네트워크 상태를 확인하고 다시 시도해 주세요.";
+    });
+  });
+
+  $("sg-modal-close").addEventListener("click", closeModal);
+  $("sg-modal-bg").addEventListener("click", closeModal);
 })();
 </script>
 {% endraw %}
