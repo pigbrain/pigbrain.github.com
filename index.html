@@ -3,48 +3,334 @@ layout: default
 group: home
 ---
 {% include JB/setup %}
-<div class="page-title-inline">
-	{% if page.group == 'home' %}
-	<h1>{{ site.title }} </h1>
-	{% if site.tagline %}<h2>{{ site.tagline }}</h2>{% endif %}
-	{% else %}
-	<h1>{{ page.title }} </h1>
-	{% if page.tagline %}<h2>{{ page.tagline }}</h2>{% endif %}
-	{% endif %}
+{% raw %}
+<style>
+#salary-app { max-width: 760px; margin: 0 auto; padding: 10px 16px 60px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; position: relative; }
+#salary-app * { box-sizing: border-box; }
+
+/* coins fall in front of everything */
+#coin-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
+.coin { position: absolute; top: -40px; font-size: 28px; will-change: transform, opacity; animation: coin-fall linear forwards; }
+@keyframes coin-fall {
+  0%   { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translateY(105vh) rotate(540deg); opacity: 0.9; }
+}
+
+/* input card */
+.sa-card { background: #fff; border: 1px solid #e6e6e6; border-radius: 14px; padding: 28px 26px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+.sa-card h2 { margin: 0 0 6px; font-size: 22px; color: #2c2c2c; }
+.sa-card p.sa-sub { margin: 0 0 22px; color: #888; font-size: 14px; }
+.sa-field { margin-bottom: 18px; }
+.sa-field label { display: block; font-size: 14px; color: #555; margin-bottom: 7px; font-weight: 600; }
+.sa-field input { width: 100%; padding: 12px 14px; font-size: 16px; border: 1px solid #d5d5d5; border-radius: 9px; outline: none; transition: border-color .15s; }
+.sa-field input:focus { border-color: #2e9e6b; }
+.sa-row { display: flex; gap: 14px; }
+.sa-row .sa-field { flex: 1; }
+
+.sa-btn { display: inline-block; border: none; border-radius: 9px; padding: 12px 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .08s, filter .15s; }
+.sa-btn:active { transform: scale(0.97); }
+.sa-btn-primary { background: linear-gradient(135deg, #34c47c, #1f9e63); color: #fff; width: 100%; }
+.sa-btn-primary:hover { filter: brightness(1.05); }
+.sa-btn-ghost { background: #f3f3f3; color: #666; border: 1px solid #e2e2e2; }
+.sa-btn-ghost:hover { background: #ececec; }
+
+/* dashboard */
+.sa-hero { text-align: center; padding: 22px 10px 8px; }
+.sa-hero .sa-label { color: #9a9a9a; font-size: 14px; letter-spacing: .04em; }
+.sa-amount { font-size: 52px; font-weight: 800; color: #1f9e63; margin: 6px 0 2px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.sa-amount .won { font-size: 28px; color: #2c2c2c; margin-left: 4px; }
+.sa-meta { color: #aaa; font-size: 13px; margin-top: 4px; }
+
+.sa-stats { display: flex; gap: 14px; margin: 22px 0; }
+.sa-stat { flex: 1; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+.sa-stat .k { font-size: 13px; color: #999; margin-bottom: 6px; }
+.sa-stat .v { font-size: 22px; font-weight: 700; color: #333; font-variant-numeric: tabular-nums; }
+.sa-stat.today .v { color: #e0892a; }
+
+.sa-section-title { font-size: 16px; font-weight: 700; color: #444; margin: 26px 0 12px; }
+.sa-foods { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+.sa-food { position: relative; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px 8px 12px; text-align: center; opacity: .4; filter: grayscale(1); transition: all .35s; }
+.sa-food.unlocked { opacity: 1; filter: none; border-color: #ffd27a; box-shadow: 0 4px 14px rgba(255,180,60,0.18); }
+.sa-food .emoji { font-size: 36px; display: block; line-height: 1; }
+.sa-food .fname { font-size: 13px; color: #555; margin-top: 7px; font-weight: 600; }
+.sa-food .fprice { font-size: 11px; color: #aaa; margin-top: 2px; }
+.sa-food .badge { position: absolute; top: 6px; right: 6px; background: #2e9e6b; color: #fff; font-size: 11px; font-weight: 700; border-radius: 999px; padding: 2px 7px; opacity: 0; transform: scale(.5); transition: all .3s; }
+.sa-food.unlocked .badge { opacity: 1; transform: scale(1); }
+.sa-food .today-tag { position: absolute; top: 6px; left: 6px; font-size: 12px; opacity: 0; transition: opacity .3s; }
+.sa-food.today-ok .today-tag { opacity: 1; }
+
+/* 마일스톤 축하 토스트 */
+#sa-toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(140%); z-index: 10000; background: linear-gradient(135deg, #ffb347, #ff8c42); color: #fff; padding: 14px 22px; border-radius: 999px; box-shadow: 0 10px 28px rgba(255,140,66,0.45); font-size: 15px; font-weight: 700; max-width: 90vw; text-align: center; opacity: 0; transition: transform .45s cubic-bezier(.2,1.4,.4,1), opacity .35s; pointer-events: none; }
+#sa-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.sa-pulse { animation: sa-pulse 1.2s ease-in-out 2; }
+@keyframes sa-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,140,66,0); } 50% { box-shadow: 0 0 0 12px rgba(255,140,66,0.18); } }
+
+.sa-footer { margin-top: 30px; text-align: center; }
+.sa-note { color: #bbb; font-size: 12px; margin-top: 14px; line-height: 1.6; }
+</style>
+
+<div id="coin-layer"></div>
+<div id="sa-toast"></div>
+
+<div id="salary-app">
+  <!-- 입력 화면 -->
+  <div id="sa-setup" class="sa-card" style="display:none;">
+    <h2>💰 월급 실시간 계산기</h2>
+    <p class="sa-sub">월급일과 월급을 입력하면, 지금 이 순간에도 쌓이는 내 돈을 보여드려요.</p>
+    <div class="sa-row">
+      <div class="sa-field">
+        <label for="sa-payday">월급일 (매월 며칠)</label>
+        <input id="sa-payday" type="number" min="1" max="31" placeholder="예: 25">
+      </div>
+      <div class="sa-field">
+        <label for="sa-salary">월급 (원)</label>
+        <input id="sa-salary" type="number" min="0" step="10000" placeholder="예: 3000000">
+      </div>
+    </div>
+    <button id="sa-save" class="sa-btn sa-btn-primary">시작하기</button>
+    <p class="sa-note">입력값은 이 브라우저에만 저장되며 서버로 전송되지 않습니다.</p>
+  </div>
+
+  <!-- 대시보드 -->
+  <div id="sa-dashboard" style="display:none;">
+    <div class="sa-hero">
+      <div class="sa-label">이번 달 월급일부터 지금까지 번 돈</div>
+      <div class="sa-amount"><span id="sa-total">0</span><span class="won">원</span></div>
+      <div class="sa-meta" id="sa-meta"></div>
+    </div>
+
+    <div class="sa-stats">
+      <div class="sa-stat today">
+        <div class="k">오늘 번 돈</div>
+        <div class="v"><span id="sa-today">0</span>원</div>
+      </div>
+      <div class="sa-stat">
+        <div class="k">초당</div>
+        <div class="v"><span id="sa-rate">0</span>원</div>
+      </div>
+    </div>
+
+    <div class="sa-section-title">🍽 지금까지 번 돈으로 먹을 수 있는 것 <span style="font-weight:400;color:#bbb;font-size:13px;">(⭐ = 오늘 번 돈으로 가능)</span></div>
+    <div class="sa-foods" id="sa-foods"></div>
+
+    <div class="sa-footer">
+      <button id="sa-reset" class="sa-btn sa-btn-ghost">월급일 · 월급 초기화</button>
+      <p class="sa-note">2.5초마다 갱신됩니다 · 돈은 24시간 쉬지 않고 쌓이는 것으로 계산해요 😴💸</p>
+    </div>
+  </div>
 </div>
-<div class="cont932">
-	<hr style="margin-top: 0;">
-	<div id="journal-articles-block">
-	{% for post in paginator.posts %}
-		<div class="journal-article">
-			<div class="journal-post-info">
-				{% assign categories_list = post.categories %}
-				{% assign category = categories_list.first %}
-				{% include themes/Snail/category.html %}
-				{% assign categories_list = nil %}
-			</div>
-			<div class="journal-body">
-				<h1 class="journal-title"><a href="{{ post.url }}">{{ post.title }}</a><span class="author">{{ post.tagline }}</span></h1>
-				{% case site.excerpt %}
-				{% when "truncate_words" %}
-				<span class="teaser"><p>{{ post.content | strip_html | truncatewords: 20 }}</p>
-				{% when "teaser" %}
-				<span class="teaser">{{ post.content  | split:'<!--more-->' | first }}
-				{% endcase %}
-				</span>
-				<span class="readmore"><a href="{{ post.url }}">Read More</a></span>
-			</div>
-		</div>
-		<div class="clearboth"></div>
-		{% endfor %}
-	</div>
-	{% if paginator.next_page  %}
-	<div id="journal-arrows-cont">
-			<a href="{{ paginator.next_page_path }}" class="journal-arrow ja-forward"></a>
-	</div>
-	{% endif %}
-	<div class="clearboth"></div>
-	<div id="journal-loadmore">Load More…</div>
-	<div class="clearboth"></div>
-</div>
-<div class="clearboth"></div>
+
+<script>
+(function () {
+  var STORAGE_KEY = "pigbrain_salary_v1";
+  var FOODS = [
+    { emoji: "🍬", name: "사탕",        price: 500 },
+    { emoji: "☕", name: "커피",        price: 5000 },
+    { emoji: "🍙", name: "김밥",        price: 8000 },
+    { emoji: "🍜", name: "라면",        price: 9000 },
+    { emoji: "🍔", name: "햄버거 세트",  price: 12000 },
+    { emoji: "🍕", name: "피자",        price: 18000 },
+    { emoji: "🍗", name: "치킨",        price: 20000 },
+    { emoji: "🥩", name: "삼겹살",      price: 30000 },
+    { emoji: "🍣", name: "초밥",        price: 50000 },
+    { emoji: "🦞", name: "랍스터",      price: 100000 },
+    { emoji: "👑", name: "한우 오마카세", price: 300000 }
+  ];
+  var COIN_UNIT = 1000;     // 1000원 쌓일 때마다 동전 1개
+  var COIN_MAX_PER_TICK = 10;
+  var TICK_MS = 2500;
+
+  // 일정 금액을 넘으면 축하 메시지를 띄워 주변(=배너 영역)으로 시선을 유도한다.
+  // 주의: Google AdSense 정책상 "광고를 클릭하세요" 류의 직접 유도는 금지되어 있어,
+  // 클릭을 강요하지 않는 가벼운 문구만 사용한다.
+  var MILESTONES = [
+    { at: 10000,   msg: "🎉 벌써 1만 원 돌파! 잘 벌고 있어요 😎" },
+    { at: 30000,   msg: "🍗 3만 원 달성! 치킨각인데요? 주변도 한번 둘러보세요 👀" },
+    { at: 50000,   msg: "🍣 5만 원! 오늘은 좀 사치 부려도 될 듯 👀" },
+    { at: 100000,  msg: "🦞 10만 원 돌파! 이 페이지 곳곳을 구경해 보세요 👀" },
+    { at: 300000,  msg: "👑 30만 원! 한우 오마카세도 가능 — 주변도 살펴봐요 👀" },
+    { at: 500000,  msg: "🤑 50만 원 돌파! 부자되는 중 💸" },
+    { at: 1000000, msg: "🚀 100만 원! 진짜 대단해요 — 한 바퀴 둘러보세요 👀" }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var setupEl = $("sa-setup"), dashEl = $("sa-dashboard");
+  var coinLayer = $("coin-layer");
+  var timer = null, lastCoinUnits = null, displayed = 0, target = 0, raf = null;
+  var lastMilestone = -Infinity, toastTimer = null;
+
+  function fmt(n) { return Math.floor(n).toLocaleString("ko-KR"); }
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); }
+    catch (e) { return null; }
+  }
+  function save(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+  // 해당 연/월의 실제 월급일(말일 보정)
+  function paydayInMonth(year, month, payDay) {
+    var lastDay = new Date(year, month + 1, 0).getDate();
+    return new Date(year, month, Math.min(payDay, lastDay), 0, 0, 0, 0);
+  }
+
+  function compute(cfg, now) {
+    var thisMonth = paydayInMonth(now.getFullYear(), now.getMonth(), cfg.payDay);
+    var lastPayday, nextPayday;
+    if (thisMonth.getTime() > now.getTime()) {
+      lastPayday = paydayInMonth(now.getFullYear(), now.getMonth() - 1, cfg.payDay);
+      nextPayday = thisMonth;
+    } else {
+      lastPayday = thisMonth;
+      nextPayday = paydayInMonth(now.getFullYear(), now.getMonth() + 1, cfg.payDay);
+    }
+    var periodMs = nextPayday.getTime() - lastPayday.getTime();
+    var ratePerMs = cfg.salary / periodMs;
+    var total = ratePerMs * (now.getTime() - lastPayday.getTime());
+
+    var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+    var todayStart = Math.max(midnight.getTime(), lastPayday.getTime());
+    var today = ratePerMs * (now.getTime() - todayStart);
+
+    return {
+      total: total,
+      today: today,
+      ratePerSec: ratePerMs * 1000,
+      lastPayday: lastPayday,
+      nextPayday: nextPayday
+    };
+  }
+
+  function dropCoins(count) {
+    for (var i = 0; i < count; i++) {
+      var c = document.createElement("div");
+      c.className = "coin";
+      c.textContent = Math.random() < 0.15 ? "💵" : "🪙";
+      c.style.left = (Math.random() * 96) + "%";
+      var dur = 2.4 + Math.random() * 1.8;
+      c.style.animationDuration = dur + "s";
+      c.style.fontSize = (22 + Math.random() * 14) + "px";
+      coinLayer.appendChild(c);
+      (function (el) { setTimeout(function () { el.remove(); }, dur * 1000 + 200); })(c);
+    }
+  }
+
+  function showToast(msg) {
+    var t = $("sa-toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    var ads = document.querySelectorAll("ins.adsbygoogle, iframe[id^='aswift'], iframe[id^='google_ads']");
+    for (var i = 0; i < ads.length; i++) { ads[i].classList.add("sa-pulse"); }
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      t.classList.remove("show");
+      for (var j = 0; j < ads.length; j++) { ads[j].classList.remove("sa-pulse"); }
+    }, 5000);
+  }
+
+  function checkMilestone(total) {
+    var hit = null;
+    for (var i = 0; i < MILESTONES.length; i++) {
+      if (total >= MILESTONES[i].at && MILESTONES[i].at > lastMilestone) { hit = MILESTONES[i]; }
+    }
+    if (hit) { lastMilestone = hit.at; showToast(hit.msg); }
+  }
+
+  function renderFoods(total, today) {
+    var box = $("sa-foods");
+    if (box.childNodes.length === 0) {
+      FOODS.forEach(function (f) {
+        var d = document.createElement("div");
+        d.className = "sa-food";
+        d.setAttribute("data-price", f.price);
+        d.innerHTML =
+          '<span class="today-tag">⭐</span>' +
+          '<span class="badge">획득</span>' +
+          '<span class="emoji">' + f.emoji + '</span>' +
+          '<span class="fname">' + f.name + '</span>' +
+          '<span class="fprice">' + fmt(f.price) + '원</span>';
+        box.appendChild(d);
+      });
+    }
+    var nodes = box.childNodes;
+    for (var i = 0; i < nodes.length; i++) {
+      var price = parseInt(nodes[i].getAttribute("data-price"), 10);
+      nodes[i].classList.toggle("unlocked", total >= price);
+      nodes[i].classList.toggle("today-ok", today >= price);
+    }
+  }
+
+  // 표시 숫자를 target까지 부드럽게 증가
+  function animate() {
+    displayed += (target - displayed) * 0.18;
+    if (Math.abs(target - displayed) < 1) displayed = target;
+    $("sa-total").textContent = fmt(displayed);
+    if (Math.abs(target - displayed) >= 1) {
+      raf = requestAnimationFrame(animate);
+    } else { raf = null; }
+  }
+
+  function tick(cfg) {
+    var r = compute(cfg, new Date());
+    target = r.total;
+    if (raf === null) raf = requestAnimationFrame(animate);
+
+    $("sa-today").textContent = fmt(r.today);
+    $("sa-rate").textContent = r.ratePerSec.toFixed(2);
+    $("sa-meta").textContent =
+      "월급일: 매월 " + cfg.payDay + "일 · 월급 " + fmt(cfg.salary) + "원" +
+      " · 다음 월급까지 " + Math.ceil((r.nextPayday - new Date()) / 86400000) + "일";
+
+    renderFoods(r.total, r.today);
+    checkMilestone(r.total);
+
+    // 구간(1000원)을 넘을 때마다 동전 떨어뜨리기
+    var units = Math.floor(r.total / COIN_UNIT);
+    if (lastCoinUnits === null) {
+      lastCoinUnits = units;
+    } else if (units > lastCoinUnits) {
+      dropCoins(Math.min(units - lastCoinUnits, COIN_MAX_PER_TICK));
+      lastCoinUnits = units;
+    }
+  }
+
+  function start(cfg) {
+    setupEl.style.display = "none";
+    dashEl.style.display = "block";
+    lastCoinUnits = null; displayed = 0; target = 0; lastMilestone = -Infinity;
+    if (timer) clearInterval(timer);
+    tick(cfg);
+    timer = setInterval(function () { tick(cfg); }, TICK_MS);
+  }
+
+  function showSetup(prefill) {
+    if (timer) { clearInterval(timer); timer = null; }
+    dashEl.style.display = "none";
+    setupEl.style.display = "block";
+    $("sa-payday").value = prefill ? prefill.payDay : "";
+    $("sa-salary").value = prefill ? prefill.salary : "";
+  }
+
+  $("sa-save").addEventListener("click", function () {
+    var payDay = parseInt($("sa-payday").value, 10);
+    var salary = parseInt($("sa-salary").value, 10);
+    if (!(payDay >= 1 && payDay <= 31)) { alert("월급일은 1~31 사이로 입력해 주세요."); return; }
+    if (!(salary > 0)) { alert("월급을 올바르게 입력해 주세요."); return; }
+    var cfg = { payDay: payDay, salary: salary };
+    save(cfg);
+    start(cfg);
+  });
+
+  $("sa-reset").addEventListener("click", function () {
+    if (!confirm("월급일과 월급을 초기화할까요?")) return;
+    var prev = load();
+    localStorage.removeItem(STORAGE_KEY);
+    showSetup(prev);
+  });
+
+  var existing = load();
+  if (existing && existing.payDay && existing.salary) { start(existing); }
+  else { showSetup(null); }
+})();
+</script>
+{% endraw %}
