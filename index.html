@@ -76,6 +76,24 @@ group: home
 
 .sa-footer { margin-top: 30px; text-align: center; }
 .sa-note { color: #bbb; font-size: 12px; margin-top: 14px; line-height: 1.6; }
+
+/* 공유 링크 박스 */
+#sa-share-link { width: 100%; max-width: 460px; padding: 10px 12px; font-size: 13px; border: 1px solid #d5d5d5; border-radius: 8px; color: #555; text-align: center; }
+
+/* 1:1 대결 화면 */
+.sa-vs-grid { display: flex; align-items: stretch; gap: 12px; margin: 18px 0 6px; }
+.sa-vs-card { flex: 1; background: #fff; border: 2px solid #eee; border-radius: 14px; padding: 20px 12px; text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,0.05); transition: border-color .3s, box-shadow .3s; }
+.sa-vs-card.me   { border-color: #cfe9db; }
+.sa-vs-card.you  { border-color: #ffe0b8; }
+.sa-vs-card.lead { box-shadow: 0 8px 22px rgba(46,158,107,0.22); }
+.sa-vs-card .vs-name { font-size: 15px; font-weight: 700; color: #555; margin-bottom: 10px; }
+.sa-vs-card .vs-amount { font-size: 30px; font-weight: 800; color: #1f9e63; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.sa-vs-card.you .vs-amount { color: #e0892a; }
+.sa-vs-card .vs-rate { font-size: 13px; color: #aaa; margin-top: 6px; }
+.sa-vs-mid { align-self: center; font-size: 18px; font-weight: 800; color: #bbb; }
+.sa-vs-verdict { text-align: center; margin: 18px 0 4px; }
+.sa-vs-verdict .vmain { font-size: 18px; font-weight: 800; color: #333; }
+.sa-vs-verdict .vsub { font-size: 13px; color: #999; margin-top: 6px; }
 </style>
 
 <div id="coin-layer"></div>
@@ -153,8 +171,42 @@ group: home
     <div class="sa-foods" id="sa-foods-today"></div>
 
     <div class="sa-footer">
-      <button id="sa-reset" class="sa-btn sa-btn-ghost">월급일 · 월급 초기화</button>
+      <button id="sa-share-vs" class="sa-btn sa-btn-primary" style="max-width:320px;">⚔️ 친구에게 월급 대결 신청 (링크 복사)</button>
+      <div id="sa-share-out" style="display:none; margin-top:14px;">
+        <input id="sa-share-link" readonly>
+        <p class="sa-note" id="sa-share-msg"></p>
+      </div>
+      <div style="margin-top:14px;">
+        <button id="sa-reset" class="sa-btn sa-btn-ghost">월급일 · 월급 초기화</button>
+      </div>
       <p class="sa-note">2.5초마다 갱신됩니다 · 돈은 24시간 쉬지 않고 쌓이는 것으로 계산해요 😴💸</p>
+    </div>
+  </div>
+
+  <!-- 1:1 대결 화면 (?vs= 링크로 진입 시 표시) -->
+  <div id="sa-vs" style="display:none;">
+    <div class="sa-hero" style="padding-bottom:6px;">
+      <div class="sa-label">⚔️ 1:1 월급 대결</div>
+    </div>
+    <div class="sa-vs-grid">
+      <div class="sa-vs-card me">
+        <div class="vs-name" id="vs-me-name">🧑 나</div>
+        <div class="vs-amount"><span id="vs-me-total">0</span>원</div>
+        <div class="vs-rate">초당 <span id="vs-me-rate">0</span>원</div>
+      </div>
+      <div class="sa-vs-mid">VS</div>
+      <div class="sa-vs-card you">
+        <div class="vs-name" id="vs-you-name">👤 상대</div>
+        <div class="vs-amount"><span id="vs-you-total">0</span>원</div>
+        <div class="vs-rate">초당 <span id="vs-you-rate">0</span>원</div>
+      </div>
+    </div>
+    <div class="sa-vs-verdict" id="sa-vs-verdict"></div>
+    <div class="sa-footer">
+      <button id="vs-join" class="sa-btn sa-btn-primary" style="display:none; max-width:320px;">내 월급 입력하고 참전하기</button>
+      <div style="margin-top:14px;">
+        <button id="vs-back" class="sa-btn sa-btn-ghost">내 계산기로 가기</button>
+      </div>
     </div>
   </div>
 </div>
@@ -194,10 +246,11 @@ group: home
   ];
 
   var $ = function (id) { return document.getElementById(id); };
-  var setupEl = $("sa-setup"), dashEl = $("sa-dashboard");
+  var setupEl = $("sa-setup"), dashEl = $("sa-dashboard"), vsEl = $("sa-vs");
   var coinLayer = $("coin-layer");
   var timer = null, coinTimer = null, lastCoinUnits = null, displayed = 0, target = 0, raf = null;
   var lastMilestone = -Infinity, toastTimer = null;
+  var vsTimer = null, vsFriend = null;
 
   function fmt(n) { return Math.floor(n).toLocaleString("ko-KR"); }
 
@@ -333,8 +386,10 @@ group: home
 
   function start(cfg) {
     setupEl.style.display = "none";
+    vsEl.style.display = "none";
     dashEl.style.display = "block";
     lastCoinUnits = null; displayed = 0; target = 0; lastMilestone = -Infinity;
+    if (vsTimer) { clearInterval(vsTimer); vsTimer = null; }
     if (timer) clearInterval(timer);
     if (coinTimer) clearInterval(coinTimer);
     tick(cfg);
@@ -349,10 +404,90 @@ group: home
   function showSetup(prefill) {
     if (timer) { clearInterval(timer); timer = null; }
     if (coinTimer) { clearInterval(coinTimer); coinTimer = null; }
+    if (vsTimer) { clearInterval(vsTimer); vsTimer = null; }
     dashEl.style.display = "none";
+    vsEl.style.display = "none";
     setupEl.style.display = "block";
     $("sa-payday").value = prefill ? prefill.payDay : "";
     $("sa-salary").value = prefill ? prefill.salary : "";
+  }
+
+  // ── 1:1 대결 (서버 없이 URL 파라미터로 상대 정보 전달) ───────────────
+  function b64enc(s) { return btoa(unescape(encodeURIComponent(s))); }
+  function b64dec(s) { return decodeURIComponent(escape(atob(s))); }
+
+  function encodeFriend(cfg, name) {
+    return b64enc(JSON.stringify({ p: cfg.payDay, s: cfg.salary, n: name || "" }));
+  }
+  function decodeFriend(token) {
+    try {
+      var o = JSON.parse(b64dec(token));
+      if (!(o.p >= 1 && o.p <= 31) || !(o.s > 0)) return null;
+      return { payDay: o.p, salary: o.s, name: String(o.n || "").slice(0, 20) };
+    } catch (e) { return null; }
+  }
+  function buildVsLink(cfg, name) {
+    return location.origin + location.pathname + "?vs=" + encodeURIComponent(encodeFriend(cfg, name));
+  }
+
+  function vsTick() {
+    var now = new Date();
+    var rf = compute({ payDay: vsFriend.payDay, salary: vsFriend.salary }, now);
+    var youName = vsFriend.name || "상대";
+    $("vs-you-name").textContent = "👤 " + youName;
+    $("vs-you-total").textContent = fmt(rf.total);
+    $("vs-you-rate").textContent = rf.ratePerSec.toFixed(2);
+
+    var me = load();
+    var meCard = vsEl.querySelector(".sa-vs-card.me");
+    var youCard = vsEl.querySelector(".sa-vs-card.you");
+    if (me && me.payDay && me.salary) {
+      var rm = compute(me, now);
+      $("vs-me-name").textContent = "🧑 나";
+      $("vs-me-total").textContent = fmt(rm.total);
+      $("vs-me-rate").textContent = rm.ratePerSec.toFixed(2);
+      $("vs-join").style.display = "none";
+
+      var diffDay = (rm.ratePerSec - rf.ratePerSec) * 86400;
+      var vmain;
+      if (Math.abs(diffDay) < 1) vmain = "🤝 막상막하! 거의 같은 속도예요.";
+      else if (diffDay > 0) vmain = "🏆 내가 하루에 ₩" + fmt(diffDay) + " 더 버는 중!";
+      else vmain = "😤 " + youName + "님이 하루에 ₩" + fmt(-diffDay) + " 더 버는 중!";
+
+      var gap = rm.total - rf.total;
+      var vsub = gap >= 0
+        ? "지금 적립액은 내가 ₩" + fmt(gap) + " 앞서는 중"
+        : "지금 적립액은 " + youName + "님이 ₩" + fmt(-gap) + " 앞서는 중";
+      $("sa-vs-verdict").innerHTML = "<div class='vmain'>" + vmain + "</div><div class='vsub'>" + vsub + "</div>";
+
+      meCard.classList.toggle("lead", rm.ratePerSec >= rf.ratePerSec);
+      youCard.classList.toggle("lead", rf.ratePerSec > rm.ratePerSec);
+    } else {
+      $("vs-me-name").textContent = "🧑 나";
+      $("vs-me-total").textContent = "—";
+      $("vs-me-rate").textContent = "—";
+      $("vs-join").style.display = "inline-block";
+      $("sa-vs-verdict").innerHTML = "<div class='vmain'>내 월급을 입력하면 대결이 시작됩니다!</div>";
+      meCard.classList.remove("lead");
+      youCard.classList.remove("lead");
+    }
+  }
+
+  function enterVs(friend) {
+    vsFriend = friend;
+    if (timer) { clearInterval(timer); timer = null; }
+    if (vsTimer) clearInterval(vsTimer);
+    setupEl.style.display = "none";
+    dashEl.style.display = "none";
+    vsEl.style.display = "block";
+    if (!coinTimer) {
+      coinTimer = setInterval(function () {
+        if (document.hidden) return;
+        dropCoins(1 + Math.floor(Math.random() * 3));
+      }, COIN_RAIN_MS);
+    }
+    vsTick();
+    vsTimer = setInterval(vsTick, 1000);
   }
 
   $("sa-save").addEventListener("click", function () {
@@ -362,7 +497,7 @@ group: home
     if (!(salary > 0)) { alert("월급을 올바르게 입력해 주세요."); return; }
     var cfg = { payDay: payDay, salary: salary };
     save(cfg);
-    start(cfg);
+    if (vsFriend) { enterVs(vsFriend); } else { start(cfg); }
   });
 
   $("sa-reset").addEventListener("click", function () {
@@ -372,9 +507,45 @@ group: home
     showSetup(prev);
   });
 
+  $("sa-share-vs").addEventListener("click", function () {
+    var cfg = load();
+    if (!cfg) return;
+    var name = (prompt("대결에 표시할 닉네임 (선택)", "") || "").slice(0, 20);
+    var link = buildVsLink(cfg, name);
+    var out = $("sa-share-out"), input = $("sa-share-link"), msg = $("sa-share-msg");
+    out.style.display = "block";
+    input.value = link;
+    input.focus(); input.select();
+    var done = function (ok) {
+      msg.textContent = (ok ? "✅ 링크를 복사했어요! " : "아래 링크를 길게 눌러 복사하세요. ") +
+        "받는 사람은 링크만 열면 내 적립 속도와 자기 속도를 비교할 수 있어요.";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); });
+    } else {
+      try { document.execCommand("copy"); done(true); } catch (e) { done(false); }
+    }
+  });
+
+  $("vs-join").addEventListener("click", function () {
+    showSetup(null);           // vsFriend 는 유지되므로, 저장 시 자동으로 대결로 복귀
+    vsEl.style.display = "none";
+  });
+  $("vs-back").addEventListener("click", function () {
+    location.href = location.pathname;   // ?vs= 파라미터 제거하고 내 계산기로
+  });
+
+  // ── 진입 분기 ───────────────────────────────────────────────
+  var vsParam = new URLSearchParams(location.search).get("vs");
+  var friend = vsParam ? decodeFriend(vsParam) : null;
   var existing = load();
-  if (existing && existing.payDay && existing.salary) { start(existing); }
-  else { showSetup(null); }
+  if (friend) {
+    enterVs(friend);
+  } else if (existing && existing.payDay && existing.salary) {
+    start(existing);
+  } else {
+    showSetup(null);
+  }
 })();
 </script>
 {% endraw %}
