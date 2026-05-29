@@ -58,6 +58,8 @@ group: home
 .sa-stat .v { font-size: 22px; font-weight: 700; color: #333; font-variant-numeric: tabular-nums; }
 .sa-stat.today .v { color: #e0892a; }
 
+.sa-witty { margin: -6px 0 4px; text-align: center; font-size: 15px; font-weight: 600; color: #6a7c72; background: #f1f8f4; border: 1px solid #e2efe8; border-radius: 999px; padding: 10px 16px; transition: opacity .25s; }
+
 .sa-section-title { font-size: 16px; font-weight: 700; color: #444; margin: 26px 0 12px; }
 .sa-foods { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
 .sa-food { position: relative; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px 8px 12px; text-align: center; opacity: .4; filter: grayscale(1); transition: all .35s; }
@@ -167,6 +169,8 @@ group: home
       </div>
     </div>
 
+    <div class="sa-witty" id="sa-witty"></div>
+
     <div class="sa-section-title">🌞 오늘 번 돈으로 먹을 수 있는 것</div>
     <div class="sa-foods" id="sa-foods-today"></div>
 
@@ -227,6 +231,19 @@ group: home
     { emoji: "🦞", name: "랍스터",      price: 100000 },
     { emoji: "👑", name: "한우 오마카세", price: 300000 }
   ];
+  // 초당 수입을 친근한 단위로 환산해 보여줄 품목들
+  var WITTY = [
+    { emoji: "☕", name: "아메리카노", price: 4500,  unit: "잔" },
+    { emoji: "🍙", name: "김밥",       price: 3500,  unit: "줄" },
+    { emoji: "🍜", name: "라면",       price: 4000,  unit: "그릇" },
+    { emoji: "🧋", name: "버블티",     price: 5500,  unit: "잔" },
+    { emoji: "🍔", name: "햄버거",     price: 6000,  unit: "개" },
+    { emoji: "🐟", name: "붕어빵",     price: 1000,  unit: "개" },
+    { emoji: "🍗", name: "치킨",       price: 20000, unit: "마리" },
+    { emoji: "🍫", name: "초콜릿",     price: 1500,  unit: "개" }
+  ];
+  var wittyIdx = 0;
+
   var COIN_UNIT = 1000;     // 1000원 쌓일 때마다 보너스 동전 1개
   var COIN_MAX_PER_TICK = 10;
   var TICK_MS = 2500;
@@ -350,6 +367,28 @@ group: home
     renderFoodGrid($("sa-foods-today"), today);
   }
 
+  // 초당 수입을 "약 N초마다 아메리카노 한 잔" 식으로 환산
+  function renderWitty(ratePerSec) {
+    var el = $("sa-witty");
+    if (!(ratePerSec > 0)) { el.textContent = ""; return; }
+    var it = WITTY[wittyIdx % WITTY.length];
+    wittyIdx++;
+    var secPerOne = it.price / ratePerSec;          // 1개 버는 데 걸리는 시간(초)
+    var label;
+    if (secPerOne < 60) {
+      var perMin = ratePerSec * 60 / it.price;        // 1분에 몇 개
+      label = (perMin >= 2)
+        ? "지금 1분에 " + it.emoji + " " + it.name + " " + perMin.toFixed(1) + it.unit + " 버는 중"
+        : "지금 약 " + Math.round(secPerOne) + "초마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
+    } else if (secPerOne < 3600) {
+      label = "약 " + Math.round(secPerOne / 60) + "분마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
+    } else {
+      label = "약 " + (secPerOne / 3600).toFixed(1) + "시간마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
+    }
+    el.style.opacity = "0";
+    setTimeout(function () { el.textContent = label; el.style.opacity = "1"; }, 120);
+  }
+
   // 표시 숫자를 target까지 부드럽게 증가
   function animate() {
     displayed += (target - displayed) * 0.18;
@@ -372,6 +411,7 @@ group: home
       " · 다음 월급까지 " + Math.ceil((r.nextPayday - new Date()) / 86400000) + "일";
 
     renderFoods(r.total, r.today);
+    renderWitty(r.ratePerSec);
     checkMilestone(r.total);
 
     // 구간(1000원)을 넘을 때마다 보너스 동전 한 줌 추가로 떨어뜨리기
