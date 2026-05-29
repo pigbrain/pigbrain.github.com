@@ -3,13 +3,50 @@
 <head>
 	<meta charset="utf-8">
 	{% if page.group == 'home' %}
-	<title>{{ site.title }}</title>
-    {% if site.description %}<meta name="description" content="{{ site.description }}">{% endif %}
+	{% assign seo_title = "월급 실시간 계산기 | 내 월급 초당 얼마? · Pigbrain" %}
+	{% assign seo_desc = site.description %}
 	{% else %}
-	<title>{{ page.title }}</title>
-    {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
+	{% assign seo_title = page.title %}
+	{% assign seo_desc = page.description | default: site.description %}
 	{% endif %}
+	<title>{{ seo_title }}</title>
+	<meta name="description" content="{{ seo_desc }}">
 	<meta name="author" content="{{ site.author.name }}">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="canonical" href="{{ site.production_url }}{{ page.url }}">
+
+	<!-- Open Graph (카카오톡 · 페이스북 · 슬랙 등 링크 미리보기) -->
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="{{ site.title }}">
+	<meta property="og:title" content="{{ seo_title }}">
+	<meta property="og:description" content="{{ seo_desc }}">
+	<meta property="og:url" content="{{ site.production_url }}{{ page.url }}">
+	<meta property="og:image" content="{{ site.production_url }}/assets/og-image.png">
+	<meta property="og:image:width" content="1200">
+	<meta property="og:image:height" content="630">
+	<meta property="og:locale" content="ko_KR">
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:title" content="{{ seo_title }}">
+	<meta name="twitter:description" content="{{ seo_desc }}">
+	<meta name="twitter:image" content="{{ site.production_url }}/assets/og-image.png">
+
+	{% if page.group == 'home' %}
+	<script type="application/ld+json">
+	{
+	  "@context": "https://schema.org",
+	  "@type": "WebApplication",
+	  "name": "월급 실시간 계산기",
+	  "url": "{{ site.production_url }}/",
+	  "description": "{{ site.description }}",
+	  "applicationCategory": "FinanceApplication",
+	  "operatingSystem": "Web",
+	  "inLanguage": "ko-KR",
+	  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
+	}
+	</script>
+	{% endif %}
 	
 	<link rel="stylesheet" href="{{ ASSET_PATH }}/css/jquery.fancybox.css">
 	<link rel="stylesheet" href="{{ ASSET_PATH }}/css/main.css">
