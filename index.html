@@ -96,6 +96,29 @@ group: home
 .sa-vs-verdict { text-align: center; margin: 18px 0 4px; }
 .sa-vs-verdict .vmain { font-size: 18px; font-weight: 800; color: #333; }
 .sa-vs-verdict .vsub { font-size: 13px; color: #999; margin-top: 6px; }
+
+/* 공유 카드 (캡처용) */
+#sa-capture-wrap { position: fixed; left: -10000px; top: 0; }
+#sa-capture { width: 540px; height: 675px; box-sizing: border-box; padding: 54px 46px; background: linear-gradient(160deg, #1f9e63 0%, #14b8a6 55%, #0ea5b7 100%); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; display: flex; flex-direction: column; }
+#sa-capture .cap-badge { font-size: 22px; font-weight: 800; opacity: .95; }
+#sa-capture .cap-amount-label { margin-top: 64px; font-size: 19px; opacity: .85; }
+#sa-capture .cap-amount { margin-top: 8px; font-size: 64px; font-weight: 900; line-height: 1.05; letter-spacing: -1px; }
+#sa-capture .cap-amount .cap-won { font-size: 34px; font-weight: 800; margin-left: 6px; }
+#sa-capture .cap-stats { margin-top: 40px; display: flex; gap: 16px; }
+#sa-capture .cap-stat { flex: 1; background: rgba(255,255,255,0.16); border-radius: 16px; padding: 18px 16px; }
+#sa-capture .cap-stat .cl { display: block; font-size: 15px; opacity: .85; margin-bottom: 6px; }
+#sa-capture .cap-stat b { font-size: 26px; font-weight: 800; }
+#sa-capture .cap-witty { margin-top: 30px; font-size: 20px; font-weight: 700; background: rgba(0,0,0,0.12); border-radius: 14px; padding: 16px 18px; line-height: 1.4; }
+#sa-capture .cap-foot { margin-top: auto; font-size: 16px; opacity: .85; font-weight: 600; }
+
+/* 모달 */
+#sa-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; }
+.sa-modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,0.6); }
+.sa-modal-box { position: relative; z-index: 1; background: #fff; border-radius: 16px; padding: 22px; max-width: 92vw; max-height: 92vh; overflow: auto; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+#sa-modal-loading { padding: 40px 20px; font-size: 16px; color: #666; }
+#sa-modal-img { max-width: min(360px, 80vw); width: 100%; border-radius: 12px; display: block; margin: 0 auto; }
+.sa-modal-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.sa-modal-btns .sa-btn { width: auto; min-width: 120px; text-decoration: none; }
 </style>
 
 <div id="coin-layer"></div>
@@ -175,6 +198,8 @@ group: home
     <div class="sa-foods" id="sa-foods-today"></div>
 
     <div class="sa-footer">
+      <button id="sa-make-card" class="sa-btn sa-btn-primary" style="max-width:320px;">📸 자랑 카드 만들기</button>
+      <div style="margin-top:12px;"></div>
       <button id="sa-share-vs" class="sa-btn sa-btn-primary" style="max-width:320px;">⚔️ 친구에게 월급 대결 신청 (링크 복사)</button>
       <div id="sa-share-out" style="display:none; margin-top:14px;">
         <input id="sa-share-link" readonly>
@@ -212,6 +237,36 @@ group: home
         <button id="vs-back" class="sa-btn sa-btn-ghost">내 계산기로 가기</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- 공유 카드 캡처용 (화면 밖에서 렌더) -->
+<div id="sa-capture-wrap" aria-hidden="true">
+  <div id="sa-capture">
+    <div class="cap-badge">💰 나의 이번 달 월급 적립 현황</div>
+    <div class="cap-amount-label">월급일부터 지금까지</div>
+    <div class="cap-amount"><span id="cap-total">0</span><span class="cap-won">원</span></div>
+    <div class="cap-stats">
+      <div class="cap-stat"><span class="cl">오늘</span><b><span id="cap-today">0</span>원</b></div>
+      <div class="cap-stat"><span class="cl">초당</span><b><span id="cap-rate">0</span>원</b></div>
+    </div>
+    <div class="cap-witty" id="cap-witty"></div>
+    <div class="cap-foot"><span id="cap-date"></span> · pigbrain.github.io</div>
+  </div>
+</div>
+
+<!-- 카드 미리보기 / 공유 모달 -->
+<div id="sa-modal" style="display:none;">
+  <div class="sa-modal-bg" id="sa-modal-bg"></div>
+  <div class="sa-modal-box">
+    <div id="sa-modal-loading">카드 만드는 중… 📸</div>
+    <img id="sa-modal-img" alt="월급 적립 자랑 카드" style="display:none;">
+    <div class="sa-modal-btns">
+      <button id="sa-card-share" class="sa-btn sa-btn-primary" style="display:none;">공유하기</button>
+      <a id="sa-card-download" class="sa-btn sa-btn-primary" style="display:none;" download="my-salary-card.png">이미지 저장</a>
+      <button id="sa-modal-close" class="sa-btn sa-btn-ghost">닫기</button>
+    </div>
+    <p class="sa-note" id="sa-card-msg"></p>
   </div>
 </div>
 
@@ -367,24 +422,25 @@ group: home
     renderFoodGrid($("sa-foods-today"), today);
   }
 
-  // 초당 수입을 "약 N초마다 아메리카노 한 잔" 식으로 환산
-  function renderWitty(ratePerSec) {
-    var el = $("sa-witty");
-    if (!(ratePerSec > 0)) { el.textContent = ""; return; }
-    var it = WITTY[wittyIdx % WITTY.length];
-    wittyIdx++;
+  // 초당 수입을 "약 N초마다 아메리카노 한 잔" 식으로 환산한 문구를 만든다
+  function wittyLabel(ratePerSec, it) {
     var secPerOne = it.price / ratePerSec;          // 1개 버는 데 걸리는 시간(초)
-    var label;
     if (secPerOne < 60) {
       var perMin = ratePerSec * 60 / it.price;        // 1분에 몇 개
-      label = (perMin >= 2)
+      return (perMin >= 2)
         ? "지금 1분에 " + it.emoji + " " + it.name + " " + perMin.toFixed(1) + it.unit + " 버는 중"
         : "지금 약 " + Math.round(secPerOne) + "초마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
     } else if (secPerOne < 3600) {
-      label = "약 " + Math.round(secPerOne / 60) + "분마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
-    } else {
-      label = "약 " + (secPerOne / 3600).toFixed(1) + "시간마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
+      return "약 " + Math.round(secPerOne / 60) + "분마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
     }
+    return "약 " + (secPerOne / 3600).toFixed(1) + "시간마다 " + it.emoji + " " + it.name + " 한 " + it.unit + " 버는 중";
+  }
+
+  function renderWitty(ratePerSec) {
+    var el = $("sa-witty");
+    if (!(ratePerSec > 0)) { el.textContent = ""; return; }
+    var label = wittyLabel(ratePerSec, WITTY[wittyIdx % WITTY.length]);
+    wittyIdx++;
     el.style.opacity = "0";
     setTimeout(function () { el.textContent = label; el.style.opacity = "1"; }, 120);
   }
@@ -546,6 +602,80 @@ group: home
     localStorage.removeItem(STORAGE_KEY);
     showSetup(prev);
   });
+
+  // ── 공유 카드 (html2canvas 지연 로딩) ───────────────────────────
+  var H2C_SRC = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+  var h2cPromise = null;
+  function loadHtml2canvas() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    if (h2cPromise) return h2cPromise;
+    h2cPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = H2C_SRC;
+      s.onload = function () { resolve(window.html2canvas); };
+      s.onerror = function () { reject(new Error("load failed")); };
+      document.head.appendChild(s);
+    });
+    return h2cPromise;
+  }
+
+  function fillCaptureCard() {
+    var cfg = load();
+    if (!cfg) return false;
+    var r = compute(cfg, new Date());
+    $("cap-total").textContent = fmt(r.total);
+    $("cap-today").textContent = fmt(r.today);
+    $("cap-rate").textContent = r.ratePerSec.toFixed(2);
+    $("cap-witty").textContent = wittyLabel(r.ratePerSec, WITTY[0]); // 아메리카노 기준
+    var d = new Date();
+    $("cap-date").textContent = d.getFullYear() + "." +
+      ("0" + (d.getMonth() + 1)).slice(-2) + "." + ("0" + d.getDate()).slice(-2);
+    return true;
+  }
+
+  function closeModal() { $("sa-modal").style.display = "none"; }
+
+  $("sa-make-card").addEventListener("click", function () {
+    if (!fillCaptureCard()) return;
+    var modal = $("sa-modal"), img = $("sa-modal-img"), loading = $("sa-modal-loading");
+    var shareBtn = $("sa-card-share"), dlBtn = $("sa-card-download"), msg = $("sa-card-msg");
+    img.style.display = "none"; shareBtn.style.display = "none"; dlBtn.style.display = "none";
+    loading.style.display = "block"; msg.textContent = "";
+    modal.style.display = "flex";
+
+    loadHtml2canvas().then(function (html2canvas) {
+      return html2canvas($("sa-capture"), { scale: 2, backgroundColor: null, useCORS: true });
+    }).then(function (canvas) {
+      loading.style.display = "none";
+      var dataURL = canvas.toDataURL("image/png");
+      img.src = dataURL; img.style.display = "block";
+      dlBtn.href = dataURL; dlBtn.style.display = "inline-block";
+
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+        var file = new File([blob], "my-salary-card.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareBtn.style.display = "inline-block";
+          shareBtn.onclick = function () {
+            navigator.share({
+              files: [file],
+              title: "내 월급 적립 현황",
+              text: "이번 달 내가 지금까지 번 돈 💰 (pigbrain.github.io)"
+            }).catch(function () {});
+          };
+          msg.textContent = "공유하기로 SNS에 바로 올리거나, 이미지로 저장할 수 있어요.";
+        } else {
+          msg.textContent = "이 기기는 직접 공유를 지원하지 않아요. '이미지 저장' 후 SNS에 올려주세요. (모바일은 이미지를 길게 눌러 저장)";
+        }
+      }, "image/png");
+    }).catch(function () {
+      loading.style.display = "none";
+      msg.textContent = "카드를 만들지 못했어요. 네트워크 상태를 확인하고 다시 시도해 주세요.";
+    });
+  });
+
+  $("sa-modal-close").addEventListener("click", closeModal);
+  $("sa-modal-bg").addEventListener("click", closeModal);
 
   $("sa-share-vs").addEventListener("click", function () {
     var cfg = load();
