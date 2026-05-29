@@ -5,7 +5,7 @@ group: home
 {% include JB/setup %}
 {% raw %}
 <style>
-#salary-app { max-width: 760px; margin: 0 auto; padding: 10px 16px 60px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; position: relative; }
+#salary-app { max-width: 760px; min-height: 90vh; margin: 0 auto; padding: 10px 16px 120px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; position: relative; }
 #salary-app * { box-sizing: border-box; }
 
 /* coins fall in front of everything */
@@ -111,8 +111,11 @@ group: home
       </div>
     </div>
 
-    <div class="sa-section-title">🍽 지금까지 번 돈으로 먹을 수 있는 것 <span style="font-weight:400;color:#bbb;font-size:13px;">(⭐ = 오늘 번 돈으로 가능)</span></div>
+    <div class="sa-section-title">🍽 지금까지 번 돈으로 먹을 수 있는 것</div>
     <div class="sa-foods" id="sa-foods"></div>
+
+    <div class="sa-section-title">🌞 오늘 번 돈으로 먹을 수 있는 것</div>
+    <div class="sa-foods" id="sa-foods-today"></div>
 
     <div class="sa-footer">
       <button id="sa-reset" class="sa-btn sa-btn-ghost">월급일 · 월급 초기화</button>
@@ -137,9 +140,10 @@ group: home
     { emoji: "🦞", name: "랍스터",      price: 100000 },
     { emoji: "👑", name: "한우 오마카세", price: 300000 }
   ];
-  var COIN_UNIT = 1000;     // 1000원 쌓일 때마다 동전 1개
+  var COIN_UNIT = 1000;     // 1000원 쌓일 때마다 보너스 동전 1개
   var COIN_MAX_PER_TICK = 10;
   var TICK_MS = 2500;
+  var COIN_RAIN_MS = 650;   // 이 간격마다 동전이 꾸준히 떨어진다
 
   // 일정 금액을 넘으면 축하 메시지를 띄워 주변(=배너 영역)으로 시선을 유도한다.
   // 주의: Google AdSense 정책상 "광고를 클릭하세요" 류의 직접 유도는 금지되어 있어,
@@ -157,7 +161,7 @@ group: home
   var $ = function (id) { return document.getElementById(id); };
   var setupEl = $("sa-setup"), dashEl = $("sa-dashboard");
   var coinLayer = $("coin-layer");
-  var timer = null, lastCoinUnits = null, displayed = 0, target = 0, raf = null;
+  var timer = null, coinTimer = null, lastCoinUnits = null, displayed = 0, target = 0, raf = null;
   var lastMilestone = -Infinity, toastTimer = null;
 
   function fmt(n) { return Math.floor(n).toLocaleString("ko-KR"); }
@@ -236,15 +240,13 @@ group: home
     if (hit) { lastMilestone = hit.at; showToast(hit.msg); }
   }
 
-  function renderFoods(total, today) {
-    var box = $("sa-foods");
+  function renderFoodGrid(box, amount) {
     if (box.childNodes.length === 0) {
       FOODS.forEach(function (f) {
         var d = document.createElement("div");
         d.className = "sa-food";
         d.setAttribute("data-price", f.price);
         d.innerHTML =
-          '<span class="today-tag">⭐</span>' +
           '<span class="badge">획득</span>' +
           '<span class="emoji">' + f.emoji + '</span>' +
           '<span class="fname">' + f.name + '</span>' +
@@ -255,9 +257,13 @@ group: home
     var nodes = box.childNodes;
     for (var i = 0; i < nodes.length; i++) {
       var price = parseInt(nodes[i].getAttribute("data-price"), 10);
-      nodes[i].classList.toggle("unlocked", total >= price);
-      nodes[i].classList.toggle("today-ok", today >= price);
+      nodes[i].classList.toggle("unlocked", amount >= price);
     }
+  }
+
+  function renderFoods(total, today) {
+    renderFoodGrid($("sa-foods"), total);
+    renderFoodGrid($("sa-foods-today"), today);
   }
 
   // 표시 숫자를 target까지 부드럽게 증가
@@ -284,7 +290,7 @@ group: home
     renderFoods(r.total, r.today);
     checkMilestone(r.total);
 
-    // 구간(1000원)을 넘을 때마다 동전 떨어뜨리기
+    // 구간(1000원)을 넘을 때마다 보너스 동전 한 줌 추가로 떨어뜨리기
     var units = Math.floor(r.total / COIN_UNIT);
     if (lastCoinUnits === null) {
       lastCoinUnits = units;
@@ -299,12 +305,19 @@ group: home
     dashEl.style.display = "block";
     lastCoinUnits = null; displayed = 0; target = 0; lastMilestone = -Infinity;
     if (timer) clearInterval(timer);
+    if (coinTimer) clearInterval(coinTimer);
     tick(cfg);
     timer = setInterval(function () { tick(cfg); }, TICK_MS);
+    // 수익과 상관없이 항상 꾸준히 동전이 떨어지도록 (화면이 보일 때만)
+    coinTimer = setInterval(function () {
+      if (document.hidden) return;
+      dropCoins(1 + Math.floor(Math.random() * 3)); // 1~3개
+    }, COIN_RAIN_MS);
   }
 
   function showSetup(prefill) {
     if (timer) { clearInterval(timer); timer = null; }
+    if (coinTimer) { clearInterval(coinTimer); coinTimer = null; }
     dashEl.style.display = "none";
     setupEl.style.display = "block";
     $("sa-payday").value = prefill ? prefill.payDay : "";
