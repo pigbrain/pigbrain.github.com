@@ -3,12 +3,21 @@
 	</div>
 	<div id="nav-c">
 		<ul id="nav-list" style="width: 700px;">
-			<li id="home"><a href="{{ HOME_PATH }}">Home</a></li>
+			<!-- 기능별 화면. 새 기능은 'group: navigation' + title 을 가진 페이지로 추가하면 메뉴에 자동 등록됩니다. -->
+			{% if page.group == 'home' %}
+			<li id="f-salary" class="active">
+			<span class="nav-l-active"></span>
+			<a href="{{ HOME_PATH }}" class="active">월급계산기</a>
+			<span class="nav-r-active"></span>
+			</li>
+			{% else %}
+			<li id="f-salary" class="novline"><a href="{{ HOME_PATH }}">월급계산기</a></li>
+			{% endif %}
 			{% assign pages_list = site.pages %}
 			{% assign group = 'navigation' %}
 			{% for node in pages_list %}
 				{% if node.title != null %}
-				  {% if group == null or group == node.group %}
+				  {% if group == node.group %}
 					{% if page.url == node.url %}
 					<li  id = "{{node.title}}" class="active">
 					<span class="nav-l-active"></span>

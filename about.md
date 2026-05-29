@@ -2,7 +2,7 @@
 layout: about
 title: About Me
 header: About Me
-group: navigation
+group: blog
 ---
  * **Name:** HyunDong Lee
  * **Email:** pigbrain.lee@gmail.com
