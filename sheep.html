@@ -315,8 +315,8 @@ group: navigation
   var SHEEP_KEY = "pigbrain_sheep_v1";
   var MAX_WOOL = 72;       // 양 한 마리가 가질 수 있는 최대 털뭉치 수(=복슬복슬 100%)
   var SEED_WOOL = 30;      // 새 양이 시작할 때의 털 양
-  var GROW_INTERVAL = 300; // 이 간격마다 털이 자란다(ms)
-  var GROW_BATCH = 2;      // 한 번에 자라나는 털뭉치 수 (클수록 어려움)
+  var GROW_INTERVAL = 650; // 이 간격마다 털이 자란다(ms)
+  var GROW_BATCH = 1;      // 한 번에 자라나는 털뭉치 수 (클수록 어려움)
   var stage = $("sg-stage"), sheep = $("sg-sheep"), woolBox = $("sg-wool"), pop = $("sg-pop"), fluffEl = $("sg-fluff");
   var shearing = false, busy = false, started = false, liveCount = 0, growTimer = null;
   var slots = [];          // {x, y, size, el}
