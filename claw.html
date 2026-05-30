@@ -176,9 +176,9 @@ footer { display: none !important; }
   var DOLLS = ["🧸", "🐰", "🐻", "🐱", "🐶", "🐼", "🦊", "🐯", "🦁", "🐵", "🐸", "🐷", "🐨", "🐮", "🦄"];
   var N_SLOTS = 6;
   var RIG_W = 64;
-  var GRAB_PX = 44;          // 집게와 인형 중심이 이 px 이내면 잡기 시도
-  var GRAB_SUCCESS = 0.6;    // 정렬됐을 때 잡기 성공 확률
-  var SPEED = 3.4;           // 집게 좌우 이동 속도(px/frame)
+  var GRAB_PX = 28;          // 집게와 인형 중심이 이 px 이내면 잡기 시도 (작을수록 어려움)
+  var GRAB_SUCCESS = 0.4;    // 정렬됐을 때 잡기 성공 확률 (낮을수록 어려움)
+  var SPEED = 5.2;           // 집게 좌우 이동 속도(px/frame) (빠를수록 타이밍 어려움)
   // 단계별 시간(ms)
   var T_DROP = 650, T_GRAB = 380, T_LIFT = 650, T_MOVE = 620, T_RELEASE = 420;
 
