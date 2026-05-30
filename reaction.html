@@ -1,0 +1,326 @@
+---
+layout: default
+title: 반응속도
+group: navigation
+---
+{% include JB/setup %}
+{% raw %}
+<style>
+#rt-app { max-width: 760px; min-height: 90vh; margin: 0 auto; padding: 10px 16px 120px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+#rt-app * { box-sizing: border-box; }
+
+/* 기능 페이지에서는 블로그용 footer 숨김 */
+footer { display: none !important; }
+
+.rt-head { text-align: center; padding: 16px 0 6px; }
+.rt-head h1 { font-size: 30px; font-weight: 800; color: #2c3338; margin: 0; }
+.rt-msg { display: inline-block; margin-top: 12px; font-size: 15px; font-weight: 700; color: #2e7d52; background: #e9f7ef; border: 1px solid #cfeadd; border-radius: 999px; padding: 9px 18px; }
+
+/* 점수판 */
+.rt-scoreboard { display: flex; gap: 14px; margin: 22px 0 14px; }
+.rt-scoreboard > div { flex: 1; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px; text-align: center; font-size: 14px; color: #777; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+.rt-scoreboard b { font-size: 22px; color: #2c3338; }
+
+/* 반응 영역 */
+#rt-box { position: relative; height: 320px; border-radius: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation; transition: background-color .08s; color: #fff; padding: 20px; }
+#rt-box.idle    { background: linear-gradient(160deg, #4a90d9, #2f6fb0); }
+#rt-box.waiting { background: linear-gradient(160deg, #e05a4d, #c0392b); }
+#rt-box.go      { background: linear-gradient(160deg, #36d97b, #1f9e5a); }
+#rt-box.result  { background: linear-gradient(160deg, #3a4b5c, #2c3a47); }
+#rt-box.tooSoon { background: linear-gradient(160deg, #f0a24b, #e07b1a); }
+#rt-main { font-size: 44px; font-weight: 900; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.18); }
+#rt-main.small { font-size: 30px; }
+#rt-sub { margin-top: 14px; font-size: 16px; font-weight: 700; opacity: 0.92; }
+
+.rt-tip { text-align: center; color: #9aa6a0; font-size: 13px; margin-top: 16px; line-height: 1.6; }
+
+/* 버튼 */
+.rt-btn { border: none; border-radius: 9px; padding: 12px 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .08s, filter .15s; }
+.rt-btn:active { transform: scale(.97); }
+.rt-btn-primary { background: linear-gradient(135deg, #36d97b, #1f9e5a); color: #fff; width: 100%; }
+.rt-btn-ghost { background: #f3f3f3; color: #666; border: 1px solid #e2e2e2; }
+
+/* 공유 / 도전 */
+.rt-actions { text-align: center; margin-top: 24px; }
+.rt-actions .rt-btn-primary { max-width: 320px; margin: 0 auto; }
+.rt-actions .gap { height: 12px; }
+#rt-share-out { display: none; margin-top: 14px; }
+#rt-share-link { width: 100%; max-width: 460px; padding: 10px 12px; font-size: 13px; border: 1px solid #d5d5d5; border-radius: 8px; color: #555; text-align: center; }
+.rt-note { color: #aaa; font-size: 12px; margin-top: 12px; line-height: 1.6; text-align: center; }
+
+/* 도전장 배너 */
+#rt-challenge { display: none; margin: 16px 0; background: #e9f7ef; border: 1px solid #cfeadd; border-radius: 14px; padding: 16px 30px 16px 18px; text-align: center; position: relative; }
+#rt-challenge .ch-main { font-size: 16px; font-weight: 800; color: #2e7d52; }
+#rt-challenge .ch-sub { font-size: 14px; color: #5f7a6c; margin-top: 6px; }
+#rt-challenge .ch-close { position: absolute; top: 8px; right: 12px; color: #b3d3c2; cursor: pointer; font-weight: 800; font-size: 16px; }
+
+/* 공유 카드 (캡처용) */
+#rt-capture-wrap { position: fixed; left: -10000px; top: 0; }
+#rt-capture { width: 540px; height: 675px; box-sizing: border-box; padding: 54px 46px; background: linear-gradient(165deg, #36d97b 0%, #1f9e5a 60%, #157a44 100%); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; }
+#rt-capture .cap-badge { font-size: 24px; font-weight: 800; opacity: .95; }
+#rt-capture .cap-icon { font-size: 130px; line-height: 1; margin-top: 26px; }
+#rt-capture .cap-big { margin-top: 18px; font-size: 34px; font-weight: 800; }
+#rt-capture .cap-big b { font-size: 76px; font-weight: 900; }
+#rt-capture .cap-sub { margin-top: 14px; font-size: 28px; font-weight: 800; background: rgba(0,0,0,.14); border-radius: 14px; padding: 12px 24px; }
+#rt-capture .cap-witty { margin-top: 22px; font-size: 22px; font-weight: 700; opacity: .95; }
+#rt-capture .cap-foot { margin-top: auto; font-size: 18px; opacity: .9; font-weight: 700; }
+
+/* 모달 */
+#rt-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; }
+.rt-modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+.rt-modal-box { position: relative; z-index: 1; background: #fff; border-radius: 16px; padding: 22px; max-width: 92vw; max-height: 92vh; overflow: auto; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+#rt-modal-loading { padding: 40px 20px; font-size: 16px; color: #666; }
+#rt-modal-img { max-width: min(360px, 80vw); width: 100%; border-radius: 12px; display: block; margin: 0 auto; }
+.rt-modal-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.rt-modal-btns .rt-btn { width: auto; min-width: 120px; text-decoration: none; }
+</style>
+
+<div id="rt-app">
+  <div class="rt-head">
+    <h1>🟢 반응속도 테스트</h1>
+    <div class="rt-msg">⚡ 초록불이 켜지는 순간 탭! 당신의 반응속도는 몇 ms?</div>
+  </div>
+
+  <!-- 친구 도전장 (?vs= 링크로 진입 시 표시) -->
+  <div id="rt-challenge">
+    <span class="ch-close" id="rt-ch-close">×</span>
+    <div class="ch-main" id="rt-ch-main"></div>
+    <div class="ch-sub" id="rt-ch-sub"></div>
+  </div>
+
+  <!-- 점수판 -->
+  <div class="rt-scoreboard">
+    <div>최고 기록 <b id="rt-best">—</b></div>
+    <div>시도 횟수 <b id="rt-tries">0</b></div>
+  </div>
+
+  <!-- 반응 영역 -->
+  <div id="rt-box" class="idle">
+    <div id="rt-main">반응속도 테스트 🟢</div>
+    <div id="rt-sub">화면을 탭하면 시작합니다</div>
+  </div>
+  <p class="rt-tip">💡 빨간 화면에서 기다렸다가 <b>초록색으로 바뀌는 순간</b> 탭하세요. 초록불 전에 누르면 실패! (모바일도 OK)</p>
+
+  <div class="rt-actions">
+    <button id="rt-make-card" class="rt-btn rt-btn-primary">📸 자랑 카드 만들기</button>
+    <div class="gap"></div>
+    <button id="rt-share-vs" class="rt-btn rt-btn-primary">⚔️ 친구에게 반응속도 도전장 보내기 (링크 복사)</button>
+    <div id="rt-share-out">
+      <input id="rt-share-link" readonly>
+      <p class="rt-note" id="rt-share-msg"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 공유 카드 캡처용 (화면 밖) -->
+<div id="rt-capture-wrap" aria-hidden="true">
+  <div id="rt-capture">
+    <div class="cap-badge">⚡ 나의 반응속도 기록</div>
+    <div class="cap-icon">🟢</div>
+    <div class="cap-big">최고 기록 <b id="cap-best">—</b><span style="font-size:34px;font-weight:800;">ms</span></div>
+    <div class="cap-sub" id="cap-rating">—</div>
+    <div class="cap-witty">초록불 보면 손가락이 먼저 반응 ⚡</div>
+    <div class="cap-foot"><span id="cap-date"></span> · pigbrain.github.io</div>
+  </div>
+</div>
+
+<!-- 카드 미리보기 / 공유 모달 -->
+<div id="rt-modal" style="display:none;">
+  <div class="rt-modal-bg" id="rt-modal-bg"></div>
+  <div class="rt-modal-box">
+    <div id="rt-modal-loading">카드 만드는 중… 📸</div>
+    <img id="rt-modal-img" alt="반응속도 자랑 카드" style="display:none;">
+    <div class="rt-modal-btns">
+      <button id="rt-card-share" class="rt-btn rt-btn-primary" style="display:none;">공유하기</button>
+      <a id="rt-card-download" class="rt-btn rt-btn-primary" style="display:none;" download="my-reaction-card.png">이미지 저장</a>
+      <button id="rt-modal-close" class="rt-btn rt-btn-ghost">닫기</button>
+    </div>
+    <p class="rt-note" id="rt-card-msg"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ─────────── 반응속도 게임 ─────────── */
+  var RT_KEY = "pigbrain_reaction_v1";
+  var box = $("rt-box"), mainEl = $("rt-main"), subEl = $("rt-sub");
+  var state = "idle", timeoutId = null, goTime = 0;
+
+  var stats = (function () { try { return JSON.parse(localStorage.getItem(RT_KEY)) || {}; } catch (e) { return {}; } })();
+  var todayKey = (function () { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); })();
+  var best = (typeof stats.best === "number") ? stats.best : null;   // 최고(최저) 기록은 전체 기간 유지
+  var tries = (stats.day === todayKey) ? (stats.tries || 0) : 0;
+
+  function ratingText(ms) {
+    if (ms < 180) return "🚀 인간 한계 돌파!";
+    if (ms < 220) return "⚡ 프로게이머급";
+    if (ms < 280) return "😎 아주 빠름";
+    if (ms < 350) return "👍 평균 이상";
+    if (ms < 450) return "🙂 평균 정도";
+    return "🐢 커피 한 잔 하고 올까요?";
+  }
+
+  function renderScore() {
+    $("rt-best").textContent = (best === null) ? "—" : (best + "ms");
+    $("rt-tries").textContent = tries;
+    localStorage.setItem(RT_KEY, JSON.stringify({ best: best, day: todayKey, tries: tries }));
+    updateChallenge();
+  }
+
+  function setBox(s, main, sub, small) {
+    state = s;
+    box.className = s;
+    mainEl.textContent = main;
+    mainEl.classList.toggle("small", !!small);
+    subEl.textContent = sub || "";
+  }
+
+  function startWait() {
+    setBox("waiting", "기다리세요…", "초록색이 되면 탭! (빨리 누르면 실패)");
+    if (timeoutId) clearTimeout(timeoutId);
+    timeoutId = setTimeout(function () {
+      goTime = (window.performance && performance.now) ? performance.now() : Date.now();
+      setBox("go", "지금! 탭! 🟢", "");
+    }, 1500 + Math.random() * 2500);
+  }
+
+  function success() {
+    var now = (window.performance && performance.now) ? performance.now() : Date.now();
+    var rt = Math.round(now - goTime);
+    tries++;
+    if (best === null || rt < best) best = rt;
+    renderScore();
+    setBox("result", rt + " ms", ratingText(rt) + " · 탭하면 다시", true);
+  }
+
+  function tooSoon() {
+    if (timeoutId) clearTimeout(timeoutId);
+    setBox("tooSoon", "너무 빨랐어요! 😵", "초록불을 기다려야 해요 · 탭하면 다시", true);
+  }
+
+  function onTap() {
+    if (state === "idle" || state === "result" || state === "tooSoon") startWait();
+    else if (state === "waiting") tooSoon();
+    else if (state === "go") success();
+  }
+
+  box.addEventListener("pointerdown", function (e) { e.preventDefault(); onTap(); });
+
+  renderScore();
+
+  /* ─────────── 친구 도전장(링크 공유) ─────────── */
+  var challengeFriend = null;
+  function b64enc(v) { return btoa(unescape(encodeURIComponent(v))); }
+  function b64dec(v) { return decodeURIComponent(escape(atob(v))); }
+  function encodeChallenge(name) { return b64enc(JSON.stringify({ b: best, n: name || "" })); }
+  function decodeChallenge(token) {
+    try { var o = JSON.parse(b64dec(token)); return { b: (typeof o.b === "number" ? o.b : null), name: String(o.n || "").slice(0, 20) }; }
+    catch (e) { return null; }
+  }
+  function buildChallengeLink(name) { return location.origin + location.pathname + "?vs=" + encodeURIComponent(encodeChallenge(name)); }
+
+  function updateChallenge() {
+    if (!challengeFriend) return;
+    var f = challengeFriend, who = f.name || "친구";
+    var fb = (f.b === null) ? "기록 없음" : (f.b + "ms");
+    var verdict;
+    if (best === null) verdict = "아직 기록이 없어요 — 도전해보세요!";
+    else if (f.b === null) verdict = "🏆 당신이 먼저 기록을 세웠어요!";
+    else if (best < f.b) verdict = "🏆 당신이 " + (f.b - best) + "ms 더 빨라요!";
+    else if (best === f.b) verdict = "🤝 똑같은 기록! 한 번 더!";
+    else verdict = "😤 " + (best - f.b) + "ms 뒤졌어요 — 다시 도전!";
+    $("rt-ch-main").textContent = "⚔️ " + who + "님의 도전: 최고 " + fb;
+    $("rt-ch-sub").textContent = "내 최고 기록: " + (best === null ? "—" : best + "ms") + " · " + verdict;
+  }
+
+  $("rt-ch-close").addEventListener("click", function () { $("rt-challenge").style.display = "none"; });
+
+  $("rt-share-vs").addEventListener("click", function () {
+    if (best === null) { alert("먼저 한 번 측정해서 기록을 만든 뒤 도전장을 보낼 수 있어요!"); return; }
+    var name = (prompt("도전장에 표시할 닉네임 (선택)", "") || "").slice(0, 20);
+    var link = buildChallengeLink(name);
+    var out = $("rt-share-out"), input = $("rt-share-link"), msg = $("rt-share-msg");
+    out.style.display = "block";
+    input.value = link; input.focus(); input.select();
+    var done = function (ok) {
+      msg.textContent = (ok ? "✅ 도전장 링크를 복사했어요! " : "아래 링크를 길게 눌러 복사하세요. ") +
+        "받는 사람은 링크만 열면 내 기록과 자기 기록을 비교하며 도전할 수 있어요.";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); });
+    } else {
+      try { document.execCommand("copy"); done(true); } catch (e) { done(false); }
+    }
+  });
+
+  var vsParam = new URLSearchParams(location.search).get("vs");
+  if (vsParam) {
+    var friend = decodeChallenge(vsParam);
+    if (friend) { challengeFriend = friend; $("rt-challenge").style.display = "block"; updateChallenge(); }
+  }
+
+  /* ─────────── 자랑 카드 (html2canvas 지연 로딩) ─────────── */
+  var H2C_SRC = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+  var h2cPromise = null;
+  function loadHtml2canvas() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    if (h2cPromise) return h2cPromise;
+    h2cPromise = new Promise(function (resolve, reject) {
+      var sc = document.createElement("script");
+      sc.src = H2C_SRC;
+      sc.onload = function () { resolve(window.html2canvas); };
+      sc.onerror = function () { reject(new Error("load failed")); };
+      document.head.appendChild(sc);
+    });
+    return h2cPromise;
+  }
+  function fillCard() {
+    $("cap-best").textContent = (best === null) ? "—" : best;
+    $("cap-rating").textContent = (best === null) ? "아직 기록 없음" : ratingText(best);
+    var d = new Date();
+    $("cap-date").textContent = d.getFullYear() + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + ("0" + d.getDate()).slice(-2);
+  }
+  function closeModal() { $("rt-modal").style.display = "none"; }
+
+  $("rt-make-card").addEventListener("click", function () {
+    if (best === null) { alert("먼저 한 번 측정해서 기록을 만들어 주세요!"); return; }
+    fillCard();
+    var modal = $("rt-modal"), img = $("rt-modal-img"), loading = $("rt-modal-loading");
+    var shareBtn = $("rt-card-share"), dlBtn = $("rt-card-download"), msg = $("rt-card-msg");
+    img.style.display = "none"; shareBtn.style.display = "none"; dlBtn.style.display = "none";
+    loading.style.display = "block"; msg.textContent = "";
+    modal.style.display = "flex";
+
+    loadHtml2canvas().then(function (h2c) {
+      return h2c($("rt-capture"), { scale: 2, backgroundColor: null, useCORS: true });
+    }).then(function (canvas) {
+      loading.style.display = "none";
+      var dataURL = canvas.toDataURL("image/png");
+      img.src = dataURL; img.style.display = "block";
+      dlBtn.href = dataURL; dlBtn.style.display = "inline-block";
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+        var file = new File([blob], "my-reaction-card.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareBtn.style.display = "inline-block";
+          shareBtn.onclick = function () {
+            navigator.share({ files: [file], title: "내 반응속도 기록", text: "내 반응속도 최고 기록 " + best + "ms ⚡ (pigbrain.github.io)" }).catch(function () {});
+          };
+          msg.textContent = "공유하기로 SNS에 바로 올리거나, 이미지로 저장할 수 있어요.";
+        } else {
+          msg.textContent = "이 기기는 직접 공유를 지원하지 않아요. '이미지 저장' 후 SNS에 올려주세요.";
+        }
+      }, "image/png");
+    }).catch(function () {
+      loading.style.display = "none";
+      msg.textContent = "카드를 만들지 못했어요. 네트워크 상태를 확인하고 다시 시도해 주세요.";
+    });
+  });
+
+  $("rt-modal-close").addEventListener("click", closeModal);
+  $("rt-modal-bg").addEventListener("click", closeModal);
+})();
+</script>
+{% endraw %}
