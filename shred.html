@@ -1,0 +1,423 @@
+---
+layout: default
+title: 문서파쇄기
+group: navigation
+---
+{% include JB/setup %}
+{% raw %}
+<style>
+#shred-app { max-width: 760px; min-height: 90vh; margin: 0 auto; padding: 10px 16px 120px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+#shred-app * { box-sizing: border-box; }
+
+/* 기능 페이지에서는 블로그용 footer 숨김 */
+footer { display: none !important; }
+
+.sh-head { text-align: center; padding: 16px 0 6px; }
+.sh-head h1 { font-size: 30px; font-weight: 800; color: #2f3338; margin: 0; }
+.sh-msg { display: inline-block; margin-top: 12px; font-size: 15px; font-weight: 700; color: #4a5560; background: #eef1f4; border: 1px solid #d8dde2; border-radius: 999px; padding: 9px 18px; }
+
+/* 점수판 */
+.sh-scoreboard { display: flex; gap: 14px; margin: 22px 0 14px; }
+.sh-scoreboard > div { flex: 1; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px; text-align: center; font-size: 14px; color: #777; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+.sh-scoreboard b { font-size: 22px; color: #2f3338; }
+
+/* 스테이지 */
+#sh-stage { position: relative; height: 440px; border-radius: 20px; overflow: hidden; background: linear-gradient(180deg, #dfe6ec 0%, #c2ccd6 100%); user-select: none; -webkit-user-select: none; }
+#sh-stage::before { content: "잡아서 파쇄기로 끌어내리세요 ↓"; position: absolute; left: 0; right: 0; top: 12px; text-align: center; color: #7a8794; font-size: 13px; font-weight: 800; }
+
+/* 서류 */
+#sh-doc { position: absolute; width: 150px; height: 190px; left: 50%; top: 46px; transform-origin: bottom center; background: #fffdf7; border-radius: 6px; box-shadow: 0 10px 24px rgba(0,0,0,0.28); padding: 16px 14px; cursor: grab; z-index: 6; touch-action: none; }
+#sh-doc:active { cursor: grabbing; }
+.sh-doc-title { font-size: 13px; font-weight: 800; color: #333; text-align: center; border-bottom: 2px solid #333; padding-bottom: 7px; }
+.sh-doc-lines { margin-top: 12px; }
+.sh-doc-lines i { display: block; height: 6px; background: #ececec; border-radius: 3px; margin-bottom: 9px; }
+.sh-doc-lines i:nth-child(2) { width: 78%; }
+.sh-doc-lines i:nth-child(4) { width: 55%; }
+
+/* 파쇄기 */
+#sh-shredder { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); width: 260px; z-index: 5; }
+#sh-shredder.shake { animation: sh-shake .12s linear 4; }
+@keyframes sh-shake { 0%,100% { transform: translateX(-50%); } 25% { transform: translate(-51%, 1px); } 75% { transform: translate(-49%, -1px); } }
+.sh-slot { height: 16px; background: #2b3036; border-radius: 6px 6px 0 0; box-shadow: inset 0 4px 6px rgba(0,0,0,0.6); position: relative; z-index: 2; }
+.sh-slot::after { content: ""; position: absolute; left: 12px; right: 12px; top: 6px; height: 3px; background: #11151a; border-radius: 3px; }
+.sh-body { height: 120px; background: linear-gradient(180deg, #5b6672 0%, #424b55 100%); border-radius: 4px 4px 14px 14px; box-shadow: inset 0 -10px 20px rgba(0,0,0,0.25); position: relative; }
+.sh-body::before { content: "SHREDDER"; position: absolute; left: 0; right: 0; top: 16px; text-align: center; color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 900; letter-spacing: 3px; }
+.sh-light { position: absolute; right: 16px; bottom: 16px; width: 12px; height: 12px; border-radius: 50%; background: #58d68d; box-shadow: 0 0 8px #58d68d; }
+
+/* 종이 조각 */
+.sh-strip { position: absolute; width: var(--w); height: var(--h); background: #fffdf7; border: 1px solid #e7e2d5; z-index: 3; pointer-events: none; }
+.sh-strip.fall { animation: sh-fall var(--dur) ease-in forwards; }
+@keyframes sh-fall { to { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; } }
+
+#sh-combo { position: absolute; left: 50%; top: 20%; transform: translate(-50%,-50%) scale(.6); color: #2f3338; font-size: 24px; font-weight: 900; text-shadow: 0 2px 8px rgba(255,255,255,0.6); opacity: 0; pointer-events: none; white-space: nowrap; }
+#sh-combo.show { animation: sh-combo 0.8s ease forwards; }
+@keyframes sh-combo { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.6); } 25% { opacity: 1; transform: translate(-50%,-72%) scale(1.1); } 100% { opacity: 0; transform: translate(-50%,-100%) scale(1); } }
+
+.sh-tip { text-align: center; color: #9aa6b0; font-size: 13px; margin-top: 16px; line-height: 1.6; }
+
+/* 버튼 */
+.sh-btn { border: none; border-radius: 9px; padding: 12px 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .08s, filter .15s; }
+.sh-btn:active { transform: scale(.97); }
+.sh-btn-primary { background: linear-gradient(135deg, #5b6672, #2f3338); color: #fff; width: 100%; }
+.sh-btn-ghost { background: #f3f3f3; color: #666; border: 1px solid #e2e2e2; }
+
+/* 공유 / 도전 */
+.sh-actions { text-align: center; margin-top: 24px; }
+.sh-actions .sh-btn-primary { max-width: 320px; margin: 0 auto; }
+.sh-actions .gap { height: 12px; }
+#sh-share-out { display: none; margin-top: 14px; }
+#sh-share-link { width: 100%; max-width: 460px; padding: 10px 12px; font-size: 13px; border: 1px solid #d5d5d5; border-radius: 8px; color: #555; text-align: center; }
+.sh-note { color: #aaa; font-size: 12px; margin-top: 12px; line-height: 1.6; text-align: center; }
+
+/* 도전장 배너 */
+#sh-challenge { display: none; margin: 16px 0; background: #eef1f4; border: 1px solid #d8dde2; border-radius: 14px; padding: 16px 30px 16px 18px; text-align: center; position: relative; }
+#sh-challenge .ch-main { font-size: 16px; font-weight: 800; color: #3a4651; }
+#sh-challenge .ch-sub { font-size: 14px; color: #6a747e; margin-top: 6px; }
+#sh-challenge .ch-close { position: absolute; top: 8px; right: 12px; color: #b6bec6; cursor: pointer; font-weight: 800; font-size: 16px; }
+
+/* 공유 카드 (캡처용) */
+#sh-capture-wrap { position: fixed; left: -10000px; top: 0; }
+#sh-capture { width: 540px; height: 675px; box-sizing: border-box; padding: 54px 46px; background: linear-gradient(165deg, #5b6672 0%, #3a434d 60%, #23292f 100%); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; }
+#sh-capture .cap-badge { font-size: 24px; font-weight: 800; opacity: .95; }
+#sh-capture .cap-icon { font-size: 140px; line-height: 1; margin-top: 30px; }
+#sh-capture .cap-big { margin-top: 24px; font-size: 38px; font-weight: 800; }
+#sh-capture .cap-big b { font-size: 64px; font-weight: 900; }
+#sh-capture .cap-sub { margin-top: 16px; font-size: 26px; font-weight: 700; background: rgba(0,0,0,.18); border-radius: 14px; padding: 12px 22px; }
+#sh-capture .cap-witty { margin-top: 22px; font-size: 22px; font-weight: 700; opacity: .95; }
+#sh-capture .cap-foot { margin-top: auto; font-size: 18px; opacity: .9; font-weight: 700; }
+
+/* 모달 */
+#sh-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; }
+.sh-modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+.sh-modal-box { position: relative; z-index: 1; background: #fff; border-radius: 16px; padding: 22px; max-width: 92vw; max-height: 92vh; overflow: auto; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+#sh-modal-loading { padding: 40px 20px; font-size: 16px; color: #666; }
+#sh-modal-img { max-width: min(360px, 80vw); width: 100%; border-radius: 12px; display: block; margin: 0 auto; }
+.sh-modal-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.sh-modal-btns .sh-btn { width: auto; min-width: 120px; text-decoration: none; }
+</style>
+
+<div id="shred-app">
+  <div class="sh-head">
+    <h1>🗂️ 문서 파쇄기</h1>
+    <div class="sh-msg">📄 스트레스 받는 서류, 파쇄기에 넣고 시원하게 갈아버리자!</div>
+  </div>
+
+  <!-- 친구 도전장 (?vs= 링크로 진입 시 표시) -->
+  <div id="sh-challenge">
+    <span class="ch-close" id="sh-ch-close">×</span>
+    <div class="ch-main" id="sh-ch-main"></div>
+    <div class="ch-sub" id="sh-ch-sub"></div>
+  </div>
+
+  <!-- 점수판 -->
+  <div class="sh-scoreboard">
+    <div>오늘 파쇄한 서류 <b id="sh-count">0</b>건</div>
+    <div>분쇄한 종이 조각 <b id="sh-strip-count">0</b>개</div>
+  </div>
+
+  <!-- 스테이지 -->
+  <div id="sh-stage">
+    <div id="sh-doc">
+      <div class="sh-doc-title">사직서</div>
+      <div class="sh-doc-lines"><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div id="sh-shredder">
+      <div class="sh-slot"></div>
+      <div class="sh-body"><div class="sh-light"></div></div>
+    </div>
+    <div id="sh-combo"></div>
+  </div>
+  <p class="sh-tip">💡 서류를 잡아 <b>파쇄기 입구로 끌어내리면</b> 드르륵 갈려 종이 조각이 쏟아집니다. 다 갈면 새 서류가 올라와요. (모바일도 OK)</p>
+
+  <div class="sh-actions">
+    <button id="sh-make-card" class="sh-btn sh-btn-primary">📸 자랑 카드 만들기</button>
+    <div class="gap"></div>
+    <button id="sh-share-vs" class="sh-btn sh-btn-primary">⚔️ 친구에게 파쇄 대결 도전장 보내기 (링크 복사)</button>
+    <div id="sh-share-out">
+      <input id="sh-share-link" readonly>
+      <p class="sh-note" id="sh-share-msg"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 공유 카드 캡처용 (화면 밖) -->
+<div id="sh-capture-wrap" aria-hidden="true">
+  <div id="sh-capture">
+    <div class="cap-badge">🗂️ 오늘의 파쇄 실적</div>
+    <div class="cap-icon">📄✂️</div>
+    <div class="cap-big">오늘 파쇄 <b id="cap-count">0</b>건</div>
+    <div class="cap-sub">🌀 분쇄한 종이 조각 <span id="cap-strips">0</span>개</div>
+    <div class="cap-witty">스트레스도 같이 갈아버림 😌</div>
+    <div class="cap-foot"><span id="cap-date"></span> · pigbrain.github.io</div>
+  </div>
+</div>
+
+<!-- 카드 미리보기 / 공유 모달 -->
+<div id="sh-modal" style="display:none;">
+  <div class="sh-modal-bg" id="sh-modal-bg"></div>
+  <div class="sh-modal-box">
+    <div id="sh-modal-loading">카드 만드는 중… 📸</div>
+    <img id="sh-modal-img" alt="문서 파쇄 자랑 카드" style="display:none;">
+    <div class="sh-modal-btns">
+      <button id="sh-card-share" class="sh-btn sh-btn-primary" style="display:none;">공유하기</button>
+      <a id="sh-card-download" class="sh-btn sh-btn-primary" style="display:none;" download="my-shred-card.png">이미지 저장</a>
+      <button id="sh-modal-close" class="sh-btn sh-btn-ghost">닫기</button>
+    </div>
+    <p class="sh-note" id="sh-card-msg"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ─────────── 문서 파쇄 게임 ─────────── */
+  var SHRED_KEY = "pigbrain_shred_v1";
+  var DOC_W = 150, DOC_H = 190;
+  var STRIPS = 14;             // 서류 하나당 종이 조각 수
+  var TITLES = [
+    "사직서", "야근 지시서", "주말 출근 통보", "실적 압박 보고서", "회식 공지",
+    "꼰대 훈화 말씀", "불필요한 회의록", "추가 업무 배정", "감사 지적 사항", "월요일 일정표"
+  ];
+  var stage = $("sh-stage"), doc = $("sh-doc"), docTitle = doc.querySelector(".sh-doc-title");
+  var shredder = $("sh-shredder"), slot = shredder.querySelector(".sh-slot"), comboEl = $("sh-combo");
+  var dragging = false, busy = false, offX = 0, offY = 0;
+
+  var stats = (function () { try { return JSON.parse(localStorage.getItem(SHRED_KEY)) || {}; } catch (e) { return {}; } })();
+  var todayKey = (function () { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); })();
+  var count = (stats.day === todayKey) ? (stats.count || 0) : 0;
+
+  function renderScore() {
+    $("sh-count").textContent = count;
+    $("sh-strip-count").textContent = count * STRIPS;
+    localStorage.setItem(SHRED_KEY, JSON.stringify({ day: todayKey, count: count }));
+    updateChallenge();
+  }
+
+  function randomTitle() { return TITLES[Math.floor(Math.random() * TITLES.length)]; }
+
+  function placeDocStart() {
+    doc.style.transition = "none";
+    doc.style.transform = "";
+    doc.style.opacity = "1";
+    doc.style.left = (stage.clientWidth / 2 - DOC_W / 2) + "px";
+    doc.style.top = "46px";
+  }
+
+  function spawnStrips() {
+    var sr = stage.getBoundingClientRect();
+    var slr = slot.getBoundingClientRect();
+    var shr = shredder.getBoundingClientRect();
+    var baseTop = (shr.bottom - sr.top) - 12;
+    var leftEdge = slr.left - sr.left;
+    for (var i = 0; i < STRIPS; i++) {
+      var st = document.createElement("div");
+      st.className = "sh-strip";
+      st.style.setProperty("--w", (4 + Math.random() * 4).toFixed(0) + "px");
+      st.style.setProperty("--h", (16 + Math.random() * 20).toFixed(0) + "px");
+      st.style.left = (leftEdge + Math.random() * slr.width) + "px";
+      st.style.top = baseTop + "px";
+      st.style.setProperty("--dx", ((Math.random() * 2 - 1) * 90).toFixed(0) + "px");
+      st.style.setProperty("--dy", (60 + Math.random() * 90).toFixed(0) + "px");
+      st.style.setProperty("--rot", ((Math.random() * 2 - 1) * 220).toFixed(0) + "deg");
+      st.style.setProperty("--dur", (0.7 + Math.random() * 0.6).toFixed(2) + "s");
+      stage.appendChild(st);
+      requestAnimationFrame(function (el) { return function () { el.classList.add("fall"); }; }(st));
+      (function (el) { setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 1500); })(st);
+    }
+  }
+
+  function flashCombo() {
+    comboEl.textContent = "드르륵! 🌀";
+    comboEl.classList.remove("show"); void comboEl.offsetWidth; comboEl.classList.add("show");
+  }
+
+  function feed() {
+    busy = true;
+    var sr = stage.getBoundingClientRect();
+    var slr = slot.getBoundingClientRect();
+    var targetLeft = (slr.left + slr.width / 2 - sr.left) - DOC_W / 2;
+    var targetTop = (slr.top - sr.top) - DOC_H + 10;
+    doc.style.transition = "all .42s ease-in";
+    requestAnimationFrame(function () {
+      doc.style.left = targetLeft + "px";
+      doc.style.top = targetTop + "px";
+      doc.style.transform = "scaleY(0.04)";
+      doc.style.opacity = "0.7";
+    });
+    shredder.classList.remove("shake"); void shredder.offsetWidth; shredder.classList.add("shake");
+    setTimeout(spawnStrips, 130);
+    setTimeout(spawnStrips, 300);
+
+    count++;
+    renderScore();
+    flashCombo();
+
+    setTimeout(function () {
+      shredder.classList.remove("shake");
+      docTitle.textContent = randomTitle();
+      placeDocStart();
+      busy = false;
+    }, 520);
+  }
+
+  function overSlot() {
+    var dr = doc.getBoundingClientRect();
+    var slr = slot.getBoundingClientRect();
+    return dr.bottom >= slr.top + 4 && dr.right > slr.left + 8 && dr.left < slr.right - 8;
+  }
+
+  doc.addEventListener("pointerdown", function (e) {
+    if (busy) return;
+    dragging = true;
+    try { doc.setPointerCapture(e.pointerId); } catch (_) {}
+    var r = doc.getBoundingClientRect();
+    offX = e.clientX - r.left;
+    offY = e.clientY - r.top;
+    doc.style.transition = "none";
+    e.preventDefault();
+  });
+  doc.addEventListener("pointermove", function (e) {
+    if (!dragging || busy) return;
+    var sr = stage.getBoundingClientRect();
+    var x = e.clientX - sr.left - offX;
+    var y = e.clientY - sr.top - offY;
+    x = Math.max(-10, Math.min(x, stage.clientWidth - DOC_W + 10));
+    y = Math.max(-10, Math.min(y, stage.clientHeight - 20));
+    doc.style.left = x + "px";
+    doc.style.top = y + "px";
+    if (overSlot()) {
+      dragging = false;
+      try { doc.releasePointerCapture(e.pointerId); } catch (_) {}
+      feed();
+    }
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    if (e && e.pointerId != null) { try { doc.releasePointerCapture(e.pointerId); } catch (_) {} }
+    // 입구에 못 닿았으면 제자리로
+    doc.style.transition = "all .25s ease";
+    placeDocStartAnimated();
+  }
+  function placeDocStartAnimated() {
+    doc.style.left = (stage.clientWidth / 2 - DOC_W / 2) + "px";
+    doc.style.top = "46px";
+  }
+  doc.addEventListener("pointerup", endDrag);
+  doc.addEventListener("pointercancel", endDrag);
+
+  placeDocStart();
+  renderScore();
+  window.addEventListener("resize", function () { if (!dragging && !busy) placeDocStart(); });
+
+  /* ─────────── 친구 도전장(링크 공유) ─────────── */
+  var challengeFriend = null;
+  function b64enc(v) { return btoa(unescape(encodeURIComponent(v))); }
+  function b64dec(v) { return decodeURIComponent(escape(atob(v))); }
+  function encodeChallenge(name) { return b64enc(JSON.stringify({ c: count, n: name || "" })); }
+  function decodeChallenge(token) {
+    try { var o = JSON.parse(b64dec(token)); return { c: o.c || 0, name: String(o.n || "").slice(0, 20) }; }
+    catch (e) { return null; }
+  }
+  function buildChallengeLink(name) { return location.origin + location.pathname + "?vs=" + encodeURIComponent(encodeChallenge(name)); }
+
+  function updateChallenge() {
+    if (!challengeFriend) return;
+    var f = challengeFriend, who = f.name || "친구";
+    var diff = count - f.c;
+    var verdict;
+    if (diff > 0) verdict = "🏆 당신이 " + diff + "건 더 갈았어요! 사이다!";
+    else if (diff === 0) verdict = "🤝 " + f.c + "건 동점! 한 건만 더!";
+    else verdict = "😤 " + (-diff) + "건 뒤졌어요 — 더 갈아버려요!";
+    $("sh-ch-main").textContent = "⚔️ " + who + "님의 도전: 파쇄 " + f.c + "건";
+    $("sh-ch-sub").textContent = "내 기록: 파쇄 " + count + "건 · " + verdict;
+  }
+
+  $("sh-ch-close").addEventListener("click", function () { $("sh-challenge").style.display = "none"; });
+
+  $("sh-share-vs").addEventListener("click", function () {
+    var name = (prompt("도전장에 표시할 닉네임 (선택)", "") || "").slice(0, 20);
+    var link = buildChallengeLink(name);
+    var out = $("sh-share-out"), input = $("sh-share-link"), msg = $("sh-share-msg");
+    out.style.display = "block";
+    input.value = link; input.focus(); input.select();
+    var done = function (ok) {
+      msg.textContent = (ok ? "✅ 도전장 링크를 복사했어요! " : "아래 링크를 길게 눌러 복사하세요. ") +
+        "받는 사람은 링크만 열면 내 파쇄 실적과 자기 실적을 비교하며 도전할 수 있어요.";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); });
+    } else {
+      try { document.execCommand("copy"); done(true); } catch (e) { done(false); }
+    }
+  });
+
+  var vsParam = new URLSearchParams(location.search).get("vs");
+  if (vsParam) {
+    var friend = decodeChallenge(vsParam);
+    if (friend) { challengeFriend = friend; $("sh-challenge").style.display = "block"; updateChallenge(); }
+  }
+
+  /* ─────────── 자랑 카드 (html2canvas 지연 로딩) ─────────── */
+  var H2C_SRC = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+  var h2cPromise = null;
+  function loadHtml2canvas() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    if (h2cPromise) return h2cPromise;
+    h2cPromise = new Promise(function (resolve, reject) {
+      var sc = document.createElement("script");
+      sc.src = H2C_SRC;
+      sc.onload = function () { resolve(window.html2canvas); };
+      sc.onerror = function () { reject(new Error("load failed")); };
+      document.head.appendChild(sc);
+    });
+    return h2cPromise;
+  }
+  function fillCard() {
+    $("cap-count").textContent = count;
+    $("cap-strips").textContent = count * STRIPS;
+    var d = new Date();
+    $("cap-date").textContent = d.getFullYear() + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + ("0" + d.getDate()).slice(-2);
+  }
+  function closeModal() { $("sh-modal").style.display = "none"; }
+
+  $("sh-make-card").addEventListener("click", function () {
+    fillCard();
+    var modal = $("sh-modal"), img = $("sh-modal-img"), loading = $("sh-modal-loading");
+    var shareBtn = $("sh-card-share"), dlBtn = $("sh-card-download"), msg = $("sh-card-msg");
+    img.style.display = "none"; shareBtn.style.display = "none"; dlBtn.style.display = "none";
+    loading.style.display = "block"; msg.textContent = "";
+    modal.style.display = "flex";
+
+    loadHtml2canvas().then(function (h2c) {
+      return h2c($("sh-capture"), { scale: 2, backgroundColor: null, useCORS: true });
+    }).then(function (canvas) {
+      loading.style.display = "none";
+      var dataURL = canvas.toDataURL("image/png");
+      img.src = dataURL; img.style.display = "block";
+      dlBtn.href = dataURL; dlBtn.style.display = "inline-block";
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+        var file = new File([blob], "my-shred-card.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareBtn.style.display = "inline-block";
+          shareBtn.onclick = function () {
+            navigator.share({ files: [file], title: "오늘의 파쇄 실적", text: "스트레스 서류 " + count + "건 갈아버림 🗂️ (pigbrain.github.io)" }).catch(function () {});
+          };
+          msg.textContent = "공유하기로 SNS에 바로 올리거나, 이미지로 저장할 수 있어요.";
+        } else {
+          msg.textContent = "이 기기는 직접 공유를 지원하지 않아요. '이미지 저장' 후 SNS에 올려주세요.";
+        }
+      }, "image/png");
+    }).catch(function () {
+      loading.style.display = "none";
+      msg.textContent = "카드를 만들지 못했어요. 네트워크 상태를 확인하고 다시 시도해 주세요.";
+    });
+  });
+
+  $("sh-modal-close").addEventListener("click", closeModal);
+  $("sh-modal-bg").addEventListener("click", closeModal);
+})();
+</script>
+{% endraw %}
