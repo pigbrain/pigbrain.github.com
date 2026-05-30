@@ -98,6 +98,10 @@
 		</div>
 	</div>
 	{% include themes/Snail/footer.html %}
+	{% if page.group != 'home' %}
+	<!-- 월급계산기 외 화면: 월급 설정돼 있으면 '오늘 번 돈' 구석 표시 -->
+	<script src="{{ BASE_PATH }}/assets/earnings-badge.js"></script>
+	{% endif %}
 	{% include JB/analytics %}
 </body>
 </html>
