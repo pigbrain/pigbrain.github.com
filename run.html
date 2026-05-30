@@ -21,7 +21,7 @@ footer { display: none !important; }
 .rn-scoreboard b { font-size: 22px; color: #2f3a44; }
 
 /* 게임 무대 */
-#rn-stage { position: relative; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #cfe8ff 0%, #eaf6ff 70%, #f3efe4 70%, #efe8d6 100%); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.5); cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+#rn-stage { position: relative; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #eef2f6 0%, #e6ecf2 60%, #dfe6ee 84%, #c9b18d 84%, #bd9f74 100%); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.5); cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
 #rn-canvas { display: block; width: 100%; }
 #rn-score { position: absolute; top: 10px; right: 14px; font-size: 16px; font-weight: 900; color: #3a4654; text-shadow: 0 1px 0 rgba(255,255,255,0.6); }
 #rn-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(255,255,255,0.35); color: #2f3a44; font-weight: 800; }
@@ -143,10 +143,22 @@ footer { display: none !important; }
 
   var PX = 60, PLAYER_W = 30, PLAYER_SIZE = 34;
   var GRAV = 2400, JUMP = 820;
-  var OBSTACLES = [
+  // 사물 장애물
+  var THINGS = [
     { e: "☕", h: 30 }, { e: "📦", h: 40 }, { e: "📚", h: 34 },
     { e: "🗄️", h: 52 }, { e: "🧳", h: 44 }, { e: "🪑", h: 46 }, { e: "🐛", h: 28 }
   ];
+  // 직급별 사람 장애물 (낮은 직급 → 높은 직급)
+  var PEOPLE = [
+    { e: "🧑", h: 46, label: "사원" },
+    { e: "👨", h: 46, label: "대리" },
+    { e: "👩", h: 46, label: "과장" },
+    { e: "🧔", h: 48, label: "부장" },
+    { e: "👴", h: 48, label: "사장" }
+  ];
+  // 사무실 배경 소품 (시차 스크롤)
+  var BG_WALL = ["🪟", "🖼️", "🕐", "🪟", "🌿"];
+  var BG_DESK = ["🖥️", "🪴", "🗄️", "📈", "🖨️"];
 
   var state = "ready";       // ready | playing | over
   var raf = null, last = 0;
@@ -185,20 +197,57 @@ footer { display: none !important; }
     groundY = H - 30;
   }
 
+  // 사무실 배경 소품을 한 줄로 반복해 시차 스크롤 그리기
+  function drawRow(props, spacing, y, scrollAmt, size, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.font = size + "px serif";
+    ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
+    var off = ((scrollAmt % spacing) + spacing) % spacing;
+    var startIdx = Math.floor(scrollAmt / spacing);
+    var k = 0;
+    for (var x = -off; x < W + spacing; x += spacing) {
+      var idx = (((startIdx + k) % props.length) + props.length) % props.length;
+      ctx.fillText(props[idx], x, y);
+      k++;
+    }
+    ctx.restore();
+  }
+
+  function drawOffice() {
+    drawRow(BG_WALL, 150, groundY - 116, (groundScroll || 0) * 0.25, 32, 0.5);   // 벽 (창문·시계·액자)
+    drawRow(BG_DESK, 128, groundY - 64, (groundScroll || 0) * 0.5, 26, 0.7);     // 책상 소품
+  }
+
+  function drawLabel(o) {
+    ctx.save();
+    var lx = o.x + o.w / 2, ly = groundY - o.h - 12;
+    ctx.font = "700 12px -apple-system, BlinkMacSystemFont, sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    var tw = ctx.measureText(o.label).width + 12;
+    ctx.fillStyle = "rgba(43,108,176,0.92)";
+    ctx.fillRect(lx - tw / 2, ly - 9, tw, 18);
+    ctx.fillStyle = "#fff";
+    ctx.fillText(o.label, lx, ly + 1);
+    ctx.restore();
+  }
+
   function render() {
     ctx.clearRect(0, 0, W, H);
+    drawOffice();
     // 땅
-    ctx.strokeStyle = "#c9b79c"; ctx.lineWidth = 3;
+    ctx.strokeStyle = "#a98c63"; ctx.lineWidth = 3;
     ctx.beginPath(); ctx.moveTo(0, groundY + 2); ctx.lineTo(W, groundY + 2); ctx.stroke();
     ctx.fillStyle = "#d8c9b2";
     var off = (groundScroll || 0) % 40;
     for (var gx = -off; gx < W; gx += 40) ctx.fillRect(gx, groundY + 7, 16, 3);
     // 장애물
-    ctx.textBaseline = "alphabetic";
+    ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
     for (var i = 0; i < obstacles.length; i++) {
       var o = obstacles[i];
       ctx.font = o.h + "px serif";
       ctx.fillText(o.e, o.x, groundY);
+      if (o.label) drawLabel(o);
     }
     // 플레이어 (진행 방향을 보도록 좌우 반전 + 달리기 모션)
     var grounded = !jumping;
@@ -218,8 +267,10 @@ footer { display: none !important; }
   }
 
   function spawnObstacle() {
-    var t = OBSTACLES[Math.floor(Math.random() * OBSTACLES.length)];
-    obstacles.push({ e: t.e, h: t.h, w: t.h * 0.92, x: W + 20 });
+    var person = Math.random() < 0.5;
+    var src = person ? PEOPLE : THINGS;
+    var t = src[Math.floor(Math.random() * src.length)];
+    obstacles.push({ e: t.e, h: t.h, w: t.h * (person ? 0.62 : 0.92), x: W + 20, label: t.label || null });
   }
 
   function update(dt) {
