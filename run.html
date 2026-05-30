@@ -151,7 +151,7 @@ footer { display: none !important; }
   var state = "ready";       // ready | playing | over
   var raf = null, last = 0;
   var speed, distancePx, score, obstacles, spawnDist, nextGap, groundScroll;
-  var pBottom, vy, jumping;
+  var pBottom, vy, jumping, runPhase = 0;
 
   var stats = (function () { try { return JSON.parse(localStorage.getItem(RN_KEY)) || {}; } catch (e) { return {}; } })();
   var todayKey = (function () { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); })();
@@ -200,9 +200,21 @@ footer { display: none !important; }
       ctx.font = o.h + "px serif";
       ctx.fillText(o.e, o.x, groundY);
     }
-    // 플레이어
+    // 플레이어 (진행 방향을 보도록 좌우 반전 + 달리기 모션)
+    var grounded = !jumping;
+    var bob = grounded ? -Math.abs(Math.sin(runPhase * 2)) * 4 : 0;       // 통통 튀기
+    var tilt = grounded ? Math.sin(runPhase * 2) * 0.12 : -0.14;          // 기우뚱 / 점프 시 앞으로 기울기
+    var cx = PX + PLAYER_W / 2;
+    var cy = pBottom - PLAYER_SIZE / 2 + bob;
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(-1, 1);          // 좌우 반전 → 오른쪽을 보고 달림
+    ctx.rotate(tilt);
     ctx.font = PLAYER_SIZE + "px serif";
-    ctx.fillText("🏃", PX, pBottom);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("🏃", 0, 0);
+    ctx.restore();
   }
 
   function spawnObstacle() {
@@ -216,6 +228,7 @@ footer { display: none !important; }
     score = Math.floor(distancePx / 14);
     $("rn-score").textContent = "🏁 " + score + "m";
     groundScroll += speed * dt;
+    runPhase += dt * (8 + speed * 0.02);   // 빠를수록 다리 회전도 빨라짐
 
     if (jumping) {
       vy += GRAV * dt;
@@ -255,7 +268,7 @@ footer { display: none !important; }
 
   function start() {
     speed = 280; distancePx = 0; score = 0; obstacles = []; spawnDist = 0; nextGap = 300; groundScroll = 0;
-    pBottom = groundY; vy = 0; jumping = false;
+    pBottom = groundY; vy = 0; jumping = false; runPhase = 0;
     plays++; renderScore();
     state = "playing";
     overlay.style.display = "none";
