@@ -8,6 +8,9 @@ group: home
 #salary-app { max-width: 760px; min-height: 90vh; margin: 0 auto; padding: 10px 16px 120px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; position: relative; }
 #salary-app * { box-sizing: border-box; }
 
+/* 기능 페이지에서는 블로그용 footer 숨김 */
+footer { display: none; }
+
 /* coins fall in front of everything */
 /* 좌/우 여백(자동광고 사이드 레일 영역)을 덮지 않도록 가운데 컬럼으로 제한 */
 #coin-layer { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 820px; height: 100%; pointer-events: none; z-index: 50; overflow: hidden; }
