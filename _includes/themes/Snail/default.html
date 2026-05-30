@@ -100,7 +100,32 @@
 	{% include themes/Snail/footer.html %}
 	{% if page.group != 'home' %}
 	<!-- 월급계산기 외 화면: 월급 설정돼 있으면 '오늘 번 돈' 구석 표시 -->
-	<script src="{{ BASE_PATH }}/assets/earnings-badge.js"></script>
+	{% raw %}
+	<script>
+	(function () {
+	  var cfg;
+	  try { cfg = JSON.parse(localStorage.getItem("pigbrain_salary_v1")); } catch (e) { return; }
+	  if (!cfg || !(cfg.payDay >= 1 && cfg.payDay <= 31) || !(cfg.salary > 0)) return;
+	  function paydayInMonth(y, m, p) { var last = new Date(y, m + 1, 0).getDate(); return new Date(y, m, Math.min(p, last), 0, 0, 0, 0); }
+	  function todayEarned() {
+	    var now = new Date();
+	    var tm = paydayInMonth(now.getFullYear(), now.getMonth(), cfg.payDay), lastP, nextP;
+	    if (tm.getTime() > now.getTime()) { lastP = paydayInMonth(now.getFullYear(), now.getMonth() - 1, cfg.payDay); nextP = tm; }
+	    else { lastP = tm; nextP = paydayInMonth(now.getFullYear(), now.getMonth() + 1, cfg.payDay); }
+	    var ratePerMs = cfg.salary / (nextP.getTime() - lastP.getTime());
+	    var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+	    var start = Math.max(midnight.getTime(), lastP.getTime());
+	    return ratePerMs * (now.getTime() - start);
+	  }
+	  function fmt(n) { return Math.floor(n).toLocaleString("ko-KR"); }
+	  var el = document.createElement("div");
+	  el.style.cssText = "position:fixed;left:12px;bottom:12px;z-index:9998;background:rgba(31,158,99,0.95);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:13px;font-weight:700;padding:8px 13px;border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,0.22);pointer-events:none;line-height:1.2;white-space:nowrap;";
+	  function render() { el.innerHTML = "💰 오늘 번 돈 <b style='font-size:14px'>₩" + fmt(todayEarned()) + "</b>"; }
+	  function init() { render(); document.body.appendChild(el); setInterval(render, 2000); }
+	  if (document.body) init(); else document.addEventListener("DOMContentLoaded", init);
+	})();
+	</script>
+	{% endraw %}
 	{% endif %}
 	{% include JB/analytics %}
 </body>
