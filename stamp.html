@@ -1,0 +1,358 @@
+---
+layout: default
+title: 결재도장
+group: navigation
+---
+{% include JB/setup %}
+{% raw %}
+<style>
+#stamp-app { max-width: 760px; min-height: 90vh; margin: 0 auto; padding: 10px 16px 120px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+#stamp-app * { box-sizing: border-box; }
+
+/* 기능 페이지에서는 블로그용 footer 숨김 */
+footer { display: none; }
+
+.st-head { text-align: center; padding: 16px 0 6px; }
+.st-head h1 { font-size: 30px; font-weight: 800; color: #3a2c2c; margin: 0; }
+.st-msg { display: inline-block; margin-top: 12px; font-size: 15px; font-weight: 700; color: #b5402f; background: #fdecea; border: 1px solid #f6cdc7; border-radius: 999px; padding: 9px 18px; }
+
+/* 점수판 */
+.st-scoreboard { display: flex; gap: 14px; margin: 22px 0 14px; }
+.st-scoreboard > div { flex: 1; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px; text-align: center; font-size: 14px; color: #777; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+.st-scoreboard b { font-size: 22px; color: #3a2c2c; }
+
+/* 스테이지(책상) */
+#st-stage { position: relative; height: 400px; border-radius: 20px; overflow: hidden; background: linear-gradient(180deg, #c8a27a 0%, #a97e54 100%); box-shadow: inset 0 -30px 60px rgba(0,0,0,0.2); user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+#st-stage::before { content: "결재 대기"; position: absolute; left: 16px; top: 14px; color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 800; }
+
+/* 서류 */
+#st-doc { position: absolute; left: 50%; top: 52%; width: 250px; height: 320px; transform: translate(-50%, -50%); background: #fffdf7; border-radius: 6px; box-shadow: 0 12px 30px rgba(0,0,0,0.3); padding: 22px 20px; cursor: pointer; }
+#st-doc.out { animation: st-out .22s ease-in forwards; pointer-events: none; }
+#st-doc.in { animation: st-in .26s cubic-bezier(.2,.9,.3,1.2); }
+@keyframes st-out { to { transform: translate(150%, -50%) rotate(14deg); opacity: 0; } }
+@keyframes st-in { from { transform: translate(-180%, -50%) rotate(-10deg); opacity: 0; } to { transform: translate(-50%, -50%) rotate(0); opacity: 1; } }
+#st-doc.shake { animation: st-shake .18s ease; }
+@keyframes st-shake { 0%,100% { transform: translate(-50%,-50%); } 30% { transform: translate(-50%,-52%) rotate(-1deg); } 70% { transform: translate(-50%,-48%) rotate(1deg); } }
+
+.st-doc-title { font-size: 17px; font-weight: 800; color: #333; text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; }
+.st-doc-lines { margin-top: 16px; }
+.st-doc-lines i { display: block; height: 8px; background: #ececec; border-radius: 4px; margin-bottom: 11px; }
+.st-doc-lines i:nth-child(2) { width: 80%; }
+.st-doc-lines i:nth-child(4) { width: 60%; }
+.st-approve-box { position: absolute; right: 18px; bottom: 18px; width: 60px; height: 60px; border: 2px solid #cfcfcf; border-radius: 6px; color: #cfcfcf; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+/* 도장 */
+.st-stamp { position: absolute; width: 92px; height: 92px; transform: translate(-50%, -50%) rotate(var(--rot)) scale(2.2); border: 4px solid #d83a3a; border-radius: 50%; box-shadow: inset 0 0 0 2px #d83a3a; color: #d83a3a; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; letter-spacing: 2px; opacity: 0; pointer-events: none; }
+.st-stamp.hit { animation: st-hit .18s ease-out forwards; }
+@keyframes st-hit {
+  0%   { opacity: .15; transform: translate(-50%,-50%) rotate(var(--rot)) scale(2.2); }
+  60%  { opacity: 1;   transform: translate(-50%,-50%) rotate(var(--rot)) scale(.88); }
+  100% { opacity: .92; transform: translate(-50%,-50%) rotate(var(--rot)) scale(1); }
+}
+
+#st-combo { position: absolute; left: 50%; top: 16%; transform: translate(-50%,-50%) scale(.6); color: #fff; font-size: 26px; font-weight: 900; text-shadow: 0 2px 8px rgba(0,0,0,0.35); opacity: 0; pointer-events: none; white-space: nowrap; }
+#st-combo.show { animation: st-combo 0.7s ease forwards; }
+@keyframes st-combo { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.6); } 25% { opacity: 1; transform: translate(-50%,-70%) scale(1.15); } 100% { opacity: 0; transform: translate(-50%,-100%) scale(1); } }
+
+.st-tip { text-align: center; color: #a99a8c; font-size: 13px; margin-top: 16px; line-height: 1.6; }
+
+/* 버튼 */
+.st-btn { border: none; border-radius: 9px; padding: 12px 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .08s, filter .15s; }
+.st-btn:active { transform: scale(.97); }
+.st-btn-primary { background: linear-gradient(135deg, #ee5a44, #d6351f); color: #fff; width: 100%; }
+.st-btn-ghost { background: #f3f3f3; color: #666; border: 1px solid #e2e2e2; }
+
+/* 공유 / 도전 */
+.st-actions { text-align: center; margin-top: 24px; }
+.st-actions .st-btn-primary { max-width: 320px; margin: 0 auto; }
+.st-actions .gap { height: 12px; }
+#st-share-out { display: none; margin-top: 14px; }
+#st-share-link { width: 100%; max-width: 460px; padding: 10px 12px; font-size: 13px; border: 1px solid #d5d5d5; border-radius: 8px; color: #555; text-align: center; }
+.st-note { color: #aaa; font-size: 12px; margin-top: 12px; line-height: 1.6; text-align: center; }
+
+/* 도전장 배너 */
+#st-challenge { display: none; margin: 16px 0; background: #fdecea; border: 1px solid #f6cdc7; border-radius: 14px; padding: 16px 30px 16px 18px; text-align: center; position: relative; }
+#st-challenge .ch-main { font-size: 16px; font-weight: 800; color: #b5402f; }
+#st-challenge .ch-sub { font-size: 14px; color: #8a6a62; margin-top: 6px; }
+#st-challenge .ch-close { position: absolute; top: 8px; right: 12px; color: #d6b3ac; cursor: pointer; font-weight: 800; font-size: 16px; }
+
+/* 공유 카드 (캡처용) */
+#st-capture-wrap { position: fixed; left: -10000px; top: 0; }
+#st-capture { width: 540px; height: 675px; box-sizing: border-box; padding: 54px 46px; background: linear-gradient(165deg, #ee5a44 0%, #d6351f 60%, #a52414 100%); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; }
+#st-capture .cap-badge { font-size: 24px; font-weight: 800; opacity: .95; }
+#st-capture .cap-seal { margin-top: 30px; width: 180px; height: 180px; border: 8px solid #fff; border-radius: 50%; box-shadow: inset 0 0 0 4px #fff; display: flex; align-items: center; justify-content: center; font-size: 56px; font-weight: 900; letter-spacing: 4px; transform: rotate(-8deg); }
+#st-capture .cap-big { margin-top: 26px; font-size: 38px; font-weight: 800; }
+#st-capture .cap-big b { font-size: 64px; font-weight: 900; }
+#st-capture .cap-sub { margin-top: 16px; font-size: 26px; font-weight: 700; background: rgba(0,0,0,.14); border-radius: 14px; padding: 12px 22px; }
+#st-capture .cap-witty { margin-top: 22px; font-size: 22px; font-weight: 700; opacity: .95; }
+#st-capture .cap-foot { margin-top: auto; font-size: 18px; opacity: .9; font-weight: 700; }
+
+/* 모달 */
+#st-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; }
+.st-modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+.st-modal-box { position: relative; z-index: 1; background: #fff; border-radius: 16px; padding: 22px; max-width: 92vw; max-height: 92vh; overflow: auto; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+#st-modal-loading { padding: 40px 20px; font-size: 16px; color: #666; }
+#st-modal-img { max-width: min(360px, 80vw); width: 100%; border-radius: 12px; display: block; margin: 0 auto; }
+.st-modal-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.st-modal-btns .st-btn { width: auto; min-width: 120px; text-decoration: none; }
+</style>
+
+<div id="stamp-app">
+  <div class="st-head">
+    <h1>🟥 결재 도장 쾅쾅</h1>
+    <div class="st-msg">📑 서류에 도장 쾅쾅 찍으며 스트레스 풀자! 결재가 밀린 만큼 시간도 잘 갑니다.</div>
+  </div>
+
+  <!-- 친구 도전장 (?vs= 링크로 진입 시 표시) -->
+  <div id="st-challenge">
+    <span class="ch-close" id="st-ch-close">×</span>
+    <div class="ch-main" id="st-ch-main"></div>
+    <div class="ch-sub" id="st-ch-sub"></div>
+  </div>
+
+  <!-- 점수판 -->
+  <div class="st-scoreboard">
+    <div>오늘 결재한 서류 <b id="st-count">0</b>건</div>
+    <div>최고 콤보 <b id="st-combo-best">0</b></div>
+  </div>
+
+  <!-- 스테이지 -->
+  <div id="st-stage">
+    <div id="st-doc">
+      <div class="st-doc-title">휴가 신청서</div>
+      <div class="st-doc-lines"><i></i><i></i><i></i><i></i></div>
+      <div class="st-approve-box">결재</div>
+    </div>
+    <div id="st-combo"></div>
+  </div>
+  <p class="st-tip">💡 서류를 <b>클릭(터치)</b>하면 "승인" 도장이 쾅! 찍히고 다음 서류가 올라옵니다. 빠르게 연속으로 찍으면 <b>콤보</b>가 쌓여요. (모바일도 OK)</p>
+
+  <div class="st-actions">
+    <button id="st-make-card" class="st-btn st-btn-primary">📸 자랑 카드 만들기</button>
+    <div class="gap"></div>
+    <button id="st-share-vs" class="st-btn st-btn-primary">⚔️ 친구에게 결재 대결 도전장 보내기 (링크 복사)</button>
+    <div id="st-share-out">
+      <input id="st-share-link" readonly>
+      <p class="st-note" id="st-share-msg"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 공유 카드 캡처용 (화면 밖) -->
+<div id="st-capture-wrap" aria-hidden="true">
+  <div id="st-capture">
+    <div class="cap-badge">📑 오늘의 결재 실적</div>
+    <div class="cap-seal">승인</div>
+    <div class="cap-big">오늘 결재 <b id="cap-count">0</b>건</div>
+    <div class="cap-sub">🔥 최고 콤보 <span id="cap-combo">0</span></div>
+    <div class="cap-witty">도장 쾅쾅, 스트레스 굿바이 👋</div>
+    <div class="cap-foot"><span id="cap-date"></span> · pigbrain.github.io</div>
+  </div>
+</div>
+
+<!-- 카드 미리보기 / 공유 모달 -->
+<div id="st-modal" style="display:none;">
+  <div class="st-modal-bg" id="st-modal-bg"></div>
+  <div class="st-modal-box">
+    <div id="st-modal-loading">카드 만드는 중… 📸</div>
+    <img id="st-modal-img" alt="결재 자랑 카드" style="display:none;">
+    <div class="st-modal-btns">
+      <button id="st-card-share" class="st-btn st-btn-primary" style="display:none;">공유하기</button>
+      <a id="st-card-download" class="st-btn st-btn-primary" style="display:none;" download="my-stamp-card.png">이미지 저장</a>
+      <button id="st-modal-close" class="st-btn st-btn-ghost">닫기</button>
+    </div>
+    <p class="st-note" id="st-card-msg"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ─────────── 결재 도장 게임 ─────────── */
+  var STAMP_KEY = "pigbrain_stamp_v1";
+  var COMBO_WINDOW = 1500; // 이 시간 안에 다시 찍으면 콤보 유지(ms)
+  var TITLES = [
+    "휴가 신청서", "경비 처리서", "야근 수당 청구", "회의록 승인", "구매 요청서",
+    "출장 보고서", "연차 신청서", "프로젝트 기획안", "지출 결의서", "재택근무 신청"
+  ];
+  var stage = $("st-stage"), doc = $("st-doc"), docTitle = doc.querySelector(".st-doc-title"), comboEl = $("st-combo");
+  var busy = false, combo = 0, lastStampAt = 0;
+
+  var stats = (function () { try { return JSON.parse(localStorage.getItem(STAMP_KEY)) || {}; } catch (e) { return {}; } })();
+  var todayKey = (function () { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); })();
+  var count = (stats.day === todayKey) ? (stats.count || 0) : 0;
+  var bestCombo = (stats.day === todayKey) ? (stats.combo || 0) : 0;
+
+  function renderScore() {
+    $("st-count").textContent = count;
+    $("st-combo-best").textContent = bestCombo;
+    localStorage.setItem(STAMP_KEY, JSON.stringify({ day: todayKey, count: count, combo: bestCombo }));
+    updateChallenge();
+  }
+
+  function randomTitle() { return TITLES[Math.floor(Math.random() * TITLES.length)]; }
+
+  function nextDoc() {
+    doc.classList.remove("out");
+    var olds = doc.querySelectorAll(".st-stamp");
+    for (var i = 0; i < olds.length; i++) olds[i].remove();
+    docTitle.textContent = randomTitle();
+    doc.classList.remove("in"); void doc.offsetWidth; doc.classList.add("in");
+  }
+
+  function flashCombo() {
+    if (combo < 2) return;
+    comboEl.textContent = "🔥 " + combo + " 콤보!";
+    comboEl.classList.remove("show"); void comboEl.offsetWidth; comboEl.classList.add("show");
+  }
+
+  function doStamp(clientX, clientY) {
+    if (busy) return;
+    busy = true;
+
+    var rect = doc.getBoundingClientRect();
+    var x = clientX - rect.left, y = clientY - rect.top;
+    var s = document.createElement("div");
+    s.className = "st-stamp";
+    s.textContent = "승인";
+    s.style.left = x + "px";
+    s.style.top = y + "px";
+    s.style.setProperty("--rot", ((Math.random() * 2 - 1) * 18).toFixed(0) + "deg");
+    doc.appendChild(s);
+    requestAnimationFrame(function () { s.classList.add("hit"); });
+
+    doc.classList.remove("shake"); void doc.offsetWidth; doc.classList.add("shake");
+
+    // 콤보 계산
+    var now = Date.now();
+    combo = (now - lastStampAt <= COMBO_WINDOW) ? combo + 1 : 1;
+    lastStampAt = now;
+    if (combo > bestCombo) bestCombo = combo;
+    count++;
+    renderScore();
+    flashCombo();
+
+    setTimeout(function () {
+      doc.classList.add("out");
+      setTimeout(function () { nextDoc(); busy = false; }, 240);
+    }, 200);
+  }
+
+  doc.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    doStamp(e.clientX, e.clientY);
+  });
+
+  renderScore();
+
+  /* ─────────── 친구 도전장(링크 공유) ─────────── */
+  var challengeFriend = null;
+  function b64enc(v) { return btoa(unescape(encodeURIComponent(v))); }
+  function b64dec(v) { return decodeURIComponent(escape(atob(v))); }
+  function encodeChallenge(name) { return b64enc(JSON.stringify({ c: count, k: bestCombo, n: name || "" })); }
+  function decodeChallenge(token) {
+    try { var o = JSON.parse(b64dec(token)); return { c: o.c || 0, k: o.k || 0, name: String(o.n || "").slice(0, 20) }; }
+    catch (e) { return null; }
+  }
+  function buildChallengeLink(name) { return location.origin + location.pathname + "?vs=" + encodeURIComponent(encodeChallenge(name)); }
+
+  function updateChallenge() {
+    if (!challengeFriend) return;
+    var f = challengeFriend, who = f.name || "친구";
+    var diff = count - f.c;
+    var verdict;
+    if (diff > 0) verdict = "🏆 당신이 " + diff + "건 더 결재했어요! 일잘러 인정!";
+    else if (diff === 0) verdict = "🤝 " + f.c + "건 동점! 한 건만 더!";
+    else verdict = "😤 " + (-diff) + "건 뒤졌어요 — 도장 더 찍어요!";
+    $("st-ch-main").textContent = "⚔️ " + who + "님의 도전: 결재 " + f.c + "건 · 최고 콤보 " + f.k;
+    $("st-ch-sub").textContent = "내 기록: 결재 " + count + "건 · 최고 콤보 " + bestCombo + " · " + verdict;
+  }
+
+  $("st-ch-close").addEventListener("click", function () { $("st-challenge").style.display = "none"; });
+
+  $("st-share-vs").addEventListener("click", function () {
+    var name = (prompt("도전장에 표시할 닉네임 (선택)", "") || "").slice(0, 20);
+    var link = buildChallengeLink(name);
+    var out = $("st-share-out"), input = $("st-share-link"), msg = $("st-share-msg");
+    out.style.display = "block";
+    input.value = link; input.focus(); input.select();
+    var done = function (ok) {
+      msg.textContent = (ok ? "✅ 도전장 링크를 복사했어요! " : "아래 링크를 길게 눌러 복사하세요. ") +
+        "받는 사람은 링크만 열면 내 결재 실적과 자기 실적을 비교하며 도전할 수 있어요.";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); });
+    } else {
+      try { document.execCommand("copy"); done(true); } catch (e) { done(false); }
+    }
+  });
+
+  var vsParam = new URLSearchParams(location.search).get("vs");
+  if (vsParam) {
+    var friend = decodeChallenge(vsParam);
+    if (friend) { challengeFriend = friend; $("st-challenge").style.display = "block"; updateChallenge(); }
+  }
+
+  /* ─────────── 자랑 카드 (html2canvas 지연 로딩) ─────────── */
+  var H2C_SRC = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+  var h2cPromise = null;
+  function loadHtml2canvas() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    if (h2cPromise) return h2cPromise;
+    h2cPromise = new Promise(function (resolve, reject) {
+      var sc = document.createElement("script");
+      sc.src = H2C_SRC;
+      sc.onload = function () { resolve(window.html2canvas); };
+      sc.onerror = function () { reject(new Error("load failed")); };
+      document.head.appendChild(sc);
+    });
+    return h2cPromise;
+  }
+  function fillCard() {
+    $("cap-count").textContent = count;
+    $("cap-combo").textContent = bestCombo;
+    var d = new Date();
+    $("cap-date").textContent = d.getFullYear() + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + ("0" + d.getDate()).slice(-2);
+  }
+  function closeModal() { $("st-modal").style.display = "none"; }
+
+  $("st-make-card").addEventListener("click", function () {
+    fillCard();
+    var modal = $("st-modal"), img = $("st-modal-img"), loading = $("st-modal-loading");
+    var shareBtn = $("st-card-share"), dlBtn = $("st-card-download"), msg = $("st-card-msg");
+    img.style.display = "none"; shareBtn.style.display = "none"; dlBtn.style.display = "none";
+    loading.style.display = "block"; msg.textContent = "";
+    modal.style.display = "flex";
+
+    loadHtml2canvas().then(function (h2c) {
+      return h2c($("st-capture"), { scale: 2, backgroundColor: null, useCORS: true });
+    }).then(function (canvas) {
+      loading.style.display = "none";
+      var dataURL = canvas.toDataURL("image/png");
+      img.src = dataURL; img.style.display = "block";
+      dlBtn.href = dataURL; dlBtn.style.display = "inline-block";
+      canvas.toBlob(function (blob) {
+        if (!blob) return;
+        var file = new File([blob], "my-stamp-card.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareBtn.style.display = "inline-block";
+          shareBtn.onclick = function () {
+            navigator.share({ files: [file], title: "오늘의 결재 실적", text: "오늘 결재 " + count + "건 처리 완료 🟥 (pigbrain.github.io)" }).catch(function () {});
+          };
+          msg.textContent = "공유하기로 SNS에 바로 올리거나, 이미지로 저장할 수 있어요.";
+        } else {
+          msg.textContent = "이 기기는 직접 공유를 지원하지 않아요. '이미지 저장' 후 SNS에 올려주세요.";
+        }
+      }, "image/png");
+    }).catch(function () {
+      loading.style.display = "none";
+      msg.textContent = "카드를 만들지 못했어요. 네트워크 상태를 확인하고 다시 시도해 주세요.";
+    });
+  });
+
+  $("st-modal-close").addEventListener("click", closeModal);
+  $("st-modal-bg").addEventListener("click", closeModal);
+})();
+</script>
+{% endraw %}
