@@ -1,0 +1,414 @@
+---
+layout: default
+title: 칼퇴런
+group: navigation
+---
+{% include JB/setup %}
+{% raw %}
+<style>
+#rn-app { max-width: 760px; min-height: 90vh; margin: 0 auto; padding: 10px 16px 120px; font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; }
+#rn-app * { box-sizing: border-box; }
+
+/* 기능 페이지에서는 블로그용 footer 숨김 */
+footer { display: none !important; }
+
+.rn-head { text-align: center; padding: 16px 0 6px; }
+.rn-head h1 { font-size: 30px; font-weight: 800; color: #2f3a44; margin: 0; }
+.rn-msg { display: inline-block; margin-top: 12px; font-size: 15px; font-weight: 700; color: #2b6cb0; background: #e8f1fb; border: 1px solid #cfe2f5; border-radius: 999px; padding: 9px 18px; }
+
+.rn-scoreboard { display: flex; gap: 14px; margin: 22px 0 14px; }
+.rn-scoreboard > div { flex: 1; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 14px; text-align: center; font-size: 14px; color: #777; box-shadow: 0 4px 14px rgba(0,0,0,0.04); }
+.rn-scoreboard b { font-size: 22px; color: #2f3a44; }
+
+/* 게임 무대 */
+#rn-stage { position: relative; border-radius: 16px; overflow: hidden; background: linear-gradient(180deg, #cfe8ff 0%, #eaf6ff 70%, #f3efe4 70%, #efe8d6 100%); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.5); cursor: pointer; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+#rn-canvas { display: block; width: 100%; }
+#rn-score { position: absolute; top: 10px; right: 14px; font-size: 16px; font-weight: 900; color: #3a4654; text-shadow: 0 1px 0 rgba(255,255,255,0.6); }
+#rn-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(255,255,255,0.35); color: #2f3a44; font-weight: 800; }
+#rn-overlay .ov-main { font-size: 22px; }
+#rn-overlay .ov-sub { font-size: 14px; font-weight: 700; color: #51606e; margin-top: 8px; }
+
+.rn-tip { text-align: center; color: #99a6b2; font-size: 13px; margin-top: 14px; line-height: 1.6; }
+
+.rn-btn { border: none; border-radius: 9px; padding: 12px 20px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .08s, filter .15s; }
+.rn-btn:active { transform: scale(.97); }
+.rn-btn-primary { background: linear-gradient(135deg, #4a93e0, #2b6cb0); color: #fff; width: 100%; }
+.rn-btn-ghost { background: #f3f3f3; color: #666; border: 1px solid #e2e2e2; }
+
+.rn-actions { text-align: center; margin-top: 24px; }
+.rn-actions .rn-btn-primary { max-width: 320px; margin: 0 auto; }
+.rn-actions .gap { height: 12px; }
+#rn-share-out { display: none; margin-top: 14px; }
+#rn-share-link { width: 100%; max-width: 460px; padding: 10px 12px; font-size: 13px; border: 1px solid #d5d5d5; border-radius: 8px; color: #555; text-align: center; }
+.rn-note { color: #aaa; font-size: 12px; margin-top: 12px; line-height: 1.6; text-align: center; }
+
+#rn-challenge { display: none; margin: 16px 0; background: #e8f1fb; border: 1px solid #cfe2f5; border-radius: 14px; padding: 16px 30px 16px 18px; text-align: center; position: relative; }
+#rn-challenge .ch-main { font-size: 16px; font-weight: 800; color: #2b6cb0; }
+#rn-challenge .ch-sub { font-size: 14px; color: #5a6f82; margin-top: 6px; }
+#rn-challenge .ch-close { position: absolute; top: 8px; right: 12px; color: #aecbe8; cursor: pointer; font-weight: 800; font-size: 16px; }
+
+#rn-capture-wrap { position: fixed; left: -10000px; top: 0; }
+#rn-capture { width: 540px; height: 675px; box-sizing: border-box; padding: 54px 46px; background: linear-gradient(165deg, #4a93e0 0%, #2b6cb0 60%, #1d4e84 100%); color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; display: flex; flex-direction: column; align-items: center; text-align: center; }
+#rn-capture .cap-badge { font-size: 24px; font-weight: 800; opacity: .95; }
+#rn-capture .cap-icon { font-size: 120px; line-height: 1; margin-top: 24px; }
+#rn-capture .cap-big { margin-top: 18px; font-size: 34px; font-weight: 800; }
+#rn-capture .cap-big b { font-size: 74px; font-weight: 900; }
+#rn-capture .cap-sub { margin-top: 14px; font-size: 26px; font-weight: 800; background: rgba(0,0,0,.16); border-radius: 14px; padding: 12px 24px; }
+#rn-capture .cap-witty { margin-top: 22px; font-size: 22px; font-weight: 700; opacity: .95; }
+#rn-capture .cap-foot { margin-top: auto; font-size: 18px; opacity: .9; font-weight: 700; }
+
+#rn-modal { position: fixed; inset: 0; z-index: 10001; display: flex; align-items: center; justify-content: center; }
+.rn-modal-bg { position: absolute; inset: 0; background: rgba(0,0,0,.6); }
+.rn-modal-box { position: relative; z-index: 1; background: #fff; border-radius: 16px; padding: 22px; max-width: 92vw; max-height: 92vh; overflow: auto; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.4); }
+#rn-modal-loading { padding: 40px 20px; font-size: 16px; color: #666; }
+#rn-modal-img { max-width: min(360px, 80vw); width: 100%; border-radius: 12px; display: block; margin: 0 auto; }
+.rn-modal-btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+.rn-modal-btns .rn-btn { width: auto; min-width: 120px; text-decoration: none; }
+</style>
+
+<div id="rn-app">
+  <div class="rn-head">
+    <h1>🏃 칼퇴런</h1>
+    <div class="rn-msg">🏁 장애물을 점프로 넘고 멀리 달려 칼퇴하자! 얼마나 멀리 갈 수 있나요?</div>
+  </div>
+
+  <!-- 친구 도전장 (?vs= 링크로 진입 시 표시) -->
+  <div id="rn-challenge">
+    <span class="ch-close" id="rn-ch-close">×</span>
+    <div class="ch-main" id="rn-ch-main"></div>
+    <div class="ch-sub" id="rn-ch-sub"></div>
+  </div>
+
+  <div class="rn-scoreboard">
+    <div>최고 기록 <b id="rn-best">0</b>m</div>
+    <div>오늘 플레이 <b id="rn-plays">0</b>회</div>
+  </div>
+
+  <div id="rn-stage">
+    <canvas id="rn-canvas"></canvas>
+    <div id="rn-score">🏁 0m</div>
+    <div id="rn-overlay">
+      <div class="ov-main" id="rn-ov-main">탭 또는 Space로 시작!</div>
+      <div class="ov-sub" id="rn-ov-sub">점프해서 장애물을 넘으세요</div>
+    </div>
+  </div>
+  <p class="rn-tip">💡 <b>탭 / 클릭 / Space / ↑</b> 로 점프! 달릴수록 점점 빨라집니다. 장애물에 부딪히면 끝! (모바일도 OK)</p>
+
+  <div class="rn-actions">
+    <button id="rn-make-card" class="rn-btn rn-btn-primary">📸 자랑 카드 만들기</button>
+    <div class="gap"></div>
+    <button id="rn-share-vs" class="rn-btn rn-btn-primary">⚔️ 친구에게 칼퇴런 도전장 보내기 (링크 복사)</button>
+    <div id="rn-share-out">
+      <input id="rn-share-link" readonly>
+      <p class="rn-note" id="rn-share-msg"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 공유 카드 캡처용 (화면 밖) -->
+<div id="rn-capture-wrap" aria-hidden="true">
+  <div id="rn-capture">
+    <div class="cap-badge">🏃 나의 칼퇴런 기록</div>
+    <div class="cap-icon">🏁</div>
+    <div class="cap-big">최고 <b id="cap-best">0</b><span style="font-size:34px;font-weight:800;">m</span></div>
+    <div class="cap-sub" id="cap-rating">달렸다!</div>
+    <div class="cap-witty">오늘도 칼같이 퇴근 🏃💨</div>
+    <div class="cap-foot"><span id="cap-date"></span> · pigbrain.github.io</div>
+  </div>
+</div>
+
+<!-- 카드 미리보기 / 공유 모달 -->
+<div id="rn-modal" style="display:none;">
+  <div class="rn-modal-bg" id="rn-modal-bg"></div>
+  <div class="rn-modal-box">
+    <div id="rn-modal-loading">카드 만드는 중… 📸</div>
+    <img id="rn-modal-img" alt="칼퇴런 자랑 카드" style="display:none;">
+    <div class="rn-modal-btns">
+      <button id="rn-card-share" class="rn-btn rn-btn-primary" style="display:none;">공유하기</button>
+      <a id="rn-card-download" class="rn-btn rn-btn-primary" style="display:none;" download="my-run-card.png">이미지 저장</a>
+      <button id="rn-modal-close" class="rn-btn rn-btn-ghost">닫기</button>
+    </div>
+    <p class="rn-note" id="rn-card-msg"></p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+
+  /* ─────────── 칼퇴런 (엔드리스 러너) ─────────── */
+  var RN_KEY = "pigbrain_run_v1";
+  var canvas = $("rn-canvas"), ctx = canvas.getContext("2d"), stage = $("rn-stage"), overlay = $("rn-overlay");
+  var W = 700, H = 240, groundY = 214, dpr = 1;
+
+  var PX = 60, PLAYER_W = 30, PLAYER_SIZE = 34;
+  var GRAV = 2400, JUMP = 820;
+  var OBSTACLES = [
+    { e: "☕", h: 30 }, { e: "📦", h: 40 }, { e: "📚", h: 34 },
+    { e: "🗄️", h: 52 }, { e: "🧳", h: 44 }, { e: "🪑", h: 46 }, { e: "🐛", h: 28 }
+  ];
+
+  var state = "ready";       // ready | playing | over
+  var raf = null, last = 0;
+  var speed, distancePx, score, obstacles, spawnDist, nextGap, groundScroll;
+  var pBottom, vy, jumping;
+
+  var stats = (function () { try { return JSON.parse(localStorage.getItem(RN_KEY)) || {}; } catch (e) { return {}; } })();
+  var todayKey = (function () { var d = new Date(); return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate(); })();
+  var best = (typeof stats.best === "number") ? stats.best : 0;   // 최고 거리(전체 기간)
+  var plays = (stats.day === todayKey) ? (stats.plays || 0) : 0;
+
+  function ratingText(m) {
+    if (m >= 2000) return "🚀 칼퇴의 신";
+    if (m >= 1200) return "🏆 칼퇴 마스터";
+    if (m >= 700) return "😎 정시 퇴근러";
+    if (m >= 350) return "👍 야근 회피 성공";
+    if (m >= 120) return "🙂 칼퇴 도전 중";
+    return "🐢 아직 사무실…";
+  }
+
+  function renderScore() {
+    $("rn-best").textContent = best;
+    $("rn-plays").textContent = plays;
+    localStorage.setItem(RN_KEY, JSON.stringify({ best: best, day: todayKey, plays: plays }));
+    updateChallenge();
+  }
+
+  function initCanvas() {
+    dpr = window.devicePixelRatio || 1;
+    W = stage.clientWidth || 700;
+    H = 240;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    canvas.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    groundY = H - 30;
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, W, H);
+    // 땅
+    ctx.strokeStyle = "#c9b79c"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(0, groundY + 2); ctx.lineTo(W, groundY + 2); ctx.stroke();
+    ctx.fillStyle = "#d8c9b2";
+    var off = (groundScroll || 0) % 40;
+    for (var gx = -off; gx < W; gx += 40) ctx.fillRect(gx, groundY + 7, 16, 3);
+    // 장애물
+    ctx.textBaseline = "alphabetic";
+    for (var i = 0; i < obstacles.length; i++) {
+      var o = obstacles[i];
+      ctx.font = o.h + "px serif";
+      ctx.fillText(o.e, o.x, groundY);
+    }
+    // 플레이어
+    ctx.font = PLAYER_SIZE + "px serif";
+    ctx.fillText("🏃", PX, pBottom);
+  }
+
+  function spawnObstacle() {
+    var t = OBSTACLES[Math.floor(Math.random() * OBSTACLES.length)];
+    obstacles.push({ e: t.e, h: t.h, w: t.h * 0.92, x: W + 20 });
+  }
+
+  function update(dt) {
+    speed = Math.min(640, speed + 16 * dt);
+    distancePx += speed * dt;
+    score = Math.floor(distancePx / 14);
+    $("rn-score").textContent = "🏁 " + score + "m";
+    groundScroll += speed * dt;
+
+    if (jumping) {
+      vy += GRAV * dt;
+      pBottom += vy * dt;
+      if (pBottom >= groundY) { pBottom = groundY; vy = 0; jumping = false; }
+    }
+
+    spawnDist += speed * dt;
+    if (spawnDist >= nextGap) {
+      spawnDist = 0;
+      spawnObstacle();
+      nextGap = speed * 0.62 + 150 + Math.random() * 210;
+    }
+
+    var pLeft = PX, pRight = PX + PLAYER_W, pTop = pBottom - PLAYER_SIZE;
+    for (var i = obstacles.length - 1; i >= 0; i--) {
+      var o = obstacles[i];
+      o.x -= speed * dt;
+      if (o.x + o.w < -10) { obstacles.splice(i, 1); continue; }
+      var m = 7;
+      var oLeft = o.x, oRight = o.x + o.w, oTop = groundY - o.h, oBottom = groundY;
+      if (pLeft < oRight - m && pRight > oLeft + m && pTop < oBottom - m && pBottom > oTop + m) {
+        gameOver();
+        return;
+      }
+    }
+  }
+
+  function frame(ts) {
+    if (state !== "playing") return;
+    if (!last) last = ts;
+    var dt = Math.min(0.05, (ts - last) / 1000);
+    last = ts;
+    update(dt);
+    if (state === "playing") { render(); raf = requestAnimationFrame(frame); }
+  }
+
+  function start() {
+    speed = 280; distancePx = 0; score = 0; obstacles = []; spawnDist = 0; nextGap = 300; groundScroll = 0;
+    pBottom = groundY; vy = 0; jumping = false;
+    plays++; renderScore();
+    state = "playing";
+    overlay.style.display = "none";
+    $("rn-score").textContent = "🏁 0m";
+    last = 0;
+    raf = requestAnimationFrame(frame);
+  }
+
+  function gameOver() {
+    state = "over";
+    if (raf) cancelAnimationFrame(raf);
+    render();
+    if (score > best) best = score;
+    renderScore();
+    $("rn-ov-main").textContent = "게임 오버! 🏁 " + score + "m";
+    $("rn-ov-sub").textContent = "최고 " + best + "m · " + ratingText(score) + " · 탭/Space로 재시작";
+    overlay.style.display = "flex";
+  }
+
+  function jump() {
+    if (state === "ready" || state === "over") { start(); return; }
+    if (state === "playing" && !jumping) { vy = -JUMP; jumping = true; }
+  }
+
+  stage.addEventListener("pointerdown", function (e) { e.preventDefault(); jump(); });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+    if (e.code === "Space" || e.code === "ArrowUp" || e.key === " " || e.key === "ArrowUp") {
+      e.preventDefault(); jump();
+    }
+  });
+
+  initCanvas();
+  pBottom = groundY;
+  obstacles = []; groundScroll = 0;
+  render();
+  renderScore();
+  window.addEventListener("resize", function () {
+    var wasPlaying = state === "playing";
+    initCanvas();
+    if (!wasPlaying) { pBottom = groundY; render(); }
+  });
+
+  /* ─────────── 친구 도전장(링크 공유) ─────────── */
+  var challengeFriend = null;
+  function b64enc(v) { return btoa(unescape(encodeURIComponent(v))); }
+  function b64dec(v) { return decodeURIComponent(escape(atob(v))); }
+  function encodeChallenge(name) { return b64enc(JSON.stringify({ b: best, n: name || "" })); }
+  function decodeChallenge(token) {
+    try { var o = JSON.parse(b64dec(token)); return { b: o.b || 0, name: String(o.n || "").slice(0, 20) }; }
+    catch (e) { return null; }
+  }
+  function buildChallengeLink(name) { return location.origin + location.pathname + "?vs=" + encodeURIComponent(encodeChallenge(name)); }
+
+  function updateChallenge() {
+    if (!challengeFriend) return;
+    var f = challengeFriend, who = f.name || "친구";
+    var diff = best - f.b;
+    var verdict;
+    if (diff > 0) verdict = "🏆 당신이 " + diff + "m 더 멀리! 칼퇴 승!";
+    else if (diff === 0) verdict = "🤝 " + f.b + "m 동점! 한 번 더!";
+    else verdict = "😤 " + (-diff) + "m 뒤졌어요 — 다시 달려요!";
+    $("rn-ch-main").textContent = "⚔️ " + who + "님의 도전: 최고 " + f.b + "m";
+    $("rn-ch-sub").textContent = "내 최고 기록: " + best + "m · " + verdict;
+  }
+
+  $("rn-ch-close").addEventListener("click", function () { $("rn-challenge").style.display = "none"; });
+
+  $("rn-share-vs").addEventListener("click", function () {
+    if (best <= 0) { alert("먼저 한 번 달려서 기록을 만든 뒤 도전장을 보낼 수 있어요!"); return; }
+    var name = (prompt("도전장에 표시할 닉네임 (선택)", "") || "").slice(0, 20);
+    var link = buildChallengeLink(name);
+    var out = $("rn-share-out"), input = $("rn-share-link"), msg = $("rn-share-msg");
+    out.style.display = "block";
+    input.value = link; input.focus(); input.select();
+    var done = function (ok) {
+      msg.textContent = (ok ? "✅ 도전장 링크를 복사했어요! " : "아래 링크를 길게 눌러 복사하세요. ") +
+        "받는 사람은 링크만 열면 내 기록과 자기 기록을 비교하며 도전할 수 있어요.";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); });
+    } else {
+      try { document.execCommand("copy"); done(true); } catch (e) { done(false); }
+    }
+  });
+
+  var vsParam = new URLSearchParams(location.search).get("vs");
+  if (vsParam) {
+    var friend = decodeChallenge(vsParam);
+    if (friend) { challengeFriend = friend; $("rn-challenge").style.display = "block"; updateChallenge(); }
+  }
+
+  /* ─────────── 자랑 카드 (html2canvas 지연 로딩) ─────────── */
+  var H2C_SRC = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+  var h2cPromise = null;
+  function loadHtml2canvas() {
+    if (window.html2canvas) return Promise.resolve(window.html2canvas);
+    if (h2cPromise) return h2cPromise;
+    h2cPromise = new Promise(function (resolve, reject) {
+      var sc = document.createElement("script");
+      sc.src = H2C_SRC;
+      sc.onload = function () { resolve(window.html2canvas); };
+      sc.onerror = function () { reject(new Error("load failed")); };
+      document.head.appendChild(sc);
+    });
+    return h2cPromise;
+  }
+  function fillCard() {
+    $("cap-best").textContent = best;
+    $("cap-rating").textContent = ratingText(best);
+    var d = new Date();
+    $("cap-date").textContent = d.getFullYear() + "." + ("0" + (d.getMonth() + 1)).slice(-2) + "." + ("0" + d.getDate()).slice(-2);
+  }
+  function closeModal() { $("rn-modal").style.display = "none"; }
+
+  $("rn-make-card").addEventListener("click", function () {
+    if (best <= 0) { alert("먼저 한 번 달려서 기록을 만들어 주세요!"); return; }
+    fillCard();
+    var modal = $("rn-modal"), img = $("rn-modal-img"), loading = $("rn-modal-loading");
+    var shareBtn = $("rn-card-share"), dlBtn = $("rn-card-download"), msg = $("rn-card-msg");
+    img.style.display = "none"; shareBtn.style.display = "none"; dlBtn.style.display = "none";
+    loading.style.display = "block"; msg.textContent = "";
+    modal.style.display = "flex";
+
+    loadHtml2canvas().then(function (h2c) {
+      return h2c($("rn-capture"), { scale: 2, backgroundColor: null, useCORS: true });
+    }).then(function (canvas2) {
+      loading.style.display = "none";
+      var dataURL = canvas2.toDataURL("image/png");
+      img.src = dataURL; img.style.display = "block";
+      dlBtn.href = dataURL; dlBtn.style.display = "inline-block";
+      canvas2.toBlob(function (blob) {
+        if (!blob) return;
+        var file = new File([blob], "my-run-card.png", { type: "image/png" });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareBtn.style.display = "inline-block";
+          shareBtn.onclick = function () {
+            navigator.share({ files: [file], title: "내 칼퇴런 기록", text: "칼퇴런 최고 기록 " + best + "m 🏃 (pigbrain.github.io)" }).catch(function () {});
+          };
+          msg.textContent = "공유하기로 SNS에 바로 올리거나, 이미지로 저장할 수 있어요.";
+        } else {
+          msg.textContent = "이 기기는 직접 공유를 지원하지 않아요. '이미지 저장' 후 SNS에 올려주세요.";
+        }
+      }, "image/png");
+    }).catch(function () {
+      loading.style.display = "none";
+      msg.textContent = "카드를 만들지 못했어요. 네트워크 상태를 확인하고 다시 시도해 주세요.";
+    });
+  });
+
+  $("rn-modal-close").addEventListener("click", closeModal);
+  $("rn-modal-bg").addEventListener("click", closeModal);
+})();
+</script>
+{% endraw %}
